@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using BitbucketSharp.Utils;
+using GitHubSharp.Utils;
 using RestSharp;
 using RestSharp.Deserializers;
 

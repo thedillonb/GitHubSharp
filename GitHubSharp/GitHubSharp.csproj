@@ -40,9 +40,6 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="Exceptions.cs" />
-    <Compile Include="..\..\bitbucketsharp\BitbucketSharp\Utils\ObjectToDictionaryConverter.cs">
-      <Link>Utils\ObjectToDictionaryConverter.cs</Link>
-    </Compile>
     <Compile Include="Models\BasicUser.cs" />
     <Compile Include="Models\ChangeStatus.cs" />
     <Compile Include="Models\Comment.cs" />
@@ -60,6 +57,7 @@
     <Compile Include="API.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Models\Event.cs" />
+    <Compile Include="Utils\ObjectToDictionaryConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utils\" />

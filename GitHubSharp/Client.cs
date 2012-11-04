@@ -31,6 +31,11 @@ namespace GitHubSharp
         }
         
         public uint Retries { get; set; }
+
+        /// <summary>
+        /// The cache provider to use when requesting
+        /// </summary>
+        public ICacheProvider CacheProvider { get; set; }
         
         /// <summary>
         /// Constructor

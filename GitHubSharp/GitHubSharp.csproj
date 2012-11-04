@@ -40,29 +40,27 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="Exceptions.cs" />
-    <Compile Include="Models\BasicUser.cs" />
-    <Compile Include="Models\ChangeStatus.cs" />
-    <Compile Include="Models\Comment.cs" />
-    <Compile Include="Models\Commit.cs" />
-    <Compile Include="Models\Fork.cs" />
-    <Compile Include="Models\Gist.cs" />
-    <Compile Include="Models\GithubUser.cs" />
-    <Compile Include="Models\History.cs" />
-    <Compile Include="Models\Issue.cs" />
-    <Compile Include="Models\Network.cs" />
-    <Compile Include="Models\Object.cs" />
-    <Compile Include="Models\PullRequest.cs" />
-    <Compile Include="Models\Repository.cs" />
-    <Compile Include="Models\User.cs" />
     <Compile Include="API.cs" />
     <Compile Include="Client.cs" />
-    <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\TreeModel.cs" />
     <Compile Include="Utils\ObjectToDictionaryConverter.cs" />
+    <Compile Include="ICacheProvider.cs" />
+    <Compile Include="Models\IssueModel.cs" />
+    <Compile Include="Models\HistoryModel.cs" />
+    <Compile Include="Models\GistModel.cs" />
+    <Compile Include="Models\ForkModel.cs" />
+    <Compile Include="Models\EventModel.cs" />
+    <Compile Include="Models\CommitModel.cs" />
+    <Compile Include="Models\CommentModel.cs" />
+    <Compile Include="Models\ChangeStatusModel.cs" />
+    <Compile Include="Models\BasicUserModel.cs" />
+    <Compile Include="Models\RepositoryModel.cs" />
+    <Compile Include="Models\NetworkModel.cs" />
+    <Compile Include="Models\ObjectModel.cs" />
+    <Compile Include="Models\PullRequestModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utils\" />
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\RestSharp\RestSharp.MonoTouch\RestSharp.MonoTouch.csproj">
       <Project>{E9A9D1C5-4E06-4D31-9809-A97188C70B2C}</Project>

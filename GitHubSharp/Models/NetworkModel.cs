@@ -5,36 +5,36 @@ using System.Runtime.Serialization;
 
 namespace GitHubSharp.Models
 {
-    public class NetworkMeta
+    public class NetworkMetaModel
     {
         public List<List<List<int>>> Spacemap { get; set; }
         public int Focus { get; set; }
         public string Nethash { get; set; }
         public List<DateTime> Dates { get; set; }
-        public List<NetworkUser> Users { get; set; }
+        public List<NetworkUserModel> Users { get; set; }
     }
 
-    public class NetworkUser
+    public class NetworkUserModel
     {
         public string Name { get; set; }
         public string Repo { get; set; }
-        public List<NetworkUserHeadInfo> Heads { get; set; }
+        public List<NetworkUserHeadInfoModel> Heads { get; set; }
+
+        public class NetworkUserHeadInfoModel
+        {
+            public string Name { get; set; }
+            public string Id { get; set; }
+        }
     }
 
-    public class NetworkUserHeadInfo
-    {
-        public string Name { get; set; }
-        public string Id { get; set; }
-    }
-
-    public class NetworkBlock
+    public class NetworkBlockModel
     {
         public string Name { get; set; }
         public int Start { get; set; }
         public int Count { get; set; }
     }
 
-    public class NetworkChunk
+    public class NetworkChunkModel
     {
         public string Author { get; set; }
         public int Time { get; set; }

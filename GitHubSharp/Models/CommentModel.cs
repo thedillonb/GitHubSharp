@@ -2,16 +2,16 @@ using System;
 
 namespace GitHubSharp.Models
 {
-    public class Comment
+    public class CommentModel
     {
         public string Id { get; set; }
         public string Url { get; set; }
         public string Body { get; set; }
-        public BasicUser User { get; set; }
+        public BasicUserModel User { get; set; }
         public DateTime created_at { get; set; }
     }
 
-    public class CommentForCreationOrEdit
+    public class CommentForCreationOrEditModel
     {
         public string Body { get; set; }
     }

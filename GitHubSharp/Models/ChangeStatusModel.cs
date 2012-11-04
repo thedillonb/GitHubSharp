@@ -2,7 +2,7 @@ using System;
 
 namespace GitHubSharp.Models
 {
-	public class ChangeStatus
+	public class ChangeStatusModel
 	{
 		public int Deletions { get; set; }
 		public int Additions { get; set; }

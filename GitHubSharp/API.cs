@@ -226,6 +226,38 @@ namespace GitHubSharp
             return _client.Get<List<ContentModel>>(url);
         }
 
+        public System.Net.HttpWebResponse GetFileRaw(string owner, string repo, string branch, string file, System.IO.Stream stream)
+        {
+            var uri = Client.RawUrl + "/" + owner + "/" + repo + "/" + branch + "/";
+            if (!uri.EndsWith("/") && !file.StartsWith("/"))
+                file = "/" + file;
+            
+            var fileReq = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(uri + file);
+            
+            //Set the authentication!
+            var authInfo = _client.Username + ":" + _client.Password;
+            authInfo = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(authInfo));
+            fileReq.Headers["Authorization"] = "Basic " + authInfo;
+            
+            var resp = (System.Net.HttpWebResponse)fileReq.GetResponse();
+            if (resp != null)
+            {
+                using (var dstream = resp.GetResponseStream())
+                {
+                    var buffer = new byte[1024];
+                    while (true)
+                    {
+                        var bytesRead = dstream.Read(buffer, 0, 1024);
+                        if (bytesRead <= 0)
+                            break;
+                        stream.Write(buffer, 0, bytesRead);
+                    }
+                }
+            }
+            
+            return resp;
+        }
+
         #endregion
     }
 }

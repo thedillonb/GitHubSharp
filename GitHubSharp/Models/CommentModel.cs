@@ -8,7 +8,8 @@ namespace GitHubSharp.Models
         public string Url { get; set; }
         public string Body { get; set; }
         public BasicUserModel User { get; set; }
-        public DateTime created_at { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 
     public class CommentForCreationOrEditModel

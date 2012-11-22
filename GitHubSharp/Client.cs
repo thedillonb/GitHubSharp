@@ -9,12 +9,19 @@ namespace GitHubSharp
 {
     public class Client
     {
-        private readonly RestClient _client = new RestClient("https://api.github.com");
+        public static string ApiUrl = "https://api.github.com";
+        public static string RawUrl = "https://raw.github.com";
+        private readonly RestClient _client = new RestClient(ApiUrl);
         
         /// <summary>
-        /// Gets the username for this clietn
+        /// Gets the username for this client
         /// </summary>
-        public String Username { get; private set; }
+        public string Username { get; private set; }
+
+        /// <summary>
+        /// Gets the password.
+        /// </summary>
+        public string Password { get; private set; }
         
         public API API { get; private set; }
         
@@ -46,6 +53,7 @@ namespace GitHubSharp
         {
             Retries = 3;
             Username = username;
+            Password = password;
             API = new GitHubSharp.API(this);
             _client.Authenticator = new HttpBasicAuthenticator(username, password);
             _client.FollowRedirects = false;

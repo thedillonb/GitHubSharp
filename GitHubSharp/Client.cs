@@ -11,7 +11,8 @@ namespace GitHubSharp
     {
         public static string ApiUrl = "https://api.github.com";
         public static string RawUrl = "https://raw.github.com";
-        private readonly RestClient _client = new RestClient(ApiUrl);
+        public static string GistUrl = "https://gist.github.com";
+        private readonly RestClient _client = new RestClient();
         
         /// <summary>
         /// Gets the username for this client
@@ -56,7 +57,7 @@ namespace GitHubSharp
             Password = password;
             API = new GitHubSharp.API(this);
             _client.Authenticator = new HttpBasicAuthenticator(username, password);
-            _client.FollowRedirects = false;
+            _client.FollowRedirects = true;
         }
         
         /// <summary>
@@ -154,7 +155,7 @@ namespace GitHubSharp
         /// <returns></returns>
         public T Request<T>(string uri, Method method = Method.GET, Dictionary<string, string> data = null)
         {
-            var response = ExecuteRequest(uri, method, data);
+            var response = ExecuteRequest(ApiUrl + uri, method, data);
             var d = new JsonDeserializer();
             return d.Deserialize<T>(response);
         }
@@ -168,7 +169,7 @@ namespace GitHubSharp
         /// <param name="header"></param>
         public void Request(string uri, Method method = Method.GET, Dictionary<string, string> data = null)
         {
-            ExecuteRequest(uri, method, data);
+            ExecuteRequest(ApiUrl + uri, method, data);
         }
         
         /// <summary>
@@ -178,7 +179,7 @@ namespace GitHubSharp
         /// <param name="method"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        private IRestResponse ExecuteRequest(string uri, Method method, Dictionary<string, string> data)
+        internal IRestResponse ExecuteRequest(string uri, Method method, Dictionary<string, string> data)
         {
             if (uri == null)
                 throw new ArgumentNullException("uri");

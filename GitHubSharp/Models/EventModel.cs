@@ -144,7 +144,6 @@ namespace GitHubSharp.Models
 
         public class ForkEvent
         {
-            [SerializeAs(Name="forkee")]
             public RepositoryModel Forkee { get; set; }
         }
 
@@ -163,6 +162,17 @@ namespace GitHubSharp.Models
 
         public class GollumEvent
         {
+            public List<PageModel> Pages { get; set; }
+
+            public class PageModel
+            {
+                public string Summary { get; set; }
+                public string PageName { get; set; }
+                public string Sha { get; set; }
+                public string Title { get; set; }
+                public string Action { get; set; }
+                public string HtmlUrl { get; set; }
+            }
         }
 
         public class IssueCommentEvent

@@ -102,6 +102,11 @@ namespace GitHubSharp
             return _client.Get<RepositorySearchModel>("/legacy/repos/search/" + keyword);
         }
 
+        public List<RepositoryModel> GetRepositoriesStarred()
+        {
+            return _client.Get<List<RepositoryModel>>("/user/starred");
+        }
+
         #endregion
 
         #region Gists
@@ -122,9 +127,15 @@ namespace GitHubSharp
             return _client.Get<List<GistModel>>("/gists/starred");
         }
 
-        public GistModel GetGist(int id)
+        public GistModel GetGist(string id)
         {
             return _client.Get<GistModel>("/gists/" + id);
+        }
+
+        public string GetGistFile(string url)
+        {
+            var a = _client.ExecuteRequest(url, RestSharp.Method.GET, null);
+            return a.Content;
         }
 
         #endregion
@@ -256,6 +267,15 @@ namespace GitHubSharp
             }
             
             return resp;
+        }
+
+        #endregion
+
+        #region Notifications
+
+        public List<NotificationModel> GetNotifications()
+        {
+            return _client.Get<List<NotificationModel>>("/notifications");
         }
 
         #endregion

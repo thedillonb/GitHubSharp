@@ -59,6 +59,7 @@
     <Compile Include="Models\ObjectModel.cs" />
     <Compile Include="Models\PullRequestModel.cs" />
     <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\NotificationModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

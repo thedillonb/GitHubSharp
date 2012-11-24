@@ -14,25 +14,29 @@ namespace GitHubSharp
 
         #region Users
 
-        public UserModel GetUser(string username = null)
+        public GitHubResponse<UserAuthenticatedModel> GetAuthenticatedUser()
         {
-            return username == null ? _client.Get<UserAuthenticatedModel>("/user") :
-                                      _client.Get<UserModel>("/users/" + username);
+            return _client.Get<UserAuthenticatedModel>("/user");
         }
 
-        public List<BasicUserModel> GetUserFollowers(string username = null)
+        public GitHubResponse<UserModel> GetUser(string username = null)
+        {
+            return _client.Get<UserModel>("/users/" + username);
+        }
+
+        public GitHubResponse<List<BasicUserModel>> GetUserFollowers(string username = null)
         {
             return username == null ? _client.Get<List<BasicUserModel>>("/user/followers") :
                                       _client.Get<List<BasicUserModel>>("/users/" + username + "/followers");
         }
 
-        public List<BasicUserModel> GetUserFollowing(string username = null)
+        public GitHubResponse<List<BasicUserModel>> GetUserFollowing(string username = null)
         {
             return username == null ? _client.Get<List<BasicUserModel>>("/user/following") :
                                       _client.Get<List<BasicUserModel>>("/users/" + username + "/following"); 
         }
 
-        public List<KeyModel> GetUserKeys()
+        public GitHubResponse<List<KeyModel>> GetUserKeys()
         {
             return _client.Get<List<KeyModel>>("/user/keys");
         }
@@ -41,18 +45,18 @@ namespace GitHubSharp
 
         #region Followers
 
-        public BasicUserModel GetFollowers(string username = null)
+        public GitHubResponse<BasicUserModel> GetFollowers(string username = null)
         {
             return username == null ? _client.Get<BasicUserModel>("/user/followers") :
                                       _client.Get<BasicUserModel>("/users/" + username + "/followers");
         }
 
-        public BasicUserModel GetFollowing(string username)
+        public GitHubResponse<BasicUserModel> GetFollowing(string username)
         {
             return _client.Get<BasicUserModel>("/users/" + username + "/following");
         }
 
-        public BasicUserModel GetAuthenticatedFollowing()
+        public GitHubResponse<BasicUserModel> GetAuthenticatedFollowing()
         {
             return _client.Get<BasicUserModel>("/user/following");
         }
@@ -61,48 +65,48 @@ namespace GitHubSharp
 
         #region Repositories
 
-        public List<RepositoryModel> ListRepositories(string username = null)
+        public GitHubResponse<List<RepositoryModel>> ListRepositories(string username = null, int page = 1, int perPage = 100)
         {
-            return username == null ? _client.Get<List<RepositoryModel>>("/user/repos") : 
-                _client.Get<List<RepositoryModel>>("/users/" + username + "/repos");
+            return username == null ? _client.Get<List<RepositoryModel>>("/user/repos?page=" + page + "&per_page=" + perPage) : 
+                _client.Get<List<RepositoryModel>>("/users/" + username + "/repos?page=" + page + "&per_page=" + perPage);
         }
 
-        public List<RepositoryModel> GetOrginizationRepositories(string org)
+        public GitHubResponse<List<RepositoryModel>> GetOrginizationRepositories(string org, int page = 1, int perPage = 100)
         {
-            return _client.Get<List<RepositoryModel>>("/orgs/" + org + "/repos");
+            return _client.Get<List<RepositoryModel>>("/orgs/" + org + "/repos?page=" + page + "&per_page=" + perPage);
         }
 
-        public RepositoryModel GetRepository(string username, string repo)
+        public GitHubResponse<RepositoryModel> GetRepository(string username, string repo)
         {
             return _client.Get<RepositoryModel>("/repos/" + username + "/" + repo);
         }
 
-        public List<BasicUserModel> GetContributors(string username, string repo)
+        public GitHubResponse<List<BasicUserModel>> GetContributors(string username, string repo)
         {
             return _client.Get<List<BasicUserModel>>("/repos/" + username + "/" + repo + "/contributors");
         }
 
-        public Dictionary<string, int> GetLanguages(string username, string repo)
+        public GitHubResponse<Dictionary<string, int>> GetLanguages(string username, string repo)
         {
             return _client.Get<Dictionary<string, int>>("/repos/" + username + "/" + repo + "/languages");
         }
 
-        public List<TagModel> GetTags(string username, string repo)
+        public GitHubResponse<List<TagModel>> GetTags(string username, string repo)
         {
             return _client.Get<List<TagModel>>("/repos/" + username + "/" + repo + "/tags");
         }
 
-        public List<BranchModel> GetBranches(string username, string repo)
+        public GitHubResponse<List<BranchModel>> GetBranches(string username, string repo)
         {
             return _client.Get<List<BranchModel>>("/repos/" + username + "/" + repo + "/branches");
         }
 
-        public RepositorySearchModel SearchRepositories(string keyword)
+        public GitHubResponse<RepositorySearchModel> SearchRepositories(string keyword)
         {
             return _client.Get<RepositorySearchModel>("/legacy/repos/search/" + keyword);
         }
 
-        public List<RepositoryModel> GetRepositoriesStarred()
+        public GitHubResponse<List<RepositoryModel>> GetRepositoriesStarred()
         {
             return _client.Get<List<RepositoryModel>>("/user/starred");
         }
@@ -111,23 +115,23 @@ namespace GitHubSharp
 
         #region Gists
 
-        public List<GistModel> GetGists(string username = null)
+        public GitHubResponse<List<GistModel>> GetGists(string username = null, int page = 1, int perPage = 100)
         {
-            return username == null ? _client.Get<List<GistModel>>("/gists") :
-                                      _client.Get<List<GistModel>>("/users/" + username + "/gists");
+            return username == null ? _client.Get<List<GistModel>>("/gists?page=" + page + "&per_page=" + perPage) :
+               _client.Get<List<GistModel>>("/users/" + username + "/gists?page=" + page + "&per_page=" + perPage);
         }
 
-        public List<GistModel> GetPublicGists()
+        public GitHubResponse<List<GistModel>> GetPublicGists(int page = 1, int perPage = 100)
         {
-            return _client.Get<List<GistModel>>("/gists/public");
+            return _client.Get<List<GistModel>>("/gists/public?page=" + page + "&per_page=" + perPage);
         }
 
-        public List<GistModel> GetStarredGists()
+        public GitHubResponse<List<GistModel>> GetStarredGists(int page = 1, int perPage = 100)
         {
-            return _client.Get<List<GistModel>>("/gists/starred");
+            return _client.Get<List<GistModel>>("/gists/starred?page=" + page + "&per_page=" + perPage);
         }
 
-        public GistModel GetGist(string id)
+        public GitHubResponse<GistModel> GetGist(string id)
         {
             return _client.Get<GistModel>("/gists/" + id);
         }
@@ -142,23 +146,23 @@ namespace GitHubSharp
 
         #region Organizations
 
-        public List<BasicUserModel> GetOrganizations(string username = null)
+        public GitHubResponse<List<BasicUserModel>> GetOrganizations(string username = null)
         {
             return username == null ? _client.Get<List<BasicUserModel>>("/user/orgs") :
                                       _client.Get<List<BasicUserModel>>("/users/" + username + "/orgs");
         }
 
-        public UserModel GetOrganization(string org)
+        public GitHubResponse<UserModel> GetOrganization(string org)
         {
             return _client.Get<UserModel>("/orgs/" + org);
         }
 
-        public List<BasicUserModel> GetOrganizationMembers(string org)
+        public GitHubResponse<List<BasicUserModel>> GetOrganizationMembers(string org)
         {
             return _client.Get<List<BasicUserModel>>("/orgs/" + org + "/members");
         }
 
-        public List<BasicUserModel> GetOrganizationTeams(string org)
+        public GitHubResponse<List<BasicUserModel>> GetOrganizationTeams(string org)
         {
             return _client.Get<List<BasicUserModel>>("/orgs/" + org + "/teams");
         }
@@ -167,7 +171,7 @@ namespace GitHubSharp
 
         #region Teams
 
-        public List<RepositoryModel> GetTeamRepositories(int id)
+        public GitHubResponse<List<RepositoryModel>> GetTeamRepositories(int id)
         {
             return _client.Get<List<RepositoryModel>>("/teams/" + id + "/repos");
         }
@@ -176,12 +180,12 @@ namespace GitHubSharp
 
         #region Commits
 
-        public List<CommitModel> GetCommits(string user, string repo)
+        public GitHubResponse<List<CommitModel>> GetCommits(string user, string repo)
         {
             return _client.Get<List<CommitModel>>("/repos/" + user + "/" + repo + "/commits");
         }
 
-        public CommitModel GetCommit(string user, string repo, string sha)
+        public GitHubResponse<CommitModel> GetCommit(string user, string repo, string sha)
         {
             return _client.Get<CommitModel>("/repos/" + user + "/" + repo + "/commits/" + sha); 
         }
@@ -190,14 +194,14 @@ namespace GitHubSharp
 
         #region Watching
 
-        public List<RepositoryModel> GetRepositoriesWatching(string owner = null)
+        public GitHubResponse<List<RepositoryModel>> GetRepositoriesWatching(string owner = null)
         {
             return owner == null
                            ? _client.Get<List<RepositoryModel>>("/users/subscriptions")
                            : _client.Get<List<RepositoryModel>>("/users/" + owner + "/subscriptions");
         }
 
-        public List<BasicUserModel> GetRepositoryWatchers(string owner, string repo)
+        public GitHubResponse<List<BasicUserModel>> GetRepositoryWatchers(string owner, string repo)
         {
             return _client.Get<List<BasicUserModel>>("/repos/" + owner + "/" + repo + "/subscribers");
         }
@@ -206,7 +210,7 @@ namespace GitHubSharp
 
         #region Tree
 
-        public TreeModel GetTree(string owner, string repo, string sha)
+        public GitHubResponse<TreeModel> GetTree(string owner, string repo, string sha)
         {
             return _client.Get<TreeModel>("/repos/" + owner + "/" + repo + "/git/trees/" + sha);
         }
@@ -215,23 +219,23 @@ namespace GitHubSharp
 
         #region Events
 
-        public List<EventModel> GetEvents(string username = null)
+        public GitHubResponse<List<EventModel>> GetEvents(string username = null, int page = 1)
         {
             return username == null
-                           ? _client.Get<List<EventModel>>("/events")
-                           : _client.Get<List<EventModel>>("/users/" + username + "/events");
+                           ? _client.Get<List<EventModel>>("/events?page=" + page)
+                           : _client.Get<List<EventModel>>("/users/" + username + "/events?page=" + page);
         }
 
-        public List<EventModel> GetRepositoryEvents(string owner, string repo)
+        public GitHubResponse<List<EventModel>> GetRepositoryEvents(string owner, string repo, int page = 1)
         {
-            return _client.Get<List<EventModel>>("/repos/" + owner + "/" + repo + "/events");
+            return _client.Get<List<EventModel>>("/repos/" + owner + "/" + repo + "/events?page=" + page);
         }
 
         #endregion
 
         #region Content
 
-        public List<ContentModel> GetRepositoryContent(string owner, string repo, string path = "/", string branch = "master")
+        public GitHubResponse<List<ContentModel>> GetRepositoryContent(string owner, string repo, string path = "/", string branch = "master")
         {
             var url = "/repos/" + owner + "/" + repo + "/contents" + path + "?ref=" + branch;
             return _client.Get<List<ContentModel>>(url);
@@ -269,13 +273,30 @@ namespace GitHubSharp
             return resp;
         }
 
+        public GitHubResponse<ContentModel> GetRepositoryReadme(string owner, string repo, string branch = "master")
+        {
+            return _client.Get<ContentModel>("/repos/" + owner + "/" + repo + "/readme?ref=" + branch);
+        }
+
         #endregion
 
         #region Notifications
 
-        public List<NotificationModel> GetNotifications()
+        public GitHubResponse<List<NotificationModel>> GetNotifications()
         {
             return _client.Get<List<NotificationModel>>("/notifications");
+        }
+
+        #endregion
+    
+        #region Markdown
+
+        public string GetMarkdown(string text)
+        {
+            var request = new RestSharp.RestRequest(Client.ApiUrl + "/markdown/raw", RestSharp.Method.POST);
+            request.AddParameter("text/plain", text, RestSharp.ParameterType.RequestBody);
+            var response = _client.ExecuteRequest(request);
+            return response.Content;
         }
 
         #endregion

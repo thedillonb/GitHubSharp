@@ -23,7 +23,10 @@ namespace GitHubSharp
         /// Gets the password.
         /// </summary>
         public string Password { get; private set; }
-        
+
+        /// <summary>
+        /// Gets the AP.
+        /// </summary>
         public API API { get; private set; }
         
         /// <summary>
@@ -66,7 +69,7 @@ namespace GitHubSharp
         /// <typeparam name="T">The type of object the response should be deserialized ot</typeparam>
         /// <param name="uri">The URI to request information from</param>
         /// <returns>An object with response data</returns>
-        public T Get<T>(String uri)
+        public GitHubResponse<T> Get<T>(String uri) where T : class
         {
             return Request<T>(uri);
         }
@@ -77,7 +80,7 @@ namespace GitHubSharp
         /// <typeparam name="T"></typeparam>
         /// <param name="uri"></param>
         /// <returns></returns>
-        public T Put<T>(string uri, Dictionary<string, string> data = null)
+        public GitHubResponse<T> Put<T>(string uri, Dictionary<string, string> data = null) where T : class
         {
             return Request<T>(uri, Method.PUT, data);
         }
@@ -98,7 +101,7 @@ namespace GitHubSharp
         /// <param name="uri"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public T Post<T>(string uri, Dictionary<string, string> data)
+        public GitHubResponse<T> Post<T>(string uri, Dictionary<string, string> data) where T : class
         {
             return Request<T>(uri, Method.POST, data);
         }
@@ -110,7 +113,7 @@ namespace GitHubSharp
         /// <param name="uri"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public T Post<T>(string uri, T data)
+        public GitHubResponse<T> Post<T>(string uri, T data) where T : class
         {
             return Post<T>(uri, ObjectToDictionaryConverter.Convert(data));
         }
@@ -118,7 +121,7 @@ namespace GitHubSharp
         /// <summary>
         /// Post the specified uri and data.
         /// </summary>
-        public T Post<T, D>(string uri, D data)
+        public GitHubResponse<T> Post<T, D>(string uri, D data) where T : class
         {
             return Post<T>(uri, ObjectToDictionaryConverter.Convert(data));
         }
@@ -143,6 +146,7 @@ namespace GitHubSharp
         {
             Request(uri, Method.DELETE);
         }
+
         
         /// <summary>
         /// Makes a request to the server expecting a response
@@ -153,11 +157,46 @@ namespace GitHubSharp
         /// <param name="header"></param>
         /// <param name="method"></param>
         /// <returns></returns>
-        public T Request<T>(string uri, Method method = Method.GET, Dictionary<string, string> data = null)
+        public GitHubResponse<T> Request<T>(string uri, Method method = Method.GET, Dictionary<string, string> data = null) where T : class
         {
             var response = ExecuteRequest(ApiUrl + uri, method, data);
+            var ghr = new GitHubResponse<T>();
             var d = new JsonDeserializer();
-            return d.Deserialize<T>(response);
+            ghr.Data = d.Deserialize<T>(response);
+
+            foreach (var h in response.Headers)
+            {
+                if (h.Name.Equals("X-RateLimit-Limit"))
+                    ghr.RateLimitLimit = Convert.ToInt32(h.Value);
+                else if (h.Name.Equals("X-RateLimit-Remaining"))
+                    ghr.RateLimitRemaining = Convert.ToInt32(h.Value);
+                else if (h.Name.Equals("Link"))
+                {
+                    var s = ((string)h.Value).Split(',');
+                    foreach (var link in s)
+                    {
+                        var splitted = link.Split(';');
+                        var url = splitted[0].Trim();
+                        var what = splitted[1].Trim();
+                        what = what.Substring(5);
+                        what = what.Substring(0, what.Length - 1);
+                        url = url.Substring(1);
+                        url = url.Substring(0, url.Length - 1);
+
+                        if (what.Equals("next"))
+                        {
+                            ghr.Next = new GitHubResponse<T>.Pagination(0, 0);
+                        }
+                        else if (what.Equals("prev"))
+                        {
+                            ghr.Prev = new GitHubResponse<T>.Pagination(0, 0);
+                        }
+
+                    }
+                }
+            }
+
+            return ghr;
         }
         
         /// <summary>
@@ -193,6 +232,14 @@ namespace GitHubSharp
             if (method == Method.PUT && data == null)
                 request.AddHeader("Content-Length", "0");
             
+            return ExecuteRequest(request);
+        }
+
+        /// <summary>
+        /// Executes a request to the server
+        /// </summary>
+        internal IRestResponse ExecuteRequest(IRestRequest request)
+        {
             RestSharp.IRestResponse response = null;
             for (var i = 0; i < Retries + 1; i++)
             {
@@ -221,6 +268,4 @@ namespace GitHubSharp
             throw new InvalidOperationException("Unable to execute request. Status code 0 returned " + (Retries+1) + " times!");
         }
     }
-    
-    
 }

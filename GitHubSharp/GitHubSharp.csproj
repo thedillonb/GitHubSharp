@@ -60,6 +60,7 @@
     <Compile Include="Models\PullRequestModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\NotificationModel.cs" />
+    <Compile Include="GitHubResponse.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

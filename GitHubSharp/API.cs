@@ -24,10 +24,15 @@ namespace GitHubSharp
             return _client.Get<UserModel>("/users/" + username);
         }
 
-        public GitHubResponse<List<BasicUserModel>> GetUserFollowers(string username = null)
+        public GitHubResponse<List<BasicUserModel>> GetUserFollowers(string username = null, int page = 1, int perPage = 100)
         {
-            return username == null ? _client.Get<List<BasicUserModel>>("/user/followers") :
-                                      _client.Get<List<BasicUserModel>>("/users/" + username + "/followers");
+            var sb = new System.Text.StringBuilder();
+            if (username == null)
+                sb.Append("/user/followers");
+            else
+                sb.Append("/users/").Append(username).Append("/followers");
+            sb.Append("?page=").Append(page).Append("&per_page=").Append(perPage);
+            return _client.Get<List<BasicUserModel>>(sb.ToString());
         }
 
         public GitHubResponse<List<BasicUserModel>> GetUserFollowing(string username = null)
@@ -201,9 +206,9 @@ namespace GitHubSharp
                            : _client.Get<List<RepositoryModel>>("/users/" + owner + "/subscriptions");
         }
 
-        public GitHubResponse<List<BasicUserModel>> GetRepositoryWatchers(string owner, string repo)
+        public GitHubResponse<List<BasicUserModel>> GetRepositoryWatchers(string owner, string repo, int page = 1, int perPage = 100)
         {
-            return _client.Get<List<BasicUserModel>>("/repos/" + owner + "/" + repo + "/subscribers");
+            return _client.Get<List<BasicUserModel>>("/repos/" + owner + "/" + repo + "/watchers?page=" + page + "&per_page=" + perPage);
         }
 
         #endregion

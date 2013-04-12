@@ -297,9 +297,9 @@ namespace GitHubSharp
 
         #region Notifications
 
-        public GitHubResponse<List<NotificationModel>> GetNotifications()
+        public GitHubResponse<List<NotificationModel>> GetNotifications(bool all = false, bool participating = false)
         {
-            return _client.Get<List<NotificationModel>>("/notifications");
+            return _client.Get<List<NotificationModel>>("/notifications?all=" + (all.ToString().ToLower()) + "&participating=" + (participating.ToString().ToLower()));
         }
 
         #endregion

@@ -147,6 +147,16 @@ namespace GitHubSharp
             return a.Content;
         }
 
+        public void StarGist(string id)
+        {
+            _client.Put("/gists/" + id + "/star");
+        }
+
+        public GitHubResponse<List<GistCommentModel>> GetGistComments(string id)
+        {
+            return _client.Get<List<GistCommentModel>>("/gists/" + id + "/comments");
+        }
+
         #endregion
 
         #region Organizations

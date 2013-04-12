@@ -4,7 +4,7 @@ namespace GitHubSharp.Models
 {
     public class NotificationModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public RepositoryModel Repository { get; set; }
         public SubjectModel Subject { get; set; }
         public string Reason { get; set; }

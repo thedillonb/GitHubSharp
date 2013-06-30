@@ -195,9 +195,12 @@ namespace GitHubSharp
 
         #region Commits
 
-        public GitHubResponse<List<CommitModel>> GetCommits(string user, string repo)
+        public GitHubResponse<List<CommitModel>> GetCommits(string user, string repo, string sha = null)
         {
-            return _client.Get<List<CommitModel>>("/repos/" + user + "/" + repo + "/commits");
+            if (sha == null)
+                return _client.Get<List<CommitModel>>("/repos/" + user + "/" + repo + "/commits");
+            else
+                return _client.Get<List<CommitModel>>("/repos/" + user + "/" + repo + "/commits?sha=" + sha);
         }
 
         public GitHubResponse<CommitModel> GetCommit(string user, string repo, string sha)

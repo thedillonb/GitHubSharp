@@ -29,6 +29,8 @@ namespace GitHubSharp.Models
         public string Filename { get; set; }
         public string RawUrl { get; set; }
         public string Content { get; set; }
+        public string Type { get; set; }
+        public string Language { get; set; }
     }
 
     public class GistCommentModel

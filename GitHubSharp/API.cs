@@ -157,6 +157,29 @@ namespace GitHubSharp
             return _client.Get<List<GistCommentModel>>("/gists/" + id + "/comments");
         }
 
+        public GitHubResponse<GistModel> ForkGist(string id)
+        {
+            return _client.Request<GistModel>("/gists/" + id + "/forks", RestSharp.Method.POST, null);
+        }
+
+        public void DeleteGist(string id)
+        {
+            _client.Delete("/gists/" + id);
+        }
+
+        public void UnstarGist(string id)
+        {
+            _client.Delete("/gists/" + id + "/star");
+        }
+
+        public bool IsGistStarred(string id)
+        {
+            var response = _client.ExecuteRequest("/gists/" + id + "/star", RestSharp.Method.GET, null);
+            if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                return true;
+            return false;
+        }
+
         #endregion
 
         #region Organizations

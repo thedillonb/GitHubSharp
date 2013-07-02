@@ -117,13 +117,14 @@ namespace GitHubSharp
         {
             return Post<T>(uri, ObjectToDictionaryConverter.Convert(data));
         }
+
         
         /// <summary>
         /// Post the specified uri and data.
         /// </summary>
-        public GitHubResponse<T> Post<T, D>(string uri, D data) where T : class
+        public GitHubResponse<T> Post<T>(string uri) where T : class
         {
-            return Post<T>(uri, ObjectToDictionaryConverter.Convert(data));
+            return Post<T>(uri);
         }
         
         /// <summary>
@@ -244,25 +245,16 @@ namespace GitHubSharp
             for (var i = 0; i < Retries + 1; i++)
             {
                 response = _client.Execute(request);
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    //A special case for deletes
-                    if (request.Method == Method.DELETE && response.StatusCode == HttpStatusCode.NoContent)
-                    {
-                        //Do nothing. This is a special case...
-                    }
-                    else if (response.StatusCode == 0)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        throw StatusCodeException.FactoryCreate(response.StatusCode);
-                    }
-                }
-                
-                //Return the response
-                return response;
+
+                //No clue what this is... Try it again...
+                if (response.StatusCode == (HttpStatusCode)0)
+                    continue;
+
+                //A 200 is always good.
+                if (response.StatusCode >= (HttpStatusCode)200 && response.StatusCode < (HttpStatusCode)300)
+                    return response;
+
+                throw StatusCodeException.FactoryCreate(response.StatusCode);
             }
             
             throw new InvalidOperationException("Unable to execute request. Status code 0 returned " + (Retries+1) + " times!");

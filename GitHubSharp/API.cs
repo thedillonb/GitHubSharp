@@ -180,6 +180,11 @@ namespace GitHubSharp
             return false;
         }
 
+        public GitHubResponse<GistCommentModel> CreateGistComment(string id, string body)
+        {
+            return _client.RequestWithJson<GistCommentModel>("/gists/" + id + "/comments", RestSharp.Method.POST, new { body = body });
+        }
+
         #endregion
 
         #region Organizations

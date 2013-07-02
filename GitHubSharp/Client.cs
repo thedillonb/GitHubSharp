@@ -199,6 +199,58 @@ namespace GitHubSharp
 
             return ghr;
         }
+
+
+        /// <summary>
+        /// Makes a request to the server expecting a response
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="uri"></param>
+        /// <param name="data"></param>
+        /// <param name="header"></param>
+        /// <param name="method"></param>
+        /// <returns></returns>
+        public GitHubResponse<T> RequestWithJson<T>(string uri, Method method = Method.GET, object obj = null) where T : class
+        {
+            var response = ExecuteRequestWithJson(ApiUrl + uri, method, obj);
+            var ghr = new GitHubResponse<T>();
+            var d = new JsonDeserializer();
+            ghr.Data = d.Deserialize<T>(response);
+
+            foreach (var h in response.Headers)
+            {
+                if (h.Name.Equals("X-RateLimit-Limit"))
+                    ghr.RateLimitLimit = Convert.ToInt32(h.Value);
+                else if (h.Name.Equals("X-RateLimit-Remaining"))
+                    ghr.RateLimitRemaining = Convert.ToInt32(h.Value);
+                else if (h.Name.Equals("Link"))
+                {
+                    var s = ((string)h.Value).Split(',');
+                    foreach (var link in s)
+                    {
+                        var splitted = link.Split(';');
+                        var url = splitted[0].Trim();
+                        var what = splitted[1].Trim();
+                        what = what.Substring(5);
+                        what = what.Substring(0, what.Length - 1);
+                        url = url.Substring(1);
+                        url = url.Substring(0, url.Length - 1);
+
+                        if (what.Equals("next"))
+                        {
+                            ghr.Next = new GitHubResponse<T>.Pagination(0, 0);
+                        }
+                        else if (what.Equals("prev"))
+                        {
+                            ghr.Prev = new GitHubResponse<T>.Pagination(0, 0);
+                        }
+
+                    }
+                }
+            }
+
+            return ghr;
+        }
         
         /// <summary>
         /// Makes a request to the server but does not expect a response.
@@ -233,6 +285,29 @@ namespace GitHubSharp
             if (method == Method.PUT && data == null)
                 request.AddHeader("Content-Length", "0");
             
+            return ExecuteRequest(request);
+        }
+
+        /// <summary>
+        /// Executes a request to the server
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="method"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        internal IRestResponse ExecuteRequestWithJson(string uri, Method method, object obj)
+        {
+            if (uri == null)
+                throw new ArgumentNullException("uri");
+
+            var request = new RestRequest(uri, method);
+            request.RequestFormat = DataFormat.Json;
+            request.AddBody(obj);
+
+            //Puts without any data must be marked as having no content!
+            if (method == Method.PUT && obj == null)
+                request.AddHeader("Content-Length", "0");
+
             return ExecuteRequest(request);
         }
 

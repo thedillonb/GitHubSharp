@@ -12,6 +12,7 @@ namespace GitHubSharp.Models
         public BasicUserModel User { get; set; }
         public Dictionary<string, GistFileModel> Files { get; set; }
         public int Comments { get; set; }
+        public string CommentsUrl { get; set; }
         public string HtmlUrl { get; set; }
         public string GitPullUrl { get; set; }
         public string GitPushUrl { get; set; }

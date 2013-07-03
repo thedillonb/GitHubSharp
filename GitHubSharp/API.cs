@@ -174,10 +174,18 @@ namespace GitHubSharp
 
         public bool IsGistStarred(string id)
         {
-            var response = _client.ExecuteRequest("/gists/" + id + "/star", RestSharp.Method.GET, null);
-            if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
-                return true;
+            try
+            {
+                var response = _client.ExecuteRequest(Client.ApiUrl + "/gists/" + id + "/star", RestSharp.Method.GET, null);
+                if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                    return true;
+            }
+            catch (NotFoundException e)
+            {
+                //This means the gist was NOT starred...
+            }
             return false;
+
         }
 
         public GitHubResponse<GistCommentModel> CreateGistComment(string id, string body)

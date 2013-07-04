@@ -43,14 +43,25 @@ namespace GitHubSharp.Models
         public DateTime CreatedAt { get; set; }
     }
 
-    public class GistToCreateOrEditModel
+    public class GistEditModel
     {
         public string Description { get; set; }
-        public Dictionary<string, GistFileForCreationModel> Files { get; set; }
+        public Dictionary<string, File> Files { get; set; }
     
-        public class GistFileForCreationModel
+        public class File
         {
             public string Filename { get; set; }
+            public string Content { get; set; }
+        }
+    }
+
+    public class GistCreateModel
+    {
+        public string Description { get; set; }
+        public Dictionary<string, File> Files { get; set; }
+
+        public class File
+        {
             public string Content { get; set; }
         }
     }

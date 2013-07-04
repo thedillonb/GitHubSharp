@@ -193,6 +193,16 @@ namespace GitHubSharp
             return _client.RequestWithJson<GistCommentModel>("/gists/" + id + "/comments", RestSharp.Method.POST, new { body = body });
         }
 
+        public GitHubResponse<GistModel> CreateGist(GistCreateModel gist)
+        {
+            return _client.RequestWithJson<GistModel>("/gists", RestSharp.Method.POST, gist);
+        }
+
+        public GitHubResponse<GistModel> EditGist(string id, GistEditModel gist)
+        {
+            return _client.RequestWithJson<GistModel>("/gists/" + id, RestSharp.Method.PATCH, gist);
+        }
+
         #endregion
 
         #region Organizations

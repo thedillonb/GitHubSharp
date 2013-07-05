@@ -58,6 +58,7 @@ namespace GitHubSharp.Models
     public class GistCreateModel
     {
         public string Description { get; set; }
+        public bool Public { get; set; }
         public Dictionary<string, File> Files { get; set; }
 
         public class File

@@ -195,7 +195,28 @@ namespace GitHubSharp
 
         public GitHubResponse<GistModel> CreateGist(GistCreateModel gist)
         {
-            return _client.RequestWithJson<GistModel>("/gists", RestSharp.Method.POST, gist);
+            //Great... The RestSharp serializer can't handle this object...
+            //Dictionary<string, obj> confuses it and converts it into {"key": "ok", "value": "dokie"}
+            //instead of {"ok": "dokie"}
+            var obj = new RestSharp.JsonObject();
+            obj.Add(new KeyValuePair<string, object>("description", gist.Description));
+            obj.Add(new KeyValuePair<string, object>("public", gist.Public));
+
+            var files = new RestSharp.JsonObject();
+            obj.Add(new KeyValuePair<string, object>("files", files));
+
+            if (gist.Files != null)
+            {
+                foreach (var f in gist.Files.Keys)
+                {
+                    var content = new RestSharp.JsonObject();
+                    files.Add(new KeyValuePair<string, object>(f, content));
+                    content.Add(new KeyValuePair<string, object>("content", gist.Files[f].Content));
+                }
+            }
+
+
+            return _client.RequestWithJson<GistModel>("/gists", RestSharp.Method.POST, obj);
         }
 
         public GitHubResponse<GistModel> EditGist(string id, GistEditModel gist)

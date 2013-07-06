@@ -215,13 +215,38 @@ namespace GitHubSharp
                 }
             }
 
-
             return _client.RequestWithJson<GistModel>("/gists", RestSharp.Method.POST, obj);
         }
 
         public GitHubResponse<GistModel> EditGist(string id, GistEditModel gist)
         {
-            return _client.RequestWithJson<GistModel>("/gists/" + id, RestSharp.Method.PATCH, gist);
+            var obj = new RestSharp.JsonObject();
+            obj.Add(new KeyValuePair<string, object>("description", gist.Description));
+
+            var files = new RestSharp.JsonObject();
+            obj.Add(new KeyValuePair<string, object>("files", files));
+
+            if (gist.Files != null)
+            {
+                foreach (var f in gist.Files.Keys)
+                {
+                    if (gist.Files[f] == null)
+                    {
+                        files.Add(new KeyValuePair<string, object>(f, null));
+                    }
+                    else
+                    {
+                        var content = new RestSharp.JsonObject();
+                        files.Add(new KeyValuePair<string, object>(f, content));
+                        content.Add(new KeyValuePair<string, object>("content", gist.Files[f].Content));
+
+                        if (gist.Files[f].Filename != null)
+                            content.Add(new KeyValuePair<string, object>("filename", gist.Files[f].Filename));
+                    }
+                }
+            }
+
+            return _client.RequestWithJson<GistModel>("/gists/" + id, RestSharp.Method.PATCH, obj);
         }
 
         #endregion

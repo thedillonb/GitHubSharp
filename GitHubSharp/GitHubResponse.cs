@@ -4,6 +4,7 @@ namespace GitHubSharp
 {
     public class GitHubResponse<T> where T : class
     {
+        public int StatusCode { get; set; }
         public int RateLimitLimit { get; set; }
         public int RateLimitRemaining { get; set; }
         public Pagination Next { get; set; }

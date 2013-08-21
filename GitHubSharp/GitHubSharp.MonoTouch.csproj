@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{89E14828-85BB-4790-9B4E-E44DD4CE000E}</ProjectGuid>
+    <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>GitHubSharp</RootNamespace>
+    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <AssemblyName>GitHubSharp</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="monotouch" />
+  </ItemGroup>
+  <Import Project="$(ProgramFiles)\MSBuild\MonoTouch\Novell.MonoTouch.Common.targets" Condition="'$(windir)' != '' " />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="API.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="Models\TreeModel.cs" />
+    <Compile Include="Utils\ObjectToDictionaryConverter.cs" />
+    <Compile Include="ICacheProvider.cs" />
+    <Compile Include="Models\IssueModel.cs" />
+    <Compile Include="Models\HistoryModel.cs" />
+    <Compile Include="Models\GistModel.cs" />
+    <Compile Include="Models\ForkModel.cs" />
+    <Compile Include="Models\EventModel.cs" />
+    <Compile Include="Models\CommitModel.cs" />
+    <Compile Include="Models\CommentModel.cs" />
+    <Compile Include="Models\ChangeStatusModel.cs" />
+    <Compile Include="Models\BasicUserModel.cs" />
+    <Compile Include="Models\RepositoryModel.cs" />
+    <Compile Include="Models\NetworkModel.cs" />
+    <Compile Include="Models\ObjectModel.cs" />
+    <Compile Include="Models\PullRequestModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\NotificationModel.cs" />
+    <Compile Include="GitHubResponse.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\RestSharp\RestSharp.MonoTouch\RestSharp.MonoTouch.csproj">
+      <Project>{E9A9D1C5-4E06-4D31-9809-A97188C70B2C}</Project>
+      <Name>RestSharp.MonoTouch</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

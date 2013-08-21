@@ -4,7 +4,7 @@ namespace GitHubSharp.Utils
 {
     public static class ObjectToDictionaryConverter
     {
-        public static Dictionary<string, string> Convert<T>(T obj)
+        public static Dictionary<string, string> Convert(object obj)
         {
             var dictionary = new Dictionary<string, string>();
             var properties = obj.GetType().GetProperties();

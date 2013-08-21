@@ -1,72 +1,90 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{89E14828-85BB-4790-9B4E-E44DD4CE000E}</ProjectGuid>
-    <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{1953CE79-63FC-47D9-A816-01827669F089}</ProjectGuid>
     <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GitHubSharp</RootNamespace>
-    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>GitHubSharp</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
+    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>False</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>False</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>True</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>False</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="monotouch" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
-  <Import Project="$(ProgramFiles)\MSBuild\MonoTouch\Novell.MonoTouch.Common.targets" Condition="'$(windir)' != '' " />
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="Exceptions.cs" />
-    <Compile Include="API.cs" />
     <Compile Include="Client.cs" />
-    <Compile Include="Models\TreeModel.cs" />
-    <Compile Include="Utils\ObjectToDictionaryConverter.cs" />
+    <Compile Include="Controllers\CommentsController.cs" />
+    <Compile Include="Controllers\Controller.cs" />
+    <Compile Include="Controllers\GistsController.cs" />
+    <Compile Include="Controllers\MarkdownController.cs" />
+    <Compile Include="Controllers\OrganizationsController.cs" />
+    <Compile Include="Controllers\RepositoriesController.cs" />
+    <Compile Include="Controllers\TeamsController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="GitHubResponse.cs" />
     <Compile Include="ICacheProvider.cs" />
-    <Compile Include="Models\IssueModel.cs" />
-    <Compile Include="Models\HistoryModel.cs" />
-    <Compile Include="Models\GistModel.cs" />
-    <Compile Include="Models\ForkModel.cs" />
-    <Compile Include="Models\EventModel.cs" />
-    <Compile Include="Models\CommitModel.cs" />
-    <Compile Include="Models\CommentModel.cs" />
-    <Compile Include="Models\ChangeStatusModel.cs" />
     <Compile Include="Models\BasicUserModel.cs" />
-    <Compile Include="Models\RepositoryModel.cs" />
+    <Compile Include="Models\ChangeStatusModel.cs" />
+    <Compile Include="Models\CommentModel.cs" />
+    <Compile Include="Models\CommitModel.cs" />
+    <Compile Include="Models\EventModel.cs" />
+    <Compile Include="Models\ForkModel.cs" />
+    <Compile Include="Models\GistModel.cs" />
+    <Compile Include="Models\HistoryModel.cs" />
+    <Compile Include="Models\IssueModel.cs" />
     <Compile Include="Models\NetworkModel.cs" />
+    <Compile Include="Models\NotificationModel.cs" />
     <Compile Include="Models\ObjectModel.cs" />
     <Compile Include="Models\PullRequestModel.cs" />
+    <Compile Include="Models\RepositoryModel.cs" />
+    <Compile Include="Models\SubscriptionModel.cs" />
+    <Compile Include="Models\TreeModel.cs" />
     <Compile Include="Models\UserModel.cs" />
-    <Compile Include="Models\NotificationModel.cs" />
-    <Compile Include="GitHubResponse.cs" />
+    <Compile Include="Utils\ObjectToDictionaryConverter.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\RestSharp\RestSharp.MonoTouch\RestSharp.MonoTouch.csproj">
-      <Project>{E9A9D1C5-4E06-4D31-9809-A97188C70B2C}</Project>
-      <Name>RestSharp.MonoTouch</Name>
-    </ProjectReference>
+    <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

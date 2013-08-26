@@ -10,6 +10,7 @@ namespace GitHubSharp
         public Pagination Next { get; set; }
         public Pagination Prev { get; set; }
         public T Data { get; set; }
+        public Func<GitHubResponse<T>> More { get; set; }
 
         public class Pagination
         {

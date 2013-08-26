@@ -10,9 +10,9 @@ namespace GitHubSharp
 {
     public class Client
     {
-        public static Uri ApiUri = new Uri("https://api.github.com");
-        public static Uri RawUri = new Uri("https://raw.github.com");
-        public static Uri GistUri = new Uri("https://gist.github.com");
+        public static Uri ApiUri = new Uri("https://api.github.com/");
+        public static Uri RawUri = new Uri("https://raw.github.com/");
+        public static Uri GistUri = new Uri("https://gist.github.com/");
         private readonly RestClient _client = new RestClient();
 
         public AuthenticatedUserController AuthenticatedUser
@@ -103,9 +103,9 @@ namespace GitHubSharp
         {
             if (baseUri == null)
                 baseUri = ApiUri;
-            var request = new RestRequest(new Uri(baseUri, new Uri(relativeResource)), Method.GET);
+            var request = new RestRequest(baseUri.AbsoluteUri + relativeResource, Method.GET);
             request.AddParameter("page", page);
-            request.AddParameter("per_page", page);
+            request.AddParameter("per_page", perPage);
             if (additionalArgs != null)
                 foreach (var arg in ObjectToDictionaryConverter.Convert(additionalArgs))
                     request.AddParameter(arg.Key, arg.Value);
@@ -232,6 +232,10 @@ namespace GitHubSharp
                         if (what.Equals("next"))
                         {
                             ghr.Next = new GitHubResponse<T>.Pagination(0, 0);
+                            ghr.More = () => {
+                                var request = new RestRequest(url, Method.GET);
+                                return ParseResponse<T>(ExecuteRequest(request));
+                            };
                         }
                         else if (what.Equals("prev"))
                         {
@@ -343,9 +347,8 @@ namespace GitHubSharp
             {
                 response = _client.Execute(request);
 
-                //No clue what this is... Try it again...
-                if (response.StatusCode == (HttpStatusCode)0)
-                    continue;
+                if (response.ErrorException != null)
+                    throw response.ErrorException;
 
                 //A 200 is always good.
                 if (response.StatusCode >= (HttpStatusCode)200 && response.StatusCode < (HttpStatusCode)300)

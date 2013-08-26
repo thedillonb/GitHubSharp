@@ -74,7 +74,7 @@ namespace GitHubSharp.Controllers
             return Client.Get<List<RepositoryModel>>(Uri + "/starred", page: page, perPage: perPage);
         }
 
-        public GitHubResponse<List<RepositoryModel>> GetRepositoriesWatching(int page = 1, int perPage = 100)
+        public GitHubResponse<List<RepositoryModel>> GetWatching(int page = 1, int perPage = 100)
         {
             return Client.Get<List<RepositoryModel>>(Uri + "/subscriptions", page: page, perPage: perPage);
         }
@@ -121,6 +121,11 @@ namespace GitHubSharp.Controllers
         public CommentsController Comments
         {
             get { return new CommentsController(Client, this); }
+        }
+
+        public CommitsController Commits
+        {
+            get { return new CommitsController(Client, this); }
         }
 
         public RepositoryController(Client client, string user, string repo)
@@ -178,19 +183,6 @@ namespace GitHubSharp.Controllers
         public GitHubResponse<TreeModel> GetTree(string sha)
         {
             return Client.Get<TreeModel>(Uri + "/git/trees/" + sha);
-        }
-
-        public GitHubResponse<List<CommitModel>> GetCommits(string user, string repo, string sha = null)
-        {
-            if (sha == null)
-                return Client.Get<List<CommitModel>>(Uri + "/commits");
-            else
-                return Client.Get<List<CommitModel>>(Uri + "/commits", additionalArgs: new { Sha = sha });
-        }
-
-        public GitHubResponse<CommitModel> GetCommit(string user, string repo, string sha)
-        {
-            return Client.Get<CommitModel>(Uri + "/commits/" + sha);
         }
 
         public System.Net.HttpWebResponse GetFileRaw(string branch, string file, System.IO.Stream stream)

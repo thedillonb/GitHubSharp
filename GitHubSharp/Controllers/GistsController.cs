@@ -9,6 +9,11 @@ namespace GitHubSharp.Controllers
 {
     public class GistsController : Controller
     {
+        public GistController this[string key]
+        {
+            get { return new GistController(Client, key); }
+        }
+
         public GistsController(Client client)
             : base(client)
         {
@@ -27,6 +32,12 @@ namespace GitHubSharp.Controllers
         public GitHubResponse<List<GistModel>> GetStarredGists(int page = 1, int perPage = 100)
         {
             return Client.Get<List<GistModel>>(Uri + "/starred", page: page, perPage: perPage);
+        }
+        
+        public string GetFile(string url)
+        {
+            var a = Client.ExecuteRequest(url, RestSharp.Method.GET, null);
+            return a.Content;
         }
 
         public override string Uri
@@ -132,12 +143,6 @@ namespace GitHubSharp.Controllers
         public void Delete()
         {
             Client.Delete(Uri);
-        }
-
-        public string GetGistFile(string url)
-        {
-            var a = Client.ExecuteRequest(url, RestSharp.Method.GET, null);
-            return a.Content;
         }
 
         public bool IsGistStarred()

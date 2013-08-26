@@ -52,4 +52,25 @@ namespace GitHubSharp.Controllers
             get { return Repository.Uri + "/comments"; }
         }
     }
+
+    public class CommitCommentsController : Controller
+    {
+        public CommitController CommitController { get; private set; }
+
+        public CommitCommentsController(Client client, CommitController commits)
+            : base(client)
+        {
+            CommitController = commits;
+        }
+
+        public GitHubResponse<List<CommentModel>> GetAll(int page = 1, int perPage = 100)
+        {
+            return Client.Get<List<CommentModel>>(Uri, page: page, perPage: perPage);
+        }
+
+        public override string Uri
+        {
+            get { return CommitController.Uri + "/comments"; }
+        }
+    }
 }

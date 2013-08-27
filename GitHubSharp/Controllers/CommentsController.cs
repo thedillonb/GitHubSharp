@@ -17,14 +17,19 @@ namespace GitHubSharp.Controllers
             Repository = repository;
         }
 
-        public GitHubResponse<List<CommentModel>> GetAll(int page = 1, int perPage = 100)
+        public GitHubResponse<List<CommentModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<CommentModel>>(Uri, page: page, perPage: perPage);
+            return Client.Get<List<CommentModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
-        public GitHubResponse<CommentModel> Get(string id)
+        public GitHubResponse<List<CommentModel>> GetAll(string sha, bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<CommentModel>(Uri + "/" + id);
+            return Client.Get<List<CommentModel>>(Repository.Uri + "/commits/" + sha + "/comments", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+        }
+
+        public GitHubResponse<CommentModel> Get(string id, bool forceCacheInvalidation = false)
+        {
+            return Client.Get<CommentModel>(Uri + "/" + id, forceCacheInvalidation: forceCacheInvalidation);
         }
 
         public GitHubResponse<CommentModel> Update(string id, string body)
@@ -58,9 +63,9 @@ namespace GitHubSharp.Controllers
             return Client.Post<CommentModel>(Uri, model.Serialize());
         }
 
-        public GitHubResponse<List<CommentModel>> GetAll(int page = 1, int perPage = 100)
+        public GitHubResponse<List<CommentModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<CommentModel>>(Uri, page: page, perPage: perPage);
+            return Client.Get<List<CommentModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
         public override string Uri

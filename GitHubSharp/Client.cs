@@ -10,9 +10,9 @@ namespace GitHubSharp
 {
     public class Client
     {
-        public static Uri ApiUri = new Uri("https://api.github.com/");
-        public static Uri RawUri = new Uri("https://raw.github.com/");
-        public static Uri GistUri = new Uri("https://gist.github.com/");
+        public static string ApiUri = "https://api.github.com";
+        public static string RawUri = "https://raw.github.com";
+        public static string GistUri = "https://gist.github.com";
         private readonly RestClient _client = new RestClient();
 
         public AuthenticatedUserController AuthenticatedUser
@@ -89,6 +89,16 @@ namespace GitHubSharp
             _client.Authenticator = new HttpBasicAuthenticator(username, password);
             _client.FollowRedirects = true;
         }
+
+        /// <summary>
+        /// Invalidates a cache object starting with a specific URI
+        /// </summary>
+        /// <param name="startsWithUri">The starting URI to be invalidated</param>
+        public void InvalidateCacheObjects(string startsWithUri)
+        {
+            if (CacheProvider != null)
+                CacheProvider.DeleteWhereStartingWith(startsWithUri);
+        }
         
         /// <summary>
         /// Makes a 'GET' request to the server using a URI
@@ -96,10 +106,22 @@ namespace GitHubSharp
         /// <typeparam name="T">The type of object the response should be deserialized ot</typeparam>
         /// <param name="uri">The URI to request information from</param>
         /// <returns>An object with response data</returns>
-        public GitHubResponse<T> Get<T>(string relativeResource, Uri baseUri = null, int page = 1, int perPage = 100, object additionalArgs = null) where T : class
+        public GitHubResponse<T> Get<T>(string relativeResource, bool forceCacheInvalidation = false, Uri baseUri = null, int page = 1, int perPage = 100, object additionalArgs = null) where T : class
         {
             if (baseUri == null)
                 baseUri = ApiUri;
+            var uri = baseUri.AbsoluteUri + relativeResource;
+
+            GitHubResponse<T> obj = null;
+
+            //If there's a cache provider, check it.
+            if (CacheProvider != null && !forceCacheInvalidation)
+                obj = CacheProvider.Get<GitHubResponse<T>>(uri);
+
+            //Return the cached object
+            if (obj != null)
+                return obj;
+
             var request = new RestRequest(baseUri.AbsoluteUri + relativeResource, Method.GET);
             request.AddParameter("page", page);
             request.AddParameter("per_page", perPage);
@@ -107,7 +129,12 @@ namespace GitHubSharp
                 foreach (var arg in ObjectToDictionaryConverter.Convert(additionalArgs))
                     request.AddParameter(arg.Key, arg.Value);
 
-            return ParseResponse<T>(ExecuteRequest(request));
+            var response = ParseResponse<T>(ExecuteRequest(request));
+
+            //If there's a cache provider, save it!
+            if (CacheProvider != null)
+                CacheProvider.Set(obj, uri);
+            return response;
         }
 
         
@@ -221,17 +248,11 @@ namespace GitHubSharp
 
                         if (what.Equals("next"))
                         {
-                            ghr.Next = new GitHubResponse<T>.Pagination(0, 0);
                             ghr.More = () => {
                                 var request = new RestRequest(url, Method.GET);
                                 return ParseResponse<T>(ExecuteRequest(request));
                             };
                         }
-                        else if (what.Equals("prev"))
-                        {
-                            ghr.Prev = new GitHubResponse<T>.Pagination(0, 0);
-                        }
-
                     }
                 }
             }

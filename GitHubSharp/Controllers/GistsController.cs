@@ -19,19 +19,19 @@ namespace GitHubSharp.Controllers
         {
         }
 
-        public GitHubResponse<List<GistModel>> GetGists(int page = 1, int perPage = 100)
+        public GitHubResponse<List<GistModel>> GetGists(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<GistModel>>(Uri, page: page, perPage: perPage);
+            return Client.Get<List<GistModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
-        public GitHubResponse<List<GistModel>> GetPublicGists(int page = 1, int perPage = 100)
+        public GitHubResponse<List<GistModel>> GetPublicGists(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<GistModel>>(Uri + "/public", page: page, perPage: perPage);
+            return Client.Get<List<GistModel>>(Uri + "/public", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
-        public GitHubResponse<List<GistModel>> GetStarredGists(int page = 1, int perPage = 100)
+        public GitHubResponse<List<GistModel>> GetStarredGists(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<GistModel>>(Uri + "/starred", page: page, perPage: perPage);
+            return Client.Get<List<GistModel>>(Uri + "/starred", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
         
         public string GetFile(string url)
@@ -56,9 +56,9 @@ namespace GitHubSharp.Controllers
             _user = user;
         }
 
-        public GitHubResponse<List<GistModel>> GetGists(string username = null, int page = 1, int perPage = 100)
+        public GitHubResponse<List<GistModel>> GetGists(string username = null, bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<GistModel>>(Uri, page: page, perPage: perPage);
+            return Client.Get<List<GistModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
         public override string Uri
@@ -115,9 +115,9 @@ namespace GitHubSharp.Controllers
             _name = name;
         }
 
-        public GitHubResponse<GistModel> GetInfo()
+        public GitHubResponse<GistModel> GetInfo(bool forceCacheInvalidation = false)
         {
-            return Client.Get<GistModel>(Uri);
+            return Client.Get<GistModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
         }
 
         public void Star()
@@ -130,9 +130,9 @@ namespace GitHubSharp.Controllers
             Client.Delete(Uri + "/star");
         }
 
-        public GitHubResponse<List<GistCommentModel>> GetComments()
+        public GitHubResponse<List<GistCommentModel>> GetComments(bool forceCacheInvalidation = false)
         {
-            return Client.Get<List<GistCommentModel>>(Uri + "/comments");
+            return Client.Get<List<GistCommentModel>>(Uri + "/comments", forceCacheInvalidation: forceCacheInvalidation);
         }
 
         public GitHubResponse<GistModel> ForkGist()

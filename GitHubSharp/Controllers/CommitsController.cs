@@ -18,13 +18,13 @@ namespace GitHubSharp.Controllers
         {
             RepositoryController = repo;
         }
-        
-        public GitHubResponse<List<CommitModel>> GetAll(string sha = null)
+
+        public GitHubResponse<List<CommitModel>> GetAll(string sha = null, bool forceCacheInvalidation = false)
         {
             if (sha == null)
-                return Client.Get<List<CommitModel>>(Uri);
+                return Client.Get<List<CommitModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation);
             else
-                return Client.Get<List<CommitModel>>(Uri, additionalArgs: new { Sha = sha });
+                return Client.Get<List<CommitModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, additionalArgs: new { Sha = sha });
         }
 
         public override string Uri
@@ -51,9 +51,9 @@ namespace GitHubSharp.Controllers
             Sha = sha;
         }
 
-        public GitHubResponse<CommitModel> GetInfo()
+        public GitHubResponse<CommitModel> GetInfo(bool forceCacheInvalidation = false)
         {
-            return Client.Get<CommitModel>(Uri);
+            return Client.Get<CommitModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
         }
 
         public override string Uri

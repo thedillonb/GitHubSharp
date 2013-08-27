@@ -35,24 +35,24 @@ namespace GitHubSharp.Controllers
             _name = name;
         }
 
-        public GitHubResponse<UserModel> GetInfo()
+        public GitHubResponse<UserModel> GetInfo(bool forceCacheInvalidation = false)
         {
-            return Client.Get<UserModel>(Uri);
+            return Client.Get<UserModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
         }
 
-        public GitHubResponse<List<BasicUserModel>> GetMembers()
+        public GitHubResponse<List<BasicUserModel>> GetMembers(bool forceCacheInvalidation = false)
         {
-            return Client.Get<List<BasicUserModel>>(Uri + "/members");
+            return Client.Get<List<BasicUserModel>>(Uri + "/members", forceCacheInvalidation: forceCacheInvalidation);
         }
 
-        public GitHubResponse<List<BasicUserModel>> GetTeams()
+        public GitHubResponse<List<BasicUserModel>> GetTeams(bool forceCacheInvalidation = false)
         {
-            return Client.Get<List<BasicUserModel>>(Uri + "/teams");
+            return Client.Get<List<BasicUserModel>>(Uri + "/teams", forceCacheInvalidation: forceCacheInvalidation);
         }
 
-        public GitHubResponse<List<EventModel>> GetEvents(int page = 1, int perPage = 100)
+        public GitHubResponse<List<EventModel>> GetEvents(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<EventModel>>(Uri + "/events", page: page, perPage: perPage);
+            return Client.Get<List<EventModel>>(Uri + "/events", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
         public override string Uri

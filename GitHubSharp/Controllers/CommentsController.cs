@@ -22,19 +22,9 @@ namespace GitHubSharp.Controllers
             return Client.Get<List<CommentModel>>(Uri, page: page, perPage: perPage);
         }
 
-        public GitHubResponse<List<CommentModel>> GetAll(string sha, int page = 1, int perPage = 100)
-        {
-            return Client.Get<List<CommentModel>>(Repository.Uri + "/commits/" + sha + "/comments", page: page, perPage: perPage);
-        }
-
         public GitHubResponse<CommentModel> Get(string id)
         {
             return Client.Get<CommentModel>(Uri + "/" + id);
-        }
-
-        public GitHubResponse<CommentModel> Create(string sha, CreateCommentModel model)
-        {
-            return Client.Post<CommentModel>(Repository.Uri + "/commits/" + sha + "/comments", model);
         }
 
         public GitHubResponse<CommentModel> Update(string id, string body)
@@ -61,6 +51,11 @@ namespace GitHubSharp.Controllers
             : base(client)
         {
             CommitController = commits;
+        }
+
+        public GitHubResponse<CommentModel> Create(CreateCommentModel model)
+        {
+            return Client.Post<CommentModel>(Uri, model.Serialize());
         }
 
         public GitHubResponse<List<CommentModel>> GetAll(int page = 1, int perPage = 100)

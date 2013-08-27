@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace GitHubSharp.Models
 {
@@ -22,6 +23,18 @@ namespace GitHubSharp.Models
         public string Body { get; set; }
         public string Path { get; set; }
         public int? Position { get; set; }
+
+        public Dictionary<string, object> Serialize()
+        {
+            var d = new Dictionary<string, object>();
+            if (Body != null)
+                d.Add("body", Body);
+            if (Path != null)
+                d.Add("path", Path);
+            if (Position != null)
+                d.Add("position", Position.Value);
+            return d;
+        }
     }
 
     public class CommentForCreationOrEditModel

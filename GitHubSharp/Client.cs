@@ -71,8 +71,6 @@ namespace GitHubSharp
             get { return _client.Timeout; }
             set { _client.Timeout = value; }
         }
-        
-        public uint Retries { get; set; }
 
         /// <summary>
         /// The cache provider to use when requesting
@@ -86,7 +84,6 @@ namespace GitHubSharp
         /// <param name="password"></param>
         public Client(String username, String password)
         {
-            Retries = 3;
             Username = username;
             Password = password;
             _client.Authenticator = new HttpBasicAuthenticator(username, password);
@@ -144,19 +141,7 @@ namespace GitHubSharp
         {
             Request(uri, Method.PUT, data);
         }
-        
-        /// <summary>
-        /// Makes a 'POST' request to the server
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="uri"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public GitHubResponse<T> Post<T>(string uri, Dictionary<string, string> data) where T : class
-        {
-            return Request<T>(uri, Method.POST, data);
-        }
-        
+
         /// <summary>
         /// Makes a 'POST' request to the server
         /// </summary>
@@ -166,7 +151,12 @@ namespace GitHubSharp
         /// <returns></returns>
         public GitHubResponse<T> Post<T>(string uri, object data) where T : class
         {
-            return Post<T>(uri, ObjectToDictionaryConverter.Convert(data));
+            var request = new RestRequest(ApiUri + uri, Method.POST);
+            request.RequestFormat = DataFormat.Json;
+            if (data != null)
+                request.AddBody(data);
+
+            return ParseResponse<T>(ExecuteRequest(request));
         }
 
         
@@ -343,21 +333,16 @@ namespace GitHubSharp
         internal IRestResponse ExecuteRequest(IRestRequest request)
         {
             RestSharp.IRestResponse response = null;
-            for (var i = 0; i < Retries + 1; i++)
-            {
-                response = _client.Execute(request);
+            response = _client.Execute(request);
 
-                if (response.ErrorException != null)
-                    throw response.ErrorException;
+            if (response.ErrorException != null)
+                throw response.ErrorException;
 
-                //A 200 is always good.
-                if (response.StatusCode >= (HttpStatusCode)200 && response.StatusCode < (HttpStatusCode)300)
-                    return response;
+            //A 200 is always good.
+            if (response.StatusCode >= (HttpStatusCode)200 && response.StatusCode < (HttpStatusCode)300)
+                return response;
 
-                throw StatusCodeException.FactoryCreate(response.StatusCode);
-            }
-            
-            throw new InvalidOperationException("Unable to execute request. Status code 0 returned " + (Retries+1) + " times!");
+            throw StatusCodeException.FactoryCreate(response.StatusCode);
         }
     }
 }

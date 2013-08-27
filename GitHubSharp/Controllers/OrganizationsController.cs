@@ -11,7 +11,7 @@ namespace GitHubSharp.Controllers
     {
         public OrganizationController this[string name]
         {
-            get { return new OrganizationController(Client, name); }
+            get { return new OrganizationController(Client, this, name); }
         }
 
         public OrganizationsController(Client client)
@@ -21,33 +21,36 @@ namespace GitHubSharp.Controllers
 
         public override string Uri
         {
-            get { return "orgs"; }
+            get { return Client.ApiUri + "/orgs"; }
         }
     }
 
     public class OrganizationController : Controller
     {
-        private readonly string _name;
+        public string Name { get; private set; }
 
-        public OrganizationController(Client client, string name)
+        public OrganizationsController OrganizationsController { get; private set; }
+
+        public OrganizationController(Client client, OrganizationsController organizationsController, string name)
             : base(client)
         {
-            _name = name;
+            Name = name;
+            OrganizationsController = organizationsController;
         }
 
-        public GitHubResponse<UserModel> GetInfo(bool forceCacheInvalidation = false)
+        public GitHubResponse<UserModel> Get(bool forceCacheInvalidation = false)
         {
             return Client.Get<UserModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
         }
 
-        public GitHubResponse<List<BasicUserModel>> GetMembers(bool forceCacheInvalidation = false)
+        public GitHubResponse<List<BasicUserModel>> GetMembers(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<BasicUserModel>>(Uri + "/members", forceCacheInvalidation: forceCacheInvalidation);
+            return Client.Get<List<BasicUserModel>>(Uri + "/members", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
-        public GitHubResponse<List<BasicUserModel>> GetTeams(bool forceCacheInvalidation = false)
+        public GitHubResponse<List<BasicUserModel>> GetTeams(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<BasicUserModel>>(Uri + "/teams", forceCacheInvalidation: forceCacheInvalidation);
+            return Client.Get<List<BasicUserModel>>(Uri + "/teams", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
         public GitHubResponse<List<EventModel>> GetEvents(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
@@ -57,7 +60,7 @@ namespace GitHubSharp.Controllers
 
         public override string Uri
         {
-            get { return "orgs/" + _name; }
+            get { return OrganizationsController.Uri + "/" + Name; }
         }
     }
 }

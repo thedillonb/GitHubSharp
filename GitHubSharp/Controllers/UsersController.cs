@@ -93,14 +93,14 @@ namespace GitHubSharp.Controllers
     /// </summary>
     public class UserController : BaseUserController
     {
-        private readonly string _user;
+        public string Name { get; private set; }
 
         /// <summary>
         /// Gets the user's repositories
         /// </summary>
         public UserRepositoriesController Repositories
         {
-            get { return new UserRepositoriesController(Client, _user); }
+            get { return new UserRepositoriesController(Client, this); }
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace GitHubSharp.Controllers
         /// </summary>
         public UserGistsController Gists
         {
-            get { return new UserGistsController(Client, _user); }
+            get { return new UserGistsController(Client, Name); }
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace GitHubSharp.Controllers
         public UserController(Client client, string name)
             : base(client)
         {
-            _user = name;
+            Name = name;
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace GitHubSharp.Controllers
 
         public override string Uri
         {
-            get { return Client.ApiUri + "users/" + _user; }
+            get { return Client.ApiUri + "users/" + Name; }
         }
     }
 
@@ -162,11 +162,6 @@ namespace GitHubSharp.Controllers
         public GitHubResponse<List<KeyModel>> GetKeys(bool forceCacheInvalidation = false)
         {
             return Client.Get<List<KeyModel>>("user/keys", forceCacheInvalidation: forceCacheInvalidation);
-        }
-
-        public GitHubResponse<List<NotificationModel>> GetNotifications(bool forceCacheInvalidation = false, int page = 1, int perPage = 100, bool all = false, bool participating = false)
-        {
-            return Client.Get<List<NotificationModel>>("notifications", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage, additionalArgs: new { All = all, Participating = participating });
         }
 
         public override string Uri

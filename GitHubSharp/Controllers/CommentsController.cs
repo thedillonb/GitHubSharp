@@ -9,12 +9,22 @@ namespace GitHubSharp.Controllers
 {
     public class CommentsController : Controller
     {
-        public RepositoryController Repository { get; private set; }
+        public RepositoryController RepositoryController { get; private set; }
+
+        public CommentController this[string key]
+        {
+            get { return new CommentController(Client, RepositoryController, key); }
+        }
 
         public CommentsController(Client client, RepositoryController repository)
             : base(client)
         {
-            Repository = repository;
+            RepositoryController = repository;
+        }
+
+        public GitHubResponse<CommentModel> Create(string body)
+        {
+            return Client.Post<CommentModel>(Uri, new Dictionary<string, object> {{ "body", body }});
         }
 
         public GitHubResponse<List<CommentModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
@@ -22,29 +32,43 @@ namespace GitHubSharp.Controllers
             return Client.Get<List<CommentModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
-        public GitHubResponse<List<CommentModel>> GetAll(string sha, bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public override string Uri
         {
-            return Client.Get<List<CommentModel>>(Repository.Uri + "/commits/" + sha + "/comments", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            get { return RepositoryController.Uri + "/comments"; }
+        }
+    }
+
+    public class CommentController : Controller
+    {
+        public RepositoryController RepositoryController { get; private set; }
+
+        public string Id { get; private set; }
+
+        public CommentController(Client client, RepositoryController repositoryController, string id)
+            : base(client)
+        {
+            RepositoryController = repositoryController;
+            Id = id;
         }
 
-        public GitHubResponse<CommentModel> Get(string id, bool forceCacheInvalidation = false)
+        public GitHubResponse<CommentModel> Get(bool forceCacheInvalidation = false)
         {
-            return Client.Get<CommentModel>(Uri + "/" + id, forceCacheInvalidation: forceCacheInvalidation);
+            return Client.Get<CommentModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
         }
 
-        public GitHubResponse<CommentModel> Update(string id, string body)
+        public GitHubResponse<CommentModel> Update(string body)
         {
-            return Client.Patch<CommentModel>(Uri + "/" + id, new { Body = body });
+            return Client.Patch<CommentModel>(Uri, new { Body = body });
         }
 
-        public void Delete(string id)
+        public void Delete()
         {
-            Client.Delete(Uri + "/" + id);
+            Client.Delete(Uri);
         }
 
         public override string Uri
         {
-            get { return Repository.Uri + "/comments"; }
+            get { return RepositoryController.Uri + "/comments/" + Id; }
         }
     }
 
@@ -52,15 +76,20 @@ namespace GitHubSharp.Controllers
     {
         public CommitController CommitController { get; private set; }
 
+        public CommentController this[string key]
+        {
+            get { return new CommentController(Client, CommitController.RepositoryController, key); }
+        }
+
         public CommitCommentsController(Client client, CommitController commits)
             : base(client)
         {
             CommitController = commits;
         }
 
-        public GitHubResponse<CommentModel> Create(CreateCommentModel model)
+        public GitHubResponse<CommentModel> Create(string body, string path, int position)
         {
-            return Client.Post<CommentModel>(Uri, model.Serialize());
+            return Client.Post<CommentModel>(Uri, new Dictionary<string, object> {{ "body", body }, { "path", path }, { "position", position }});
         }
 
         public GitHubResponse<List<CommentModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)

@@ -11,7 +11,7 @@ namespace GitHubSharp.Controllers
     {
         public GistController this[string key]
         {
-            get { return new GistController(Client, key); }
+            get { return new GistController(Client, this, key); }
         }
 
         public GistsController(Client client)
@@ -36,13 +36,12 @@ namespace GitHubSharp.Controllers
         
         public string GetFile(string url)
         {
-            var a = Client.ExecuteRequest(url, RestSharp.Method.GET, null);
-            return a.Content;
+            return Client.Get<string>(url).Data;
         }
 
         public override string Uri
         {
-            get { return "gists"; }
+            get { return Client.ApiUri + "/gists"; }
         }
     }
 
@@ -63,14 +62,14 @@ namespace GitHubSharp.Controllers
 
         public override string Uri
         {
-            get { return "users/" + _user + "/gists"; }
+            get { return Client.ApiUri + "/users/" + _user + "/gists"; }
         }
     }
 
-    public class AuthenticatedGistsController : Controller
+    public class AuthenticatedGistsController : UserGistsController
     {
         public AuthenticatedGistsController(Client client)
-            : base(client)
+            : base(client, client.Username)
         {
         }
 
@@ -96,12 +95,8 @@ namespace GitHubSharp.Controllers
                 }
             }
 
-            return Client.RequestWithJson<GistModel>(Uri, RestSharp.Method.POST, obj);
-        }
-
-        public override string Uri
-        {
-            get { return "gists"; }
+            var uri = Client.ApiUri + "/gists";
+            return Client.Post<GistModel>(uri, obj);
         }
     }
 
@@ -109,10 +104,13 @@ namespace GitHubSharp.Controllers
     {
         private readonly string _name;
 
-         public GistController(Client client, string name)
+        public GistsController GistsController { get; private set; }
+
+        public GistController(Client client, GistsController gistsController, string name)
             : base(client)
         {
             _name = name;
+            GistsController = gistsController;
         }
 
         public GitHubResponse<GistModel> GetInfo(bool forceCacheInvalidation = false)
@@ -137,7 +135,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubResponse<GistModel> ForkGist()
         {
-            return Client.Request<GistModel>(Uri + "/forks", RestSharp.Method.POST, null);
+            return Client.Post<GistModel>(Uri + "/forks", null);
         }
 
         public void Delete()
@@ -162,7 +160,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubResponse<GistCommentModel> CreateGistComment(string body)
         {
-            return Client.RequestWithJson<GistCommentModel>(Uri + "/comments", RestSharp.Method.POST, new { body = body });
+            return Client.Post<GistCommentModel>(Uri + "/comments", new { body = body });
         }
 
         public GitHubResponse<GistModel> EditGist(GistEditModel gist)
@@ -193,12 +191,12 @@ namespace GitHubSharp.Controllers
                 }
             }
 
-            return Client.RequestWithJson<GistModel>(Uri, RestSharp.Method.PATCH, obj);
+            return Client.Patch<GistModel>(Uri, obj);
         }
 
         public override string Uri
         {
-            get { return "gists/" + _name; }
+            get { return GistsController.Uri + "/" + _name; }
         }
     }
 }

@@ -50,7 +50,9 @@
     <Compile Include="Controllers\CommitsController.cs" />
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\GistsController.cs" />
+    <Compile Include="Controllers\IssuesController.cs" />
     <Compile Include="Controllers\MarkdownController.cs" />
+    <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\OrganizationsController.cs" />
     <Compile Include="Controllers\RepositoriesController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="Models\PullRequestModel.cs" />
     <Compile Include="Models\RepositoryModel.cs" />
     <Compile Include="Models\SubscriptionModel.cs" />
+    <Compile Include="Models\TeamModel.cs" />
     <Compile Include="Models\TreeModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Utils\ObjectToDictionaryConverter.cs" />

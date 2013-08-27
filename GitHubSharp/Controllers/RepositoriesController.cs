@@ -9,7 +9,6 @@ namespace GitHubSharp.Controllers
 {
     public class ExploreRepositoriesController : Controller
     {
-
         public ExploreRepositoriesController(Client client)
             : base(client)
         {
@@ -22,93 +21,97 @@ namespace GitHubSharp.Controllers
 
         public override string Uri
         {
-            get { return "legacy/repos"; }
+            get { return Client.ApiUri + "/legacy/repos"; }
         }
     }
 
     public class UserRepositoriesController : Controller
     {
-        private readonly string User;
+        public UserController UserController { get; private set; }
 
         public RepositoryController this[string key]
         {
-            get { return new RepositoryController(Client, User, key); }
+            get { return new RepositoryController(Client, UserController.Name, key); }
         }
 
-        public UserRepositoriesController(Client client, string username)
+        public UserRepositoriesController(Client client, UserController userController)
             : base(client)
         {
-            User = username;
+            UserController = userController;
         }
 
-        public GitHubResponse<List<RepositoryModel>> GetAll(int page = 1, int perPage = 100)
+        public GitHubResponse<List<RepositoryModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<RepositoryModel>>(Uri, page: page, perPage: perPage);
+            return Client.Get<List<RepositoryModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
-        public GitHubResponse<List<RepositoryModel>> GetWatching()
+        public GitHubResponse<List<RepositoryModel>> GetWatching(bool forceCacheInvalidation = false)
         {
-            return Client.Get<List<RepositoryModel>>("users/" + User + "/subscriptions");
+            return Client.Get<List<RepositoryModel>>(UserController.Uri + "/subscriptions", forceCacheInvalidation: forceCacheInvalidation);
         }
    
         public override string Uri
         {
-            get { return "users/" + User + "/repos"; }
+            get { return UserController.Uri + "/repos"; }
         }
     }
 
     public class AuthenticatedRepositoriesController : Controller
     {
+        public RepositoryController this[string key]
+        {
+            get { return new RepositoryController(Client, Client.Username, key); }
+        }
+
         public AuthenticatedRepositoriesController(Client client)
             : base(client)
         {
         }
 
-        public GitHubResponse<List<RepositoryModel>> List(int page = 1, int perPage = 100)
+        public GitHubResponse<List<RepositoryModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<RepositoryModel>>(Uri + "/repos", page: page, perPage: perPage);
+            return Client.Get<List<RepositoryModel>>(Uri + "/repos", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
-        public GitHubResponse<List<RepositoryModel>> GetStarred(int page = 1, int perPage = 100)
+        public GitHubResponse<List<RepositoryModel>> GetStarred(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<RepositoryModel>>(Uri + "/starred", page: page, perPage: perPage);
+            return Client.Get<List<RepositoryModel>>(Uri + "/starred", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
-        public GitHubResponse<List<RepositoryModel>> GetWatching(int page = 1, int perPage = 100)
+        public GitHubResponse<List<RepositoryModel>> GetWatching(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<RepositoryModel>>(Uri + "/subscriptions", page: page, perPage: perPage);
+            return Client.Get<List<RepositoryModel>>(Uri + "/subscriptions", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
-
 
         public override string Uri
         {
-            get { return "user"; }
+            get { return Client.ApiUri + "/user"; }
         }
     }
 
     public class OrginzationRepositoriesController : Controller
     {
-        private readonly string _name;
+        public OrganizationController OrganizationController { get; private set; }
 
         public RepositoryController this[string key]
         {
-            get { return new RepositoryController(Client, _name, key); }
+            get { return new RepositoryController(Client, OrganizationController.Name, key); }
         }
 
-        public OrginzationRepositoriesController(Client client, string name)
+        public OrginzationRepositoriesController(Client client, OrganizationController organizationController)
             : base(client)
         {
-            _name = name;
+            OrganizationController = organizationController;
         }
 
-        public GitHubResponse<List<RepositoryModel>> GetRepositories(int page = 1, int perPage = 100)
+        public GitHubResponse<List<RepositoryModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<RepositoryModel>>(Uri, page: page, perPage: perPage);
+            return Client.Get<List<RepositoryModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
         public override string Uri
         {
-            get { return "orgs/" + _name + "/repos"; }
+            get { return OrganizationController.Uri + "/repos"; }
         }
     }
 
@@ -135,9 +138,9 @@ namespace GitHubSharp.Controllers
             Repo = repo;
         }
 
-        public GitHubResponse<RepositoryModel> GetInfo()
+        public GitHubResponse<RepositoryModel> Get(bool forceCacheInvalidation = false)
         {
-            return Client.Get<RepositoryModel>(Uri);
+            return Client.Get<RepositoryModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
         }
 
         public GitHubResponse<List<BasicUserModel>> GetContributors(int page = 1, int perPage = 100)
@@ -221,7 +224,7 @@ namespace GitHubSharp.Controllers
         {
             try
             {
-                if (Client.Get<object>("user/subscriptions/" + User + "/" + Repo).StatusCode == 204)
+                if (Client.Get<object>(Client.ApiUri + "user/subscriptions/" + User + "/" + Repo).StatusCode == 204)
                     return true;
             }
             catch (NotFoundException)
@@ -233,12 +236,12 @@ namespace GitHubSharp.Controllers
 
         public void Watch()
         {
-            Client.Put("/user/subscriptions/" + User + "/" + Repo);
+            Client.Put(Client.ApiUri + "/user/subscriptions/" + User + "/" + Repo);
         }
 
         public void StopWatching()
         {
-            Client.Delete("/user/subscriptions/" + User + "/" + Repo);
+            Client.Delete(Client.ApiUri + "/user/subscriptions/" + User + "/" + Repo);
         }
 
         public GitHubResponse<SubscriptionModel> GetSubscription()
@@ -266,7 +269,7 @@ namespace GitHubSharp.Controllers
         {
             try
             {
-                if (Client.Get<object>("/user/starred/" + User + "/" + Repo).StatusCode == 204)
+                if (Client.Get<object>(Client.ApiUri + "/user/starred/" + User + "/" + Repo).StatusCode == 204)
                     return true;
             }
             catch (NotFoundException)
@@ -278,12 +281,12 @@ namespace GitHubSharp.Controllers
 
         public void Star()
         {
-            Client.Put("/user/starred/" + User + "/" + Repo);
+            Client.Put(Client.ApiUri + "/user/starred/" + User + "/" + Repo);
         }
 
         public void Unstar()
         {
-            Client.Delete("/user/starred/" + User + "/" + Repo);
+            Client.Delete(Client.ApiUri + "/user/starred/" + User + "/" + Repo);
         }
 
         public GitHubResponse<List<BasicUserModel>> GetCollaborators(int page = 1, int perPage = 100)
@@ -293,7 +296,7 @@ namespace GitHubSharp.Controllers
 
         public override string Uri
         {
-            get { return "repos/" + User + "/" + Repo; }
+            get { return Client.ApiUri + "/repos/" + User + "/" + Repo; }
         }
     }
 }

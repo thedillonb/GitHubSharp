@@ -44,14 +44,14 @@ namespace GitHubSharp.Controllers
             get { return new CommitCommentsController(Client, this); }
         }
 
-        public CommitController(Client client, RepositoryController repo, string sha)
+        public CommitController(Client client, RepositoryController repositoryController, string sha)
             : base(client)
         {
-            RepositoryController = repo;
+            RepositoryController = repositoryController;
             Sha = sha;
         }
 
-        public GitHubResponse<CommitModel> GetInfo(bool forceCacheInvalidation = false)
+        public GitHubResponse<CommitModel> Get(bool forceCacheInvalidation = false)
         {
             return Client.Get<CommitModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
         }

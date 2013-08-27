@@ -39,14 +39,30 @@ namespace GitHubSharp.Models
         public DateTime? DueOn { get; set; }
     }
 
-
-
-    public class CommentForIssue
+    public class IssueCommentModel
     {
+        public long Id { get; set; }
+        public string Url { get; set; }
+        public string Body { get; set; }
+        public BasicUserModel User { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public string Body { get; set; }
-        public int Id { get; set; }
-        public string User { get; set; }
+    }
+
+    public class IssueEventModel
+    {
+        public string Url { get; set; }
+        public BasicUserModel Actor { get; set; }
+        public string Event { get; set; }
+        public string CommitId { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public IssueModel Issue { get; set; }
+
+        public static class EventTypes
+        {
+            public static string Closed = "closed", Reopened = "reopened", Subscribed = "subscribed",
+                                 Merged = "merged", Referenced = "referenced", Mentioned = "mentioned",
+                                 Assigned = "assigned";
+        }
     }
 }

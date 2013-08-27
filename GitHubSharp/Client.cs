@@ -106,12 +106,8 @@ namespace GitHubSharp
         /// <typeparam name="T">The type of object the response should be deserialized ot</typeparam>
         /// <param name="uri">The URI to request information from</param>
         /// <returns>An object with response data</returns>
-        public GitHubResponse<T> Get<T>(string relativeResource, bool forceCacheInvalidation = false, Uri baseUri = null, int page = 1, int perPage = 100, object additionalArgs = null) where T : class
+        public GitHubResponse<T> Get<T>(string uri, bool forceCacheInvalidation = false, int page = 1, int perPage = 100, object additionalArgs = null) where T : class
         {
-            if (baseUri == null)
-                baseUri = ApiUri;
-            var uri = baseUri.AbsoluteUri + relativeResource;
-
             GitHubResponse<T> obj = null;
 
             //If there's a cache provider, check it.
@@ -122,7 +118,7 @@ namespace GitHubSharp
             if (obj != null)
                 return obj;
 
-            var request = new RestRequest(baseUri.AbsoluteUri + relativeResource, Method.GET);
+            var request = new RestRequest(uri, Method.GET);
             request.AddParameter("page", page);
             request.AddParameter("per_page", perPage);
             if (additionalArgs != null)
@@ -137,18 +133,17 @@ namespace GitHubSharp
             return response;
         }
 
-        
         /// <summary>
-        /// Makes a 'PUT' request to the server
+        /// Makes a 'GET' request to the server using a URI
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="uri"></param>
-        /// <returns></returns>
-        public GitHubResponse<T> Put<T>(string uri, Dictionary<string, string> data = null) where T : class
+        /// <typeparam name="T">The type of object the response should be deserialized ot</typeparam>
+        /// <param name="uri">The URI to request information from</param>
+        /// <returns>An object with response data</returns>
+        public GitHubResponse Get(string uri, bool forceCacheInvalidation = false, int page = 1, int perPage = 100, object additionalArgs = null)
         {
-            return Request<T>(uri, Method.PUT, data);
+            return (GitHubResponse)Get<object>(uri, forceCacheInvalidation, page, perPage, additionalArgs);
         }
-
+        
         /// <summary>
         /// Makes a 'PUT' request to the server
         /// </summary>
@@ -157,16 +152,25 @@ namespace GitHubSharp
         /// <returns></returns>
         public GitHubResponse<T> Put<T>(string uri, object data = null) where T : class
         {
-            return Request<T>(uri, Method.PUT, ObjectToDictionaryConverter.Convert(data));
+            var request = new RestRequest(uri, Method.PUT);
+            request.RequestFormat = DataFormat.Json;
+            if (data != null)
+                request.AddBody(data);
+
+            //Puts without any data must be marked as having no content!
+            if (data == null)
+                request.AddHeader("Content-Length", "0");
+
+            return ParseResponse<T>(ExecuteRequest(request));
         }
-        
+
         /// <summary>
         /// Makes a 'PUT' request to the server
         /// </summary>
         /// <param name="uri"></param>
-        public void Put(string uri, Dictionary<string, string> data = null)
+        public GitHubResponse Put(string uri, object data = null)
         {
-            Request(uri, Method.PUT, data);
+            return (GitHubResponse)Put<object>(uri, data);
         }
 
         /// <summary>
@@ -176,9 +180,9 @@ namespace GitHubSharp
         /// <param name="uri"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public GitHubResponse<T> Post<T>(string uri, object data) where T : class
+        public GitHubResponse<T> Post<T>(string uri, object data = null) where T : class
         {
-            var request = new RestRequest(ApiUri + uri, Method.POST);
+            var request = new RestRequest(uri, Method.POST);
             request.RequestFormat = DataFormat.Json;
             if (data != null)
                 request.AddBody(data);
@@ -186,39 +190,29 @@ namespace GitHubSharp
             return ParseResponse<T>(ExecuteRequest(request));
         }
 
-        
-        /// <summary>
-        /// Post the specified uri and data.
-        /// </summary>
-        public GitHubResponse<T> Post<T>(string uri) where T : class
-        {
-            return Post<T>(uri);
-        }
-        
-        /// <summary>
-        /// Makes a 'POST' request to the server without a response
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="uri"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public void Post(string uri, Dictionary<string, string> data)
-        {
-            Request(uri, Method.POST, data);
-        }
-        
         /// <summary>
         /// Makes a 'DELETE' request to the server
         /// </summary>
         /// <param name="uri"></param>
-        public void Delete(string uri)
+        public GitHubResponse Delete(string uri)
         {
-            Request(uri, Method.DELETE);
+            var request = new RestRequest(uri, Method.DELETE);
+            return ParseResponse(ExecuteRequest(request));
         }
 
-        public GitHubResponse<T> Patch<T>(string uri, object data) where T : class
+        public GitHubResponse<T> Patch<T>(string uri, object data = null) where T : class
         {
-            return Request<T>(uri, Method.PATCH, ObjectToDictionaryConverter.Convert(data));
+            var request = new RestRequest(uri, Method.PATCH);
+            request.RequestFormat = DataFormat.Json;
+            if (data != null)
+                request.AddBody(data);
+
+            return ParseResponse<T>(ExecuteRequest(request));
+        }
+
+        public GitHubResponse Patch(string uri, object data = null)
+        {
+            return (GitHubResponse)Patch<object>(uri, data);
         }
 
         private GitHubResponse<T> ParseResponse<T>(IRestResponse response) where T : class
@@ -259,46 +253,18 @@ namespace GitHubSharp
 
             return ghr;
         }
-        
-        /// <summary>
-        /// Makes a request to the server expecting a response
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="uri"></param>
-        /// <param name="data"></param>
-        /// <param name="header"></param>
-        /// <param name="method"></param>
-        /// <returns></returns>
-        public GitHubResponse<T> Request<T>(string uri, Method method = Method.GET, Dictionary<string, string> data = null) where T : class
-        {
-            return ParseResponse<T>(ExecuteRequest(ApiUri + uri, method, data));
-        }
 
-
-        /// <summary>
-        /// Makes a request to the server expecting a response
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="uri"></param>
-        /// <param name="data"></param>
-        /// <param name="header"></param>
-        /// <param name="method"></param>
-        /// <returns></returns>
-        public GitHubResponse<T> RequestWithJson<T>(string uri, Method method = Method.GET, object obj = null) where T : class
+        private GitHubResponse ParseResponse(IRestResponse response)
         {
-            return ParseResponse<T>(ExecuteRequestWithJson(ApiUri + uri, method, obj));
-        }
-        
-        /// <summary>
-        /// Makes a request to the server but does not expect a response.
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="method"></param>
-        /// <param name="data"></param>
-        /// <param name="header"></param>
-        public void Request(string uri, Method method = Method.GET, Dictionary<string, string> data = null)
-        {
-            ExecuteRequest(ApiUri + uri, method, data);
+            var ghr = new GitHubResponse { StatusCode = (int)response.StatusCode };
+            foreach (var h in response.Headers)
+            {
+                if (h.Name.Equals("X-RateLimit-Limit"))
+                    ghr.RateLimitLimit = Convert.ToInt32(h.Value);
+                else if (h.Name.Equals("X-RateLimit-Remaining"))
+                    ghr.RateLimitRemaining = Convert.ToInt32(h.Value);
+            }
+            return ghr;
         }
         
         /// <summary>
@@ -322,29 +288,6 @@ namespace GitHubSharp
             if (method == Method.PUT && data == null)
                 request.AddHeader("Content-Length", "0");
             
-            return ExecuteRequest(request);
-        }
-
-        /// <summary>
-        /// Executes a request to the server
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="method"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        internal IRestResponse ExecuteRequestWithJson(string uri, Method method, object obj)
-        {
-            if (uri == null)
-                throw new ArgumentNullException("uri");
-
-            var request = new RestRequest(uri, method);
-            request.RequestFormat = DataFormat.Json;
-            request.AddBody(obj);
-
-            //Puts without any data must be marked as having no content!
-            if (method == Method.PUT && obj == null)
-                request.AddHeader("Content-Length", "0");
-
             return ExecuteRequest(request);
         }
 

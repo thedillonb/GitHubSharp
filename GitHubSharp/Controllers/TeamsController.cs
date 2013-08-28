@@ -36,9 +36,9 @@ namespace GitHubSharp.Controllers
         /// </summary>
         /// <param name="forceCacheInvalidation"></param>
         /// <returns></returns>
-        public GitHubResponse<List<TeamModelShort>> GetAll(bool forceCacheInvalidation = false)
+        public GitHubResponse<List<TeamShortModel>> GetAll(bool forceCacheInvalidation = false)
         {
-            return Client.Get<List<TeamModelShort>>(Uri, forceCacheInvalidation: forceCacheInvalidation);
+            return Client.Get<List<TeamShortModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation);
         }
 
         public override string Uri

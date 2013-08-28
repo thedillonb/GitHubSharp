@@ -55,7 +55,7 @@ namespace GitHubSharp.Controllers
             _user = user;
         }
 
-        public GitHubResponse<List<GistModel>> GetGists(string username = null, bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubResponse<List<GistModel>> GetGists(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
             return Client.Get<List<GistModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
@@ -113,7 +113,7 @@ namespace GitHubSharp.Controllers
             GistsController = gistsController;
         }
 
-        public GitHubResponse<GistModel> GetInfo(bool forceCacheInvalidation = false)
+        public GitHubResponse<GistModel> Get(bool forceCacheInvalidation = false)
         {
             return Client.Get<GistModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
         }

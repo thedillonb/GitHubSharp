@@ -128,7 +128,18 @@
     <Compile Include="..\GitHubSharp\Utils\ObjectToDictionaryConverter.cs">
       <Link>Utils\ObjectToDictionaryConverter.cs</Link>
     </Compile>
-    <Compile Include="Controllers\CommitsController.cs" />
+    <Compile Include="..\GitHubSharp\Controllers\IssuesController.cs">
+      <Link>Controllers\IssuesController.cs</Link>
+    </Compile>
+    <Compile Include="..\GitHubSharp\Controllers\NotificationsController.cs">
+      <Link>Controllers\NotificationsController.cs</Link>
+    </Compile>
+    <Compile Include="..\GitHubSharp\Controllers\CommitsController.cs">
+      <Link>Controllers\CommitsController.cs</Link>
+    </Compile>
+    <Compile Include="..\GitHubSharp\Models\TeamModel.cs">
+      <Link>Models\TeamModel.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\GitHubSharp\GitHubSharp.csproj">

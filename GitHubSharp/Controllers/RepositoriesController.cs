@@ -148,44 +148,44 @@ namespace GitHubSharp.Controllers
             return Client.Get<List<BasicUserModel>>(Uri + "/contributors", page: page, perPage: perPage);
         }
 
-        public GitHubResponse<Dictionary<string, int>> GetLanguages()
+        public GitHubResponse<Dictionary<string, int>> GetLanguages(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<Dictionary<string, int>>(Uri + "/languages");
+            return Client.Get<Dictionary<string, int>>(Uri + "/languages", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
-        public GitHubResponse<List<TagModel>> GetTags()
+        public GitHubResponse<List<TagModel>> GetTags(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<TagModel>>(Uri + "/tags");
+            return Client.Get<List<TagModel>>(Uri + "/tags", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
-        public GitHubResponse<List<BranchModel>> GetBranches()
+        public GitHubResponse<List<BranchModel>> GetBranches(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<BranchModel>>(Uri + "/branches");
+            return Client.Get<List<BranchModel>>(Uri + "/branches", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
-        public GitHubResponse<List<EventModel>> GetEvents(int page = 1, int perPage = 100)
+        public GitHubResponse<List<EventModel>> GetEvents(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<EventModel>>(Uri + "/events", page: page, perPage: perPage);
+            return Client.Get<List<EventModel>>(Uri + "/events", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
-        public GitHubResponse<List<EventModel>> GetNetworkEvents(int page = 1, int perPage = 100)
+        public GitHubResponse<List<EventModel>> GetNetworkEvents(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<EventModel>>("networks/" + User + "/" + Repo + "/events", page: page, perPage: perPage);
+            return Client.Get<List<EventModel>>("networks/" + User + "/" + Repo + "/events", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
-        public GitHubResponse<ContentModel> GetReadme(string branch = "master")
+        public GitHubResponse<ContentModel> GetReadme(bool forceCacheInvalidation = false, string branch = "master")
         {
-            return Client.Get<ContentModel>(Uri + "/readme", additionalArgs: new { Ref = branch });
+            return Client.Get<ContentModel>(Uri + "/readme", forceCacheInvalidation: forceCacheInvalidation, additionalArgs: new { Ref = branch });
         }
 
-        public GitHubResponse<List<ContentModel>> GetContent(string path = "/", string branch = "master")
+        public GitHubResponse<List<ContentModel>> GetContent(bool forceCacheInvalidation = false, string path = "/", string branch = "master")
         {
-            return Client.Get<List<ContentModel>>(Uri + "/contents" + path, additionalArgs: new { Ref = branch });
+            return Client.Get<List<ContentModel>>(Uri + "/contents" + path, forceCacheInvalidation: forceCacheInvalidation, additionalArgs: new { Ref = branch });
         }
 
-        public GitHubResponse<TreeModel> GetTree(string sha)
+        public GitHubResponse<TreeModel> GetTree(string sha, bool forceCacheInvalidation = false)
         {
-            return Client.Get<TreeModel>(Uri + "/git/trees/" + sha);
+            return Client.Get<TreeModel>(Uri + "/git/trees/" + sha, forceCacheInvalidation: forceCacheInvalidation);
         }
 
         public System.Net.HttpWebResponse GetFileRaw(string branch, string file, System.IO.Stream stream)
@@ -220,11 +220,11 @@ namespace GitHubSharp.Controllers
             return resp;
         }
 
-        public bool IsWatching()
+        public bool IsWatching(bool forceCacheInvalidation = false)
         {
             try
             {
-                if (Client.Get<object>(Client.ApiUri + "user/subscriptions/" + User + "/" + Repo).StatusCode == 204)
+                if (Client.Get<object>(Client.ApiUri + "/user/subscriptions/" + User + "/" + Repo, forceCacheInvalidation: forceCacheInvalidation).StatusCode == 204)
                     return true;
             }
             catch (NotFoundException)
@@ -236,22 +236,29 @@ namespace GitHubSharp.Controllers
 
         public void Watch()
         {
-            Client.Put(Client.ApiUri + "/user/subscriptions/" + User + "/" + Repo);
+            var uri = Client.ApiUri + "/user/subscriptions/" + User + "/" + Repo;
+            Client.Put(uri);
+            Client.InvalidateCacheObjects(uri);
         }
 
         public void StopWatching()
         {
-            Client.Delete(Client.ApiUri + "/user/subscriptions/" + User + "/" + Repo);
+            var uri = Client.ApiUri + "/user/subscriptions/" + User + "/" + Repo;
+            Client.Delete(uri);
+            Client.InvalidateCacheObjects(uri);
         }
 
-        public GitHubResponse<SubscriptionModel> GetSubscription()
+        public GitHubResponse<SubscriptionModel> GetSubscription(bool forceCacheInvalidation = false)
         {
-            return Client.Get<SubscriptionModel>(Uri + "/subscription");
+            return Client.Get<SubscriptionModel>(Uri + "/subscription", forceCacheInvalidation: forceCacheInvalidation);
         }
 
         public GitHubResponse<SubscriptionModel> SetSubscription(bool subscribed, bool ignored)
         {
-            return Client.Put<SubscriptionModel>(Uri + "/subscription", new { Subscribed = subscribed, Ignored = ignored });
+            var uri = Uri + "/subscription";
+            var ret = Client.Put<SubscriptionModel>(uri, new { Subscribed = subscribed, Ignored = ignored });
+            Client.InvalidateCacheObjects(uri);
+            return ret;
         }
 
         public void DeleteSubscription()
@@ -259,9 +266,9 @@ namespace GitHubSharp.Controllers
             Client.Delete(Uri + "/subscription");
         }
 
-        public GitHubResponse<List<BasicUserModel>> GetStargazers(int page = 1, int perPage = 100)
+        public GitHubResponse<List<BasicUserModel>> GetStargazers(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<BasicUserModel>>(Uri + "/stargazers", page: page, perPage: perPage);
+            return Client.Get<List<BasicUserModel>>(Uri + "/stargazers", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
 
@@ -289,9 +296,9 @@ namespace GitHubSharp.Controllers
             Client.Delete(Client.ApiUri + "/user/starred/" + User + "/" + Repo);
         }
 
-        public GitHubResponse<List<BasicUserModel>> GetCollaborators(int page = 1, int perPage = 100)
+        public GitHubResponse<List<BasicUserModel>> GetCollaborators(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<BasicUserModel>>(Uri + "/collaborators", page: page, perPage: perPage);
+            return Client.Get<List<BasicUserModel>>(Uri + "/collaborators", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
         public override string Uri

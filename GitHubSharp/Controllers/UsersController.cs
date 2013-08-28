@@ -126,7 +126,7 @@ namespace GitHubSharp.Controllers
         /// Get the user's information
         /// </summary>
         /// <returns></returns>
-        public GitHubResponse<UserModel> GetInfo(bool forceCacheInvalidation = false)
+        public GitHubResponse<UserModel> Get(bool forceCacheInvalidation = false)
         {
             return Client.Get<UserModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
         }
@@ -161,12 +161,12 @@ namespace GitHubSharp.Controllers
 
         public GitHubResponse<List<KeyModel>> GetKeys(bool forceCacheInvalidation = false)
         {
-            return Client.Get<List<KeyModel>>("user/keys", forceCacheInvalidation: forceCacheInvalidation);
+            return Client.Get<List<KeyModel>>(Uri + "/keys", forceCacheInvalidation: forceCacheInvalidation);
         }
 
         public override string Uri
         {
-            get { return Client.ApiUri + "user"; }
+            get { return Client.ApiUri + "/user"; }
         }
     }
 }

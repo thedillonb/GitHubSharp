@@ -74,8 +74,8 @@ namespace GitHubSharp.Controllers
         /// <returns></returns>
         public GitHubResponse<List<EventModel>> GetEvents(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            string uri = string.IsNullOrEmpty(Uri) ? Client.ApiUri + "events" : Uri + "/events";
-            return Client.Get<List<EventModel>>(uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: 100);
+            string uri = string.IsNullOrEmpty(Uri) ? Client.ApiUri + "/events" : Uri + "/events";
+            return Client.Get<List<EventModel>>(uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace GitHubSharp.Controllers
 
         public override string Uri
         {
-            get { return Client.ApiUri + "users/" + Name; }
+            get { return Client.ApiUri + "/users/" + Name; }
         }
     }
 

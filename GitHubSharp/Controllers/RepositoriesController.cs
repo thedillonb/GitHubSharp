@@ -224,7 +224,7 @@ namespace GitHubSharp.Controllers
         {
             try
             {
-                if (Client.Get<object>(Client.ApiUri + "/user/subscriptions/" + User + "/" + Repo, forceCacheInvalidation: forceCacheInvalidation).StatusCode == 204)
+                if (Client.Get(Client.ApiUri + "/user/subscriptions/" + User + "/" + Repo, forceCacheInvalidation: forceCacheInvalidation).StatusCode == 204)
                     return true;
             }
             catch (NotFoundException)
@@ -276,7 +276,7 @@ namespace GitHubSharp.Controllers
         {
             try
             {
-                if (Client.Get<object>(Client.ApiUri + "/user/starred/" + User + "/" + Repo).StatusCode == 204)
+                if (Client.Get(Client.ApiUri + "/user/starred/" + User + "/" + Repo).StatusCode == 204)
                     return true;
             }
             catch (NotFoundException)
@@ -288,17 +288,32 @@ namespace GitHubSharp.Controllers
 
         public void Star()
         {
-            Client.Put(Client.ApiUri + "/user/starred/" + User + "/" + Repo);
+            var uri = Client.ApiUri + "/user/starred/" + User + "/" + Repo;
+            Client.Put(uri);
+
+            //Invalidate this URI and the current user's starred repos since we've changed it indirectly
+            Client.InvalidateCacheObjects(uri);
+            Client.InvalidateCacheObjects(Client.ApiUri + "/user/starred");
         }
 
         public void Unstar()
         {
-            Client.Delete(Client.ApiUri + "/user/starred/" + User + "/" + Repo);
+            var uri = Client.ApiUri + "/user/starred/" + User + "/" + Repo;
+            Client.Delete(uri);
+
+            //Invalidate this URI and the current user's starred repos since we've changed it indirectly
+            Client.InvalidateCacheObjects(uri);
+            Client.InvalidateCacheObjects(Client.ApiUri + "/user/starred");
         }
 
         public GitHubResponse<List<BasicUserModel>> GetCollaborators(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
             return Client.Get<List<BasicUserModel>>(Uri + "/collaborators", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+        }
+
+        public GitHubResponse<List<RepositoryModel>> GetForks(string sort = "newest", bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        {
+            return Client.Get<List<RepositoryModel>>(Uri + "/forks", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage, additionalArgs: new { sort = sort });
         }
 
         public override string Uri

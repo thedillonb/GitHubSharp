@@ -50,11 +50,11 @@ namespace GitHubSharp.Controllers
             return Client.Get<List<NotificationModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage, additionalArgs: new { All = all, Participating = participating });
         }
 
-        public bool MarkAsRead(DateTime lastReadAt)
+        public bool MarkAsRead(DateTime? lastReadAt)
         {
             var data = new Dictionary<string,string>();
             if (lastReadAt != null)
-                data.Add("last_read_at", string.Concat(lastReadAt.ToString("s"), "Z"));
+                data.Add("last_read_at", string.Concat(lastReadAt.Value.ToString("s"), "Z"));
             return Client.Put(Uri, data).StatusCode == 205;
         }
 

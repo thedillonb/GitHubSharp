@@ -87,7 +87,7 @@ namespace GitHubSharp
             Username = username;
             Password = password;
             _client.Authenticator = new HttpBasicAuthenticator(username, password);
-            _client.FollowRedirects = true;
+            //_client.FollowRedirects = true;
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace GitHubSharp
             if (CacheProvider != null)
                 CacheProvider.DeleteWhereStartingWith(startsWithUri);
         }
-        
+
         /// <summary>
         /// Makes a 'GET' request to the server using a URI
         /// </summary>
@@ -108,15 +108,15 @@ namespace GitHubSharp
         /// <returns>An object with response data</returns>
         public GitHubResponse<T> Get<T>(string uri, bool forceCacheInvalidation = false, int page = 1, int perPage = 100, object additionalArgs = null) where T : class
         {
-            GitHubResponse<T> obj = null;
+            GitHubResponse<T> response = null;
 
             //If there's a cache provider, check it.
             if (CacheProvider != null && !forceCacheInvalidation)
-                obj = CacheProvider.Get<GitHubResponse<T>>(uri);
-
-            //Return the cached object
-            if (obj != null)
-                return obj;
+            {
+                response = CacheProvider.Get<GitHubResponse<T>>(uri);
+                if (response != null)
+                    return response;
+            }
 
             var request = new RestRequest(uri, Method.GET);
             request.AddParameter("page", page);
@@ -125,11 +125,11 @@ namespace GitHubSharp
                 foreach (var arg in ObjectToDictionaryConverter.Convert(additionalArgs))
                     request.AddParameter(arg.Key, arg.Value);
 
-            var response = ParseResponse<T>(ExecuteRequest(request));
+            response = ParseResponse<T>(ExecuteRequest(request));
 
             //If there's a cache provider, save it!
             if (CacheProvider != null)
-                CacheProvider.Set(obj, uri);
+                CacheProvider.Set(response, uri);
             return response;
         }
 
@@ -141,7 +141,42 @@ namespace GitHubSharp
         /// <returns>An object with response data</returns>
         public GitHubResponse Get(string uri, bool forceCacheInvalidation = false, int page = 1, int perPage = 100, object additionalArgs = null)
         {
-            return (GitHubResponse)Get<object>(uri, forceCacheInvalidation, page, perPage, additionalArgs);
+            GitHubResponse response = null;
+
+            //If there's a cache provider, check it.
+            if (CacheProvider != null && !forceCacheInvalidation)
+            {
+                response = CacheProvider.Get<GitHubResponse>(uri);
+                if (response != null)
+                    return response;
+            }
+
+            var request = new RestRequest(uri, Method.GET);
+            request.AddParameter("page", page);
+            request.AddParameter("per_page", perPage);
+            if (additionalArgs != null)
+                foreach (var arg in ObjectToDictionaryConverter.Convert(additionalArgs))
+                    request.AddParameter(arg.Key, arg.Value);
+
+            response = ParseResponse(ExecuteRequest(request));
+
+            //If there's a cache provider, save it!
+            if (CacheProvider != null)
+                CacheProvider.Set(response, uri);
+            return response;
+        }
+
+        private RestRequest CreatePutRequest(string uri, object data)
+        {
+            var request = new RestRequest(uri, Method.PUT);
+            request.RequestFormat = DataFormat.Json;
+            if (data != null)
+                request.AddBody(data);
+
+            //Puts without any data must be marked as having no content!
+            if (data == null)
+                request.AddHeader("Content-Length", "0");
+            return request;
         }
         
         /// <summary>
@@ -152,16 +187,7 @@ namespace GitHubSharp
         /// <returns></returns>
         public GitHubResponse<T> Put<T>(string uri, object data = null) where T : class
         {
-            var request = new RestRequest(uri, Method.PUT);
-            request.RequestFormat = DataFormat.Json;
-            if (data != null)
-                request.AddBody(data);
-
-            //Puts without any data must be marked as having no content!
-            if (data == null)
-                request.AddHeader("Content-Length", "0");
-
-            return ParseResponse<T>(ExecuteRequest(request));
+            return ParseResponse<T>(ExecuteRequest(CreatePutRequest(uri, data)));
         }
 
         /// <summary>
@@ -170,7 +196,7 @@ namespace GitHubSharp
         /// <param name="uri"></param>
         public GitHubResponse Put(string uri, object data = null)
         {
-            return (GitHubResponse)Put<object>(uri, data);
+            return ParseResponse(ExecuteRequest(CreatePutRequest(uri, data)));
         }
 
         /// <summary>
@@ -200,19 +226,23 @@ namespace GitHubSharp
             return ParseResponse(ExecuteRequest(request));
         }
 
-        public GitHubResponse<T> Patch<T>(string uri, object data = null) where T : class
+        private RestRequest CreatePatchRequest(string uri, object data)
         {
             var request = new RestRequest(uri, Method.PATCH);
             request.RequestFormat = DataFormat.Json;
             if (data != null)
                 request.AddBody(data);
+            return request;
+        }
 
-            return ParseResponse<T>(ExecuteRequest(request));
+        public GitHubResponse<T> Patch<T>(string uri, object data = null) where T : class
+        {
+            return ParseResponse<T>(ExecuteRequest(CreatePatchRequest(uri, data)));
         }
 
         public GitHubResponse Patch(string uri, object data = null)
         {
-            return (GitHubResponse)Patch<object>(uri, data);
+            return ParseResponse(ExecuteRequest(CreatePatchRequest(uri, data)));
         }
 
         private GitHubResponse<T> ParseResponse<T>(IRestResponse response) where T : class
@@ -296,8 +326,7 @@ namespace GitHubSharp
         /// </summary>
         internal IRestResponse ExecuteRequest(IRestRequest request)
         {
-            RestSharp.IRestResponse response = null;
-            response = _client.Execute(request);
+            var response = _client.Execute(request);
 
             if (response.ErrorException != null)
                 throw response.ErrorException;

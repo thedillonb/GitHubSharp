@@ -5,7 +5,7 @@ namespace GitHubSharp.Models
 {
     public class RepositoryModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public BasicUserModel Owner { get; set; }
         public string Name { get; set; }
         public string FullName { get; set; }

@@ -36,7 +36,8 @@ namespace GitHubSharp.Controllers
         
         public string GetFile(string url)
         {
-            return Client.Get<string>(url).Data;
+            var response = Client.ExecuteRequest(url, RestSharp.Method.GET, null);
+            return response.Content;
         }
 
         public override string Uri

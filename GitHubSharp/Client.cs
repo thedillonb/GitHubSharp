@@ -25,6 +25,11 @@ namespace GitHubSharp
             get { return new UsersController(this); }
         }
 
+        public NotificationsController Notifications
+        {
+            get { return new NotificationsController(this); }
+        }
+
         public ExploreRepositoriesController Repositories
         {
             get { return new ExploreRepositoriesController(this); }

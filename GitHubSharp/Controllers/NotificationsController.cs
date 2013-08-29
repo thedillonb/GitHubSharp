@@ -29,7 +29,7 @@ namespace GitHubSharp.Controllers
 
         public override string Uri
         {
-            get { return Client.ApiUri + "/notifications"; }
+            get { return Client.ApiUri + "/notifications/threads/" + Id; }
         }
     }
 
@@ -45,7 +45,7 @@ namespace GitHubSharp.Controllers
         {
         }
 
-        public GitHubResponse<List<NotificationModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100, bool all = false, bool participating = false)
+        public GitHubResponse<List<NotificationModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100, bool? all = null, bool? participating = null)
         {
             return Client.Get<List<NotificationModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage, additionalArgs: new { All = all, Participating = participating });
         }

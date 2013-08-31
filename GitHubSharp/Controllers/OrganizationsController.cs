@@ -48,9 +48,9 @@ namespace GitHubSharp.Controllers
             return Client.Get<List<BasicUserModel>>(Uri + "/members", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
-        public GitHubResponse<List<BasicUserModel>> GetTeams(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubResponse<List<TeamShortModel>> GetTeams(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<BasicUserModel>>(Uri + "/teams", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return Client.Get<List<TeamShortModel>>(Uri + "/teams", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
         public GitHubResponse<List<EventModel>> GetEvents(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)

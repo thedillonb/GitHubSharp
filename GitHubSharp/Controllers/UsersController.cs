@@ -67,18 +67,6 @@ namespace GitHubSharp.Controllers
         }
 
         /// <summary>
-        /// Gets events for this user
-        /// </summary>
-        /// <param name="page"></param>
-        /// <param name="perPage"></param>
-        /// <returns></returns>
-        public GitHubResponse<List<EventModel>> GetEvents(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
-        {
-            string uri = string.IsNullOrEmpty(Uri) ? Client.ApiUri + "/events" : Uri + "/events";
-            return Client.Get<List<EventModel>>(uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
-        }
-
-        /// <summary>
         /// Gets the organizations this user belongs to
         /// </summary>
         /// <returns></returns>
@@ -131,6 +119,28 @@ namespace GitHubSharp.Controllers
             return Client.Get<UserModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
         }
 
+        /// <summary>
+        /// Gets events for this user
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="perPage"></param>
+        /// <returns></returns>
+        public GitHubResponse<List<EventModel>> GetEvents(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        {
+            return Client.Get<List<EventModel>>(Uri + "/events", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+        }
+
+        /// <summary>
+        /// Gets received events for this user
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="perPage"></param>
+        /// <returns></returns>
+        public GitHubResponse<List<EventModel>> GetReceivedEvents(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        {
+            return Client.Get<List<EventModel>>(Uri + "/received_events", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+        }
+
         public override string Uri
         {
             get { return Client.ApiUri + "/users/" + Name; }
@@ -152,6 +162,18 @@ namespace GitHubSharp.Controllers
         public AuthenticatedUserController(Client client)
             : base(client)
         {
+        }
+
+        /// <summary>
+        /// Gets events for this user
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="perPage"></param>
+        /// <returns></returns>
+        public GitHubResponse<List<EventModel>> GetPublicEvents(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        {
+            string uri = Client.ApiUri + "/events";
+            return Client.Get<List<EventModel>>(uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
         public GitHubResponse<UserAuthenticatedModel> GetInfo(bool forceCacheInvalidation = false)

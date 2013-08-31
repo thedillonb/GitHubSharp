@@ -14,9 +14,16 @@ namespace GitHubSharp.Controllers
         {
         }
 
-        public GitHubResponse<List<IssueModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubResponse<List<IssueModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100, 
+                                                       string milestone = null, string state = null, string assignee = null, 
+                                                       string creator = null, string mentioned = null, string labels = null, 
+                                                       string sort = null, string direction = null)
         {
-            return Client.Get<List<IssueModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return Client.Get<List<IssueModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage, additionalArgs: new {
+                Milestone = milestone, State = state, Assignee = assignee,
+                Creator = creator, Mentioned = mentioned, Labels = labels,
+                Sort = sort, Direction = direction
+            });
         }
     }
 

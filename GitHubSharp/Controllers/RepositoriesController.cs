@@ -136,6 +136,11 @@ namespace GitHubSharp.Controllers
             get { return new RepositoryIssuesController(Client, this); }
         }
 
+        public PullRequestsController PullRequests
+        {
+            get { return new PullRequestsController(Client, this); }
+        }
+
         public RepositoryController(Client client, string user, string repo)
             : base(client)
         {

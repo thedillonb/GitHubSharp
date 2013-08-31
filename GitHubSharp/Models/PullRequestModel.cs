@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace GitHubSharp.Models
 {
@@ -55,5 +53,12 @@ namespace GitHubSharp.Models
             public IssueUserModel User { get; set; }
             public string Ref { get; set; }
         }
+    }
+
+    public class PullRequestMergeModel
+    {
+        public string Sha { get; set; }
+        public bool Merged { get; set; }
+        public string Message { get; set; }
     }
 }

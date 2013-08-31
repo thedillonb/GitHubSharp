@@ -1,9 +1,5 @@
 ﻿using GitHubSharp.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GitHubSharp.Controllers
 {
@@ -100,6 +96,37 @@ namespace GitHubSharp.Controllers
         public override string Uri
         {
             get { return CommitController.Uri + "/comments"; }
+        }
+    }
+
+    public class PullRequestCommentsController : Controller
+    {
+        public PullRequestController Parent { get; private set; }
+
+        public PullRequestCommentsController(Client client, PullRequestController parent) 
+            : base(client)
+        {
+            Parent = parent;
+        }
+
+        public GitHubResponse<List<CommentModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        {
+            return Client.Get<List<CommentModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+        }
+
+        public GitHubResponse<CommentModel> Create(string body, string commitId, string path, int position)
+        {
+            return Client.Post<CommentModel>(Uri, new Dictionary<string, object> { { "body", body }, {"commit_id", commitId }, { "path", path }, { "position", position } });
+        }
+
+        public GitHubResponse<CommentModel> ReplyTo(string body, long replyToId)
+        {
+            return Client.Post<CommentModel>(Uri, new Dictionary<string, object> { { "body", body }, { "in_reply_to", replyToId } });
+        }
+
+        public override string Uri
+        {
+            get { return Parent.Uri + "/comments"; }
         }
     }
 }

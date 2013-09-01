@@ -70,6 +70,11 @@ namespace GitHubSharp.Controllers
     {
         public RepositoryController Parent { get; private set; }
 
+        public IssueController this[long id]
+        {
+            get { return new IssueController(Client, this, id); }
+        }
+
         public RepositoryIssuesController(Client client, RepositoryController parent)
             : base(client)
         {
@@ -113,6 +118,11 @@ namespace GitHubSharp.Controllers
         public GitHubResponse<List<IssueCommentModel>> GetComments(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
             return Client.Get<List<IssueCommentModel>>(Uri + "/comments", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+        }
+
+        public GitHubResponse<IssueCommentModel> CreateComment(string body)
+        {
+            return Client.Post<IssueCommentModel>(Uri + "/comments", new { body = body });
         }
 
         public override string Uri

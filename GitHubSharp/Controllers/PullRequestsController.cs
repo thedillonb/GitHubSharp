@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using GitHubSharp.Models;
 
-namespace GitHubSharp.MonoTouch
+namespace GitHubSharp.Controllers
 {
     public class PullRequestsController : Controller
     {

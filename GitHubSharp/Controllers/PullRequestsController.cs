@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GitHubSharp.Models;
 
-namespace GitHubSharp.Controllers
+namespace GitHubSharp.MonoTouch
 {
     public class PullRequestsController : Controller
     {
@@ -80,3 +80,4 @@ namespace GitHubSharp.Controllers
         }
     }
 }
+

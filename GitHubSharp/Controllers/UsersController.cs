@@ -141,6 +141,19 @@ namespace GitHubSharp.Controllers
             return Client.Get<List<EventModel>>(Uri + "/received_events", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
+        /// <summary>
+        /// Get Organization events
+        /// </summary>
+        /// <returns>The events.</returns>
+        /// <param name="forceCacheInvalidation">If set to <c>true</c> force cache invalidation.</param>
+        /// <param name="page">Page.</param>
+        /// <param name="perPage">Per page.</param>
+        public GitHubResponse<List<EventModel>> GetOrganizationEvents(string org, bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        {
+            return Client.Get<List<EventModel>>(Uri + "/events/orgs/" + org, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+        }
+
+
         public override string Uri
         {
             get { return Client.ApiUri + "/users/" + Name; }
@@ -157,6 +170,11 @@ namespace GitHubSharp.Controllers
         public OrganizationsController Organizations
         {
             get { return new OrganizationsController(Client); }
+        }
+
+        public AuthenticatedUserIssuesController Issues
+        {
+            get { return new AuthenticatedUserIssuesController(Client); }
         }
 
         public AuthenticatedUserController(Client client)

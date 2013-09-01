@@ -115,14 +115,6 @@ namespace GitHubSharp
         {
             GitHubResponse<T> response = null;
 
-            //If there's a cache provider, check it.
-            if (CacheProvider != null && !forceCacheInvalidation)
-            {
-                response = CacheProvider.Get<GitHubResponse<T>>(uri);
-                if (response != null)
-                    return response;
-            }
-
             var request = new RestRequest(uri, Method.GET);
             request.AddParameter("page", page);
             request.AddParameter("per_page", perPage);
@@ -130,11 +122,22 @@ namespace GitHubSharp
                 foreach (var arg in ObjectToDictionaryConverter.Convert(additionalArgs))
                     request.AddParameter(arg.Key, arg.Value);
 
+            //Build the absolute URI for the cache
+            var absoluteUri = _client.BuildUri(request).AbsoluteUri;
+
+            //If there's a cache provider, check it.
+            if (CacheProvider != null && !forceCacheInvalidation)
+            {
+                response = CacheProvider.Get<GitHubResponse<T>>(absoluteUri);
+                if (response != null)
+                    return response;
+            }
+
             response = ParseResponse<T>(ExecuteRequest(request));
 
             //If there's a cache provider, save it!
             if (CacheProvider != null)
-                CacheProvider.Set(response, uri);
+                CacheProvider.Set(response, absoluteUri);
             return response;
         }
 
@@ -148,14 +151,6 @@ namespace GitHubSharp
         {
             GitHubResponse response = null;
 
-            //If there's a cache provider, check it.
-            if (CacheProvider != null && !forceCacheInvalidation)
-            {
-                response = CacheProvider.Get<GitHubResponse>(uri);
-                if (response != null)
-                    return response;
-            }
-
             var request = new RestRequest(uri, Method.GET);
             request.AddParameter("page", page);
             request.AddParameter("per_page", perPage);
@@ -163,11 +158,22 @@ namespace GitHubSharp
                 foreach (var arg in ObjectToDictionaryConverter.Convert(additionalArgs))
                     request.AddParameter(arg.Key, arg.Value);
 
+            //Build the absolute URI for the cache
+            var absoluteUri = _client.BuildUri(request).AbsoluteUri;
+
+            //If there's a cache provider, check it.
+            if (CacheProvider != null && !forceCacheInvalidation)
+            {
+                response = CacheProvider.Get<GitHubResponse>(absoluteUri);
+                if (response != null)
+                    return response;
+            }
+
             response = ParseResponse(ExecuteRequest(request));
 
             //If there's a cache provider, save it!
             if (CacheProvider != null)
-                CacheProvider.Set(response, uri);
+                CacheProvider.Set(response, absoluteUri);
             return response;
         }
 

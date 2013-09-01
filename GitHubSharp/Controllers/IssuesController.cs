@@ -27,11 +27,21 @@ namespace GitHubSharp.Controllers
         }
     }
 
-    public class UserIssuesController : IssuesController
+    public class AuthenticatedUserIssuesController : Controller
     {
-        public UserIssuesController(Client client)
+        public AuthenticatedUserIssuesController(Client client)
             : base(client)
         {
+        }
+
+        public GitHubResponse<List<IssueModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100, 
+                                                       string filter = null, string state = null, string labels = null,
+                                                       string sort = null, string direction = null, string since = null)
+        {
+            return Client.Get<List<IssueModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage, additionalArgs: new {
+                Filter = filter, State = state, Labels = labels,
+                Sort = sort, Direction = direction, Since = since
+            });
         }
 
         public override string Uri

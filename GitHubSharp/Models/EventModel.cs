@@ -114,7 +114,7 @@ namespace GitHubSharp.Models
 
         public class RepoModel
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string Name { get; set; }
             public string Url { get; set; }
         }
@@ -206,7 +206,7 @@ namespace GitHubSharp.Models
         public class PullRequestEvent
         {
             public string Action { get; set; }
-            public int Number { get; set; }
+            public long Number { get; set; }
             public PullRequestModel PullRequest { get; set; }
         }
 
@@ -219,7 +219,7 @@ namespace GitHubSharp.Models
         {
             public string Before { get; set; }
             public string Ref { get; set; }
-            public int Size { get; set; }
+            public long Size { get; set; }
             public List<CommitModel> Commits { get; set; }
 
             public class CommitModel
@@ -240,6 +240,9 @@ namespace GitHubSharp.Models
 
         public class TeamAddEvent
         {
+            public TeamModel Team { get; set; }
+            public BasicUserModel User { get; set; }
+            public RepositoryModel Repo { get; set; }
         }
 
         public class WatchEvent

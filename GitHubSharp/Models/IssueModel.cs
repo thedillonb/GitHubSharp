@@ -19,12 +19,20 @@ namespace GitHubSharp.Models
         public DateTime CreatedAt { get; set; }
         public DateTime? ClosedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public PullRequestModel PullRequest { get; set; }
 
         public class LabelModel
         {
             public string Url { get; set; }
             public string Name { get; set; }
             public string Color { get; set; }
+        }
+
+        public class PullRequestModel
+        {
+            public string HtmlUrl { get; set; }
+            public string DiffUrl { get; set; }
+            public string PatchUrl { get; set; }
         }
     }
 

@@ -33,8 +33,6 @@ namespace GitHubSharp.Models
             public string Patch { get; set; }
         }
 
- 
-
         public class SingleFileCommitModel : CommitModel
         {
             public List<SingleFileCommitFileReference> Added { get; set; }

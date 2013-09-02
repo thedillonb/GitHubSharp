@@ -10,15 +10,20 @@ namespace GitHubSharp.Controllers
     {
         public RepositoryController Parent { get; private set; }
 
+        public PullRequestController this[long id]
+        {
+            get { return new PullRequestController(Client, this, id); }
+        }
+
         public PullRequestsController(Client client, RepositoryController parent)
             : base(client)
         {
             Parent = parent;
         }
 
-        public GitHubResponse<List<PullRequestModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubResponse<List<PullRequestModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100, string state = "open")
         {
-            return Client.Get<List<PullRequestModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return Client.Get<List<PullRequestModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage, additionalArgs: new { state = state });
         }
 
         public override string Uri
@@ -53,6 +58,11 @@ namespace GitHubSharp.Controllers
         public GitHubResponse<List<CommitModel.CommitFileModel>> GetFiles(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
             return Client.Get<List<CommitModel.CommitFileModel>>(Uri + "/files", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+        }
+
+        public GitHubResponse<List<CommitModel>> GetCommits(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        {
+            return Client.Get<List<CommitModel>>(Uri + "/commits", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
         public GitHubResponse<PullRequestMergeModel> Merge()

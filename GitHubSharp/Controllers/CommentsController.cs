@@ -18,11 +18,6 @@ namespace GitHubSharp.Controllers
             RepositoryController = repository;
         }
 
-        public GitHubResponse<CommentModel> Create(string body)
-        {
-            return Client.Post<CommentModel>(Uri, new Dictionary<string, object> {{ "body", body }});
-        }
-
         public GitHubResponse<List<CommentModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
             return Client.Get<List<CommentModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
@@ -83,9 +78,9 @@ namespace GitHubSharp.Controllers
             CommitController = commits;
         }
 
-        public GitHubResponse<CommentModel> Create(string body, string path, int position)
+        public GitHubResponse<CommentModel> Create(string body, string path = null, int? position = null)
         {
-            return Client.Post<CommentModel>(Uri, new Dictionary<string, object> {{ "body", body }, { "path", path }, { "position", position }});
+            return Client.Post<CommentModel>(Uri, new { body = body, path = path, position = position });
         }
 
         public GitHubResponse<List<CommentModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)

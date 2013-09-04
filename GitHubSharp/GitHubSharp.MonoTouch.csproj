@@ -40,7 +40,6 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="Exceptions.cs" />
-    <Compile Include="API.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Models\TreeModel.cs" />
     <Compile Include="Utils\ObjectToDictionaryConverter.cs" />
@@ -61,6 +60,20 @@
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\NotificationModel.cs" />
     <Compile Include="GitHubResponse.cs" />
+    <Compile Include="Controllers\CommentsController.cs" />
+    <Compile Include="Controllers\CommitsController.cs" />
+    <Compile Include="Controllers\Controller.cs" />
+    <Compile Include="Controllers\GistsController.cs" />
+    <Compile Include="Controllers\IssuesController.cs" />
+    <Compile Include="Controllers\MarkdownController.cs" />
+    <Compile Include="Controllers\NotificationsController.cs" />
+    <Compile Include="Controllers\OrganizationsController.cs" />
+    <Compile Include="Controllers\PullRequestsController.cs" />
+    <Compile Include="Controllers\RepositoriesController.cs" />
+    <Compile Include="Controllers\TeamsController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Models\SubscriptionModel.cs" />
+    <Compile Include="Models\TeamModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

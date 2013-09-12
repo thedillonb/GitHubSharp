@@ -137,7 +137,7 @@ namespace GitHubSharp
 
             //If there's a cache provider, save it!
             if (CacheProvider != null)
-                CacheProvider.Set(response, absoluteUri);
+                CacheProvider.Set(absoluteUri, response);
             return response;
         }
 
@@ -173,7 +173,7 @@ namespace GitHubSharp
 
             //If there's a cache provider, save it!
             if (CacheProvider != null)
-                CacheProvider.Set(response, absoluteUri);
+                CacheProvider.Set(absoluteUri, response);
             return response;
         }
 

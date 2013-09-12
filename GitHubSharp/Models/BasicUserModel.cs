@@ -2,6 +2,7 @@ using System;
 
 namespace GitHubSharp.Models
 {
+    [Serializable]
     public class BasicUserModel
     {
         public string Login { get; set; }
@@ -11,6 +12,7 @@ namespace GitHubSharp.Models
         public string Url { get; set; }
     }
 
+    [Serializable]
     public class KeyModel
     {
         public string Url { get; set; }

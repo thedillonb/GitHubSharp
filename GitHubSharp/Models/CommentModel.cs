@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace GitHubSharp.Models
 {
+    [Serializable]
     public class CommentModel
     {
         public string HtmlUrl { get; set; }
@@ -18,6 +19,7 @@ namespace GitHubSharp.Models
         public DateTime UpdatedAt { get; set; }
     }
 
+    [Serializable]
     public class CreateCommentModel
     {
         public string Body { get; set; }
@@ -25,6 +27,7 @@ namespace GitHubSharp.Models
         public int? Position { get; set; }
     }
 
+    [Serializable]
     public class CommentForCreationOrEditModel
     {
         public string Body { get; set; }

@@ -2,6 +2,7 @@ using System;
 
 namespace GitHubSharp.Models
 {
+    [Serializable]
 	public class HistoryModel
 	{
 		public string Url { get; set; }

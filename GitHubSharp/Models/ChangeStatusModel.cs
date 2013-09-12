@@ -2,6 +2,7 @@ using System;
 
 namespace GitHubSharp.Models
 {
+    [Serializable]
 	public class ChangeStatusModel
 	{
 		public int Deletions { get; set; }

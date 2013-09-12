@@ -2,6 +2,7 @@ using System;
 
 namespace GitHubSharp.Models
 {
+    [Serializable]
     public class NotificationModel
     {
         public long Id { get; set; }
@@ -13,6 +14,7 @@ namespace GitHubSharp.Models
         public DateTime LastReadAt { get; set; }
         public string Url { get; set; }
 
+        [Serializable]
         public class SubjectModel
         {
             public string Title { get; set; }

@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 
 namespace GitHubSharp.Models
 {
+    [Serializable]
     public class NetworkMetaModel
     {
         public List<List<List<int>>> Spacemap { get; set; }
@@ -14,12 +15,14 @@ namespace GitHubSharp.Models
         public List<NetworkUserModel> Users { get; set; }
     }
 
+    [Serializable]
     public class NetworkUserModel
     {
         public string Name { get; set; }
         public string Repo { get; set; }
         public List<NetworkUserHeadInfoModel> Heads { get; set; }
 
+        [Serializable]
         public class NetworkUserHeadInfoModel
         {
             public string Name { get; set; }
@@ -27,6 +30,7 @@ namespace GitHubSharp.Models
         }
     }
 
+    [Serializable]
     public class NetworkBlockModel
     {
         public string Name { get; set; }
@@ -34,6 +38,7 @@ namespace GitHubSharp.Models
         public int Count { get; set; }
     }
 
+    [Serializable]
     public class NetworkChunkModel
     {
         public string Author { get; set; }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace GitHubSharp.Models
 {
+    [Serializable]
     public class PullRequestModel
     {
         public string Url { get; set; }
@@ -30,7 +31,7 @@ namespace GitHubSharp.Models
         public int? Deletions { get; set; }
         public int? ChangedFiles { get; set; }
 
-
+        [Serializable]
         public class PullRequestCommitReferenceModel
         {
             public RepositoryModel Repository { get; set; }
@@ -41,6 +42,7 @@ namespace GitHubSharp.Models
         }
     }
 
+    [Serializable]
     public class PullRequestMergeModel
     {
         public string Sha { get; set; }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace GitHubSharp.Models
 {
+    [Serializable]
     public class RepositoryModel
     {
         public long Id { get; set; }
@@ -38,10 +39,12 @@ namespace GitHubSharp.Models
         public string HtmlUrl { get; set; }
     }
 
+    [Serializable]
     public class RepositorySearchModel
     {
         public List<RepositoryModel> Repositories { get; set; }
 
+        [Serializable]
         public class RepositoryModel
         {
             public string Type { get; set; }
@@ -71,23 +74,26 @@ namespace GitHubSharp.Models
         }
     }
 
-
+    [Serializable]
     public class TagModel
     {
         public string Name { get; set; }
         public TagCommitModel Commit { get; set; }
 
+        [Serializable]
         public class TagCommitModel
         {
             public string Sha { get; set; }
         }
     }
 
+    [Serializable]
     public class BranchModel
     {
         public string Name { get; set; }
     }
 
+    [Serializable]
     public class ContentModel
     {
         public string Type { get; set; }

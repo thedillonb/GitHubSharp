@@ -2,6 +2,7 @@
 
 namespace GitHubSharp.Models
 {
+    [Serializable]
     public class TeamShortModel
     {
         public string Url { get; set; }
@@ -9,6 +10,7 @@ namespace GitHubSharp.Models
         public long Id { get; set; }
     }
 
+    [Serializable]
     public class TeamModel
     {
         public string Url { get; set; }

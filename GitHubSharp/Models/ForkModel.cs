@@ -2,6 +2,7 @@ using System;
 
 namespace GitHubSharp.Models
 {
+    [Serializable]
 	public class ForkModel
 	{
 		public BasicUserModel User {get;set;}

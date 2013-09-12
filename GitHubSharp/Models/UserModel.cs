@@ -2,6 +2,7 @@
 
 namespace GitHubSharp.Models
 {
+    [Serializable]
     public class UserInCollectionModel
     {
         public string Name { get; set; }
@@ -18,6 +19,7 @@ namespace GitHubSharp.Models
         public DateTime Created { get; set; }
     }
 
+    [Serializable]
     public class UserModel
     {
         public string Login { get; set; }
@@ -41,6 +43,7 @@ namespace GitHubSharp.Models
         public string Type { get; set; }
     }
 
+    [Serializable]
     public class UserAuthenticatedModel : UserModel
     {
         public int TotalPrivateRepos { get; set; }
@@ -49,6 +52,8 @@ namespace GitHubSharp.Models
         public long DiskUsage { get; set; }
         public int Collaborators { get; set; }
         public UserAuthenticatedPlanModel Plan { get; set; }
+
+        [Serializable]
         public class UserAuthenticatedPlanModel
         {
             public string Name { get; set; }
@@ -58,6 +63,7 @@ namespace GitHubSharp.Models
         }
     }
 
+    [Serializable]
     public class PublicKeyModel
     {
         public string Title { get; set; }

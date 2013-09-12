@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GitHubSharp.Models
 {
+    [Serializable]
     public class SubscriptionModel
     {
         public bool Subscribed { get; set; }

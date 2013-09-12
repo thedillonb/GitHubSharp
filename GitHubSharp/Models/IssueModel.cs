@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace GitHubSharp.Models
 {
+    [Serializable]
     public class IssueModel
     {
         public string Url { get; set; }
@@ -21,6 +22,7 @@ namespace GitHubSharp.Models
         public DateTime UpdatedAt { get; set; }
         public PullRequestModel PullRequest { get; set; }
 
+        [Serializable]
         public class LabelModel
         {
             public string Url { get; set; }
@@ -28,6 +30,7 @@ namespace GitHubSharp.Models
             public string Color { get; set; }
         }
 
+        [Serializable]
         public class PullRequestModel
         {
             public string HtmlUrl { get; set; }
@@ -36,6 +39,7 @@ namespace GitHubSharp.Models
         }
     }
 
+    [Serializable]
     public class MilestoneModel
     {
         public int Number { get; set; }
@@ -49,6 +53,7 @@ namespace GitHubSharp.Models
         public DateTime? DueOn { get; set; }
     }
 
+    [Serializable]
     public class IssueCommentModel
     {
         public long Id { get; set; }
@@ -59,6 +64,7 @@ namespace GitHubSharp.Models
         public DateTime UpdatedAt { get; set; }
     }
 
+    [Serializable]
     public class IssueEventModel
     {
         public string Url { get; set; }

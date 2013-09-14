@@ -141,6 +141,11 @@ namespace GitHubSharp.Controllers
             get { return new PullRequestsController(Client, this); }
         }
 
+        public MilestonesController Milestones
+        {
+            get { return new MilestonesController(Client, this); }
+        }
+
         public RepositoryController(Client client, string user, string repo)
             : base(client)
         {
@@ -303,6 +308,11 @@ namespace GitHubSharp.Controllers
         public GitHubResponse<List<RepositoryModel>> GetForks(string sort = "newest", bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
         {
             return Client.Get<List<RepositoryModel>>(Uri + "/forks", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage, additionalArgs: new { sort = sort });
+        }
+
+        public GitHubResponse<List<LabelModel>> GetLabels(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        {
+            return Client.Get<List<LabelModel>>(Uri + "/labels", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
         }
 
         public override string Uri

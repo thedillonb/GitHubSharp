@@ -81,10 +81,10 @@ namespace GitHubSharp.Controllers
             Parent = parent;
         }
 
-        public GitHubResponse<List<IssueEventModel>> GetEvents(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubResponse<IssueModel> Create(string title, string body, string assignee, int? milestone, string[] labels)
         {
-            return Client.Get<List<IssueEventModel>>(Uri + "/events", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
-        }
+            return Client.Post<IssueModel>(Uri, new { title = title, body = body, assignee = assignee, milestone = milestone, labels = labels });
+        } 
 
         public override string Uri
         {
@@ -124,6 +124,11 @@ namespace GitHubSharp.Controllers
         {
             return Client.Post<IssueCommentModel>(Uri + "/comments", new { body = body });
         }
+
+        public GitHubResponse<IssueModel> Update(string title, string body, string state, string assignee, int? milestone, string[] labels)
+        {
+            return Client.Patch<IssueModel>(Uri, new { title = title, body = body, assignee = assignee, milestone = milestone, labels = labels });
+        } 
 
         public override string Uri
         {

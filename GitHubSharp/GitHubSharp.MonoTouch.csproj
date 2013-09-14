@@ -74,6 +74,7 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Models\SubscriptionModel.cs" />
     <Compile Include="Models\TeamModel.cs" />
+    <Compile Include="Controllers\MilestonesController.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

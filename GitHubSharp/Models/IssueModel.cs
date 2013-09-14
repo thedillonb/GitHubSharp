@@ -23,19 +23,40 @@ namespace GitHubSharp.Models
         public PullRequestModel PullRequest { get; set; }
 
         [Serializable]
-        public class LabelModel
-        {
-            public string Url { get; set; }
-            public string Name { get; set; }
-            public string Color { get; set; }
-        }
-
-        [Serializable]
         public class PullRequestModel
         {
             public string HtmlUrl { get; set; }
             public string DiffUrl { get; set; }
             public string PatchUrl { get; set; }
+        }
+    }
+
+    [Serializable]
+    public class LabelModel
+    {
+        public string Url { get; set; }
+        public string Name { get; set; }
+        public string Color { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (ReferenceEquals(this, obj))
+                return true;
+            if (obj.GetType() != typeof(LabelModel))
+                return false;
+            LabelModel other = (LabelModel)obj;
+            return Name == other.Name;
+        }
+        
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (Name != null ? Name.GetHashCode() : 0);
+            }
         }
     }
 

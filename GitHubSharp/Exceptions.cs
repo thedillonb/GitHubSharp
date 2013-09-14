@@ -15,6 +15,12 @@ namespace GitHubSharp
         : base(HttpStatusCode.NotFound, "The server is unable to locate the requested resource.") { }
     }
 
+    public class UnauthorizedException : StatusCodeException
+    {
+        public UnauthorizedException()
+            : base(HttpStatusCode.Unauthorized, "You are unauthorized to view the requested resource.") { }
+    }
+
     public class InternalServerException : StatusCodeException
     {
         public InternalServerException()
@@ -46,6 +52,8 @@ namespace GitHubSharp
                     return new NotFoundException();
                 case HttpStatusCode.InternalServerError:
                     return new InternalServerException();
+                case HttpStatusCode.Unauthorized:
+                    return new UnauthorizedException();
                 default:
                     return new StatusCodeException(statusCode);
             }

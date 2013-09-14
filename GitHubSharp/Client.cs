@@ -10,10 +10,13 @@ namespace GitHubSharp
 {
     public class Client
     {
-        public static string ApiUri = "https://api.github.com";
+        private const string DefaultApi = "https://api.github.com";
+
         public static string RawUri = "https://raw.github.com";
-        public static string GistUri = "https://gist.github.com";
+
         private readonly RestClient _client = new RestClient();
+
+        public string ApiUri { get; private set; }
 
         public AuthenticatedUserController AuthenticatedUser
         {
@@ -87,10 +90,21 @@ namespace GitHubSharp
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
-        public Client(String username, String password)
+        public Client(String username, String password, String apiUri = DefaultApi)
         {
+            if (string.IsNullOrEmpty(username))
+                throw new ArgumentException("Username must be valid!");
+
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentException("Password must be valid!");
+
+            Uri apiOut;
+            if (!Uri.TryCreate(apiUri, UriKind.Absolute, out apiOut))
+                throw new ArgumentException("The URL, " + apiUri + ", is not valid!");
+
             Username = username;
             Password = password;
+            ApiUri = apiOut.AbsoluteUri.TrimEnd('/');
             _client.Authenticator = new HttpBasicAuthenticator(username, password);
             //_client.FollowRedirects = true;
         }

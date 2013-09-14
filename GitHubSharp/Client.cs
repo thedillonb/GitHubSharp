@@ -362,5 +362,13 @@ namespace GitHubSharp
 
             throw StatusCodeException.FactoryCreate(response.StatusCode);
         }
+
+        public string DownloadRawResource(string rawUrl, System.IO.Stream downloadSream)
+        {
+            var request = new RestSharp.RestRequest(rawUrl, Method.GET);
+            request.ResponseWriter = (s) => s.CopyTo(downloadSream);
+            var response = ExecuteRequest(request);
+            return response.ContentType;
+        }
     }
 }

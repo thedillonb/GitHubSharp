@@ -198,36 +198,15 @@ namespace GitHubSharp.Controllers
             return Client.Get<TreeModel>(Uri + "/git/trees/" + sha, forceCacheInvalidation: forceCacheInvalidation);
         }
 
-        public System.Net.HttpWebResponse GetFileRaw(string branch, string file, System.IO.Stream stream)
+        public string GetFileRaw(string branch, string file, System.IO.Stream stream)
         {
             var uri = Client.RawUri + "/" + User + "/" + Repo + "/" + branch + "/";
             if (!uri.EndsWith("/") && !file.StartsWith("/"))
                 file = "/" + file;
 
-            var fileReq = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(uri + file);
-
-            //Set the authentication!
-            var authInfo = Client.Username + ":" + Client.Password;
-            authInfo = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(authInfo));
-            fileReq.Headers["Authorization"] = "Basic " + authInfo;
-
-            var resp = (System.Net.HttpWebResponse)fileReq.GetResponse();
-            if (resp != null)
-            {
-                using (var dstream = resp.GetResponseStream())
-                {
-                    var buffer = new byte[1024];
-                    while (true)
-                    {
-                        var bytesRead = dstream.Read(buffer, 0, 1024);
-                        if (bytesRead <= 0)
-                            break;
-                        stream.Write(buffer, 0, bytesRead);
-                    }
-                }
-            }
-
-            return resp;
+            var request = new RestSharp.RestRequest(uri + file);
+            request.ResponseWriter = (s) => s.CopyTo(stream);
+            return Client.ExecuteRequest(request).ContentType;
         }
 
         public bool IsWatching(bool forceCacheInvalidation = false)

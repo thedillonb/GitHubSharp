@@ -127,7 +127,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubResponse<IssueModel> Update(string title, string body, string state, string assignee, int? milestone, string[] labels)
         {
-            return Client.Patch<IssueModel>(Uri, new { title = title, body = body, assignee = assignee, milestone = milestone, labels = labels });
+            return Client.Patch<IssueModel>(Uri, new { title = title, body = body, assignee = assignee, milestone = milestone, labels = labels, state = state });
         } 
 
         public override string Uri

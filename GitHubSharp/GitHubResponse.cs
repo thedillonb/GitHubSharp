@@ -6,23 +6,22 @@ namespace GitHubSharp
     public class GitHubResponse
     {
         public int StatusCode { get; set; }
+
         public int RateLimitLimit { get; set; }
+
         public int RateLimitRemaining { get; set; }
+
+        public string ETag { get; set; }
+
+        public bool WasCached { get; set; }
     }
 
     [Serializable]
-    public class GitHubResponse<T> : GitHubResponse where T : class
+    public class GitHubResponse<T> : GitHubResponse where T : new()
     {
-        [NonSerialized]
-        private Func<GitHubResponse<T>> _more;
-
         public T Data { get; set; }
 
-        public Func<GitHubResponse<T>> More
-        {
-            get { return _more; }
-            set { _more = value; }
-        }
+        public GitHubRequest<T> More { get; set; }
     }
 }
 

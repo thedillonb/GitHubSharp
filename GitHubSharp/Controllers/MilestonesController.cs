@@ -14,9 +14,9 @@ namespace GitHubSharp.Controllers
             RepositoryController = repository;
         }
 
-        public GitHubResponse<List<MilestoneModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<MilestoneModel>> GetAll(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<MilestoneModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<MilestoneModel>>(Client, Uri, new { page = page, per_page = perPage });
         }
 
         public override string Uri

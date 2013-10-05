@@ -36,9 +36,9 @@ namespace GitHubSharp.Controllers
         /// </summary>
         /// <param name="forceCacheInvalidation"></param>
         /// <returns></returns>
-        public GitHubResponse<List<TeamShortModel>> GetAll(bool forceCacheInvalidation = false)
+        public GitHubRequest<List<TeamShortModel>> GetAll()
         {
-            return Client.Get<List<TeamShortModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation);
+            return GitHubRequest.Get<List<TeamShortModel>>(Client, Uri);
         }
 
         public override string Uri
@@ -80,19 +80,19 @@ namespace GitHubSharp.Controllers
         /// </summary>
         /// <param name="forceCacheInvalidation"></param>
         /// <returns></returns>
-        public GitHubResponse<TeamModel> Get(bool forceCacheInvalidation = false)
+        public GitHubRequest<TeamModel> Get()
         {
-            return Client.Get<TeamModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
+            return GitHubRequest.Get<TeamModel>(Client, Uri);
         }
 
-        public GitHubResponse<List<BasicUserModel>> GetMembers(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<BasicUserModel>> GetMembers(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<BasicUserModel>>(Uri + "/members", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<BasicUserModel>>(Client, Uri + "/members", new { page = page, per_page = perPage });
         }
         
-        public GitHubResponse<List<RepositoryModel>> GetRepositories()
+        public GitHubRequest<List<RepositoryModel>> GetRepositories()
         {
-            return Client.Get<List<RepositoryModel>>(Uri + "/repos");
+            return GitHubRequest.Get<List<RepositoryModel>>(Client, Uri + "/repos");
         }
 
         public override string Uri

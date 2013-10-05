@@ -51,28 +51,25 @@ namespace GitHubSharp.Controllers
         /// <summary>
         /// Get a list of users this user is following
         /// </summary>
-        /// <returns></returns>
-        public GitHubResponse<List<BasicUserModel>> GetFollowing(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<BasicUserModel>> GetFollowing(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<BasicUserModel>>(Uri + "/following", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<BasicUserModel>>(Client, Uri + "/following", new { page = page, per_page = perPage });
         }
 
         /// <summary>
         /// Get a list of users following this user
         /// </summary>
-        /// <returns></returns>
-        public GitHubResponse<List<BasicUserModel>> GetFollowers(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<BasicUserModel>> GetFollowers(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<BasicUserModel>>(Uri + "/followers", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<BasicUserModel>>(Client, Uri + "/followers", new { page = page, per_page = perPage });
         }
 
         /// <summary>
         /// Gets the organizations this user belongs to
         /// </summary>
-        /// <returns></returns>
-        public GitHubResponse<List<BasicUserModel>> GetOrganizations(bool forceCacheInvalidation = false)
+        public GitHubRequest<List<BasicUserModel>> GetOrganizations()
         {
-            return Client.Get<List<BasicUserModel>>(Uri + "/orgs", forceCacheInvalidation: forceCacheInvalidation);
+            return GitHubRequest.Get<List<BasicUserModel>>(Client, Uri + "/orgs");
         }
     }
 
@@ -113,10 +110,9 @@ namespace GitHubSharp.Controllers
         /// <summary>
         /// Get the user's information
         /// </summary>
-        /// <returns></returns>
-        public GitHubResponse<UserModel> Get(bool forceCacheInvalidation = false)
+        public GitHubRequest<UserModel> Get()
         {
-            return Client.Get<UserModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
+            return GitHubRequest.Get<UserModel>(Client, Uri);
         }
 
         /// <summary>
@@ -125,9 +121,9 @@ namespace GitHubSharp.Controllers
         /// <param name="page"></param>
         /// <param name="perPage"></param>
         /// <returns></returns>
-        public GitHubResponse<List<EventModel>> GetEvents(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<EventModel>> GetEvents(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<EventModel>>(Uri + "/events", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<EventModel>>(Client, Uri + "/events", new { page = page, per_page = perPage });
         }
 
         /// <summary>
@@ -136,9 +132,9 @@ namespace GitHubSharp.Controllers
         /// <param name="page"></param>
         /// <param name="perPage"></param>
         /// <returns></returns>
-        public GitHubResponse<List<EventModel>> GetReceivedEvents(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<EventModel>> GetReceivedEvents(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<EventModel>>(Uri + "/received_events", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<EventModel>>(Client, Uri + "/received_events", new { page = page, per_page = perPage });
         }
 
         /// <summary>
@@ -148,9 +144,9 @@ namespace GitHubSharp.Controllers
         /// <param name="forceCacheInvalidation">If set to <c>true</c> force cache invalidation.</param>
         /// <param name="page">Page.</param>
         /// <param name="perPage">Per page.</param>
-        public GitHubResponse<List<EventModel>> GetOrganizationEvents(string org, bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<EventModel>> GetOrganizationEvents(string org, int page = 1, int perPage = 100)
         {
-            return Client.Get<List<EventModel>>(Uri + "/events/orgs/" + org, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<EventModel>>(Client, Uri + "/events/orgs/" + org, new { page = page, per_page = perPage });
         }
 
 
@@ -188,20 +184,19 @@ namespace GitHubSharp.Controllers
         /// <param name="page"></param>
         /// <param name="perPage"></param>
         /// <returns></returns>
-        public GitHubResponse<List<EventModel>> GetPublicEvents(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<EventModel>> GetPublicEvents(int page = 1, int perPage = 100)
         {
-            string uri = Client.ApiUri + "/events";
-            return Client.Get<List<EventModel>>(uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<EventModel>>(Client, Client.ApiUri + "/events", new { page = page, per_page = perPage });
         }
 
-        public GitHubResponse<UserAuthenticatedModel> GetInfo(bool forceCacheInvalidation = false)
+        public GitHubRequest<UserAuthenticatedModel> GetInfo()
         {
-            return Client.Get<UserAuthenticatedModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
+            return GitHubRequest.Get<UserAuthenticatedModel>(Client, Uri);
         }
 
-        public GitHubResponse<List<KeyModel>> GetKeys(bool forceCacheInvalidation = false)
+        public GitHubRequest<List<KeyModel>> GetKeys()
         {
-            return Client.Get<List<KeyModel>>(Uri + "/keys", forceCacheInvalidation: forceCacheInvalidation);
+            return GitHubRequest.Get<List<KeyModel>>(Client, Uri + "/keys");
         }
 
         public override string Uri

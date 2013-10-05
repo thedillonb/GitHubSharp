@@ -38,24 +38,24 @@ namespace GitHubSharp.Controllers
             OrganizationsController = organizationsController;
         }
 
-        public GitHubResponse<UserModel> Get(bool forceCacheInvalidation = false)
+        public GitHubRequest<UserModel> Get()
         {
-            return Client.Get<UserModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
+            return GitHubRequest.Get<UserModel>(Client, Uri);
         }
 
-        public GitHubResponse<List<BasicUserModel>> GetMembers(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<BasicUserModel>> GetMembers(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<BasicUserModel>>(Uri + "/members", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<BasicUserModel>>(Client, Uri + "/members", new { page = page, per_page = perPage });
         }
 
-        public GitHubResponse<List<TeamShortModel>> GetTeams(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<TeamShortModel>> GetTeams(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<TeamShortModel>>(Uri + "/teams", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<TeamShortModel>>(Client, Uri + "/teams", new { page = page, per_page = perPage });
         }
 
-        public GitHubResponse<List<EventModel>> GetEvents(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<EventModel>> GetEvents(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<EventModel>>(Uri + "/events", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<EventModel>>(Client, Uri + "/events", new { page = page, per_page = perPage });
         }
 
         public override string Uri

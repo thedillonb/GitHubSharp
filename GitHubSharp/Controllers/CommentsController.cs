@@ -18,9 +18,9 @@ namespace GitHubSharp.Controllers
             RepositoryController = repository;
         }
 
-        public GitHubResponse<List<CommentModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<CommentModel>> GetAll(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<CommentModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<CommentModel>>(Client, Uri, new { page = page, per_page = perPage });
         }
 
         public override string Uri
@@ -42,19 +42,19 @@ namespace GitHubSharp.Controllers
             Id = id;
         }
 
-        public GitHubResponse<CommentModel> Get(bool forceCacheInvalidation = false)
+        public GitHubRequest<CommentModel> Get()
         {
-            return Client.Get<CommentModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
+            return GitHubRequest.Get<CommentModel>(Client, Uri);
         }
 
-        public GitHubResponse<CommentModel> Update(string body)
+        public GitHubRequest<CommentModel> Update(string body)
         {
-            return Client.Patch<CommentModel>(Uri, new { Body = body });
+            return GitHubRequest.Patch<CommentModel>(Uri, new { body = body });
         }
 
-        public void Delete()
+        public GitHubRequest Delete()
         {
-            Client.Delete(Uri);
+            return GitHubRequest.Delete(Uri);
         }
 
         public override string Uri
@@ -78,14 +78,14 @@ namespace GitHubSharp.Controllers
             CommitController = commits;
         }
 
-        public GitHubResponse<CommentModel> Create(string body, string path = null, int? position = null)
+        public GitHubRequest<CommentModel> Create(string body, string path = null, int? position = null)
         {
-            return Client.Post<CommentModel>(Uri, new { body = body, path = path, position = position });
+            return GitHubRequest.Post<CommentModel>(Client, Uri, new { body = body, path = path, position = position });
         }
 
-        public GitHubResponse<List<CommentModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<CommentModel>> GetAll(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<CommentModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<CommentModel>>(Client, Uri, new { page = page, per_page = perPage });
         }
 
         public override string Uri
@@ -104,19 +104,19 @@ namespace GitHubSharp.Controllers
             Parent = parent;
         }
 
-        public GitHubResponse<List<CommentModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<CommentModel>> GetAll(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<CommentModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<CommentModel>>(Client, Uri, new { page = page, per_page = perPage });
         }
 
-        public GitHubResponse<CommentModel> Create(string body, string commitId, string path, int position)
+        public GitHubRequest<CommentModel> Create(string body, string commitId, string path, int position)
         {
-            return Client.Post<CommentModel>(Uri, new Dictionary<string, object> { { "body", body }, {"commit_id", commitId }, { "path", path }, { "position", position } });
+            return GitHubRequest.Post<CommentModel>(Client, Uri, new { body = body, commit_id = commitId, path = path, position = position });
         }
 
-        public GitHubResponse<CommentModel> ReplyTo(string body, long replyToId)
+        public GitHubRequest<CommentModel> ReplyTo(string body, long replyToId)
         {
-            return Client.Post<CommentModel>(Uri, new Dictionary<string, object> { { "body", body }, { "in_reply_to", replyToId } });
+            return GitHubRequest.Post<CommentModel>(Client, Uri, new { body = body, in_reply_to = replyToId });
         }
 
         public override string Uri

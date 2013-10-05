@@ -14,15 +14,16 @@ namespace GitHubSharp.Controllers
         {
         }
 
-        public GitHubResponse<List<IssueModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100, 
+        public GitHubRequest<List<IssueModel>> GetAll(int page = 1, int perPage = 100, 
                                                        string milestone = null, string state = null, string assignee = null, 
                                                        string creator = null, string mentioned = null, string labels = null, 
                                                        string sort = null, string direction = null)
         {
-            return Client.Get<List<IssueModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage, additionalArgs: new {
+            return GitHubRequest.Get<List<IssueModel>>(Client, Uri, new {
                 Milestone = milestone, State = state, Assignee = assignee,
                 Creator = creator, Mentioned = mentioned, Labels = labels,
-                Sort = sort, Direction = direction
+                Sort = sort, Direction = direction,
+                page = page, per_page = perPage
             });
         }
     }
@@ -34,13 +35,14 @@ namespace GitHubSharp.Controllers
         {
         }
 
-        public GitHubResponse<List<IssueModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100, 
+        public GitHubRequest<List<IssueModel>> GetAll(int page = 1, int perPage = 100, 
                                                        string filter = null, string state = null, string labels = null,
                                                        string sort = null, string direction = null, string since = null)
         {
-            return Client.Get<List<IssueModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage, additionalArgs: new {
+            return GitHubRequest.Get<List<IssueModel>>(Client, Uri, new {
                 Filter = filter, State = state, Labels = labels,
-                Sort = sort, Direction = direction, Since = since
+                Sort = sort, Direction = direction, Since = since,
+                page = page, per_page = perPage
             });
         }
 
@@ -81,9 +83,9 @@ namespace GitHubSharp.Controllers
             Parent = parent;
         }
 
-        public GitHubResponse<IssueModel> Create(string title, string body, string assignee, int? milestone, string[] labels)
+        public GitHubRequest<IssueModel> Create(string title, string body, string assignee, int? milestone, string[] labels)
         {
-            return Client.Post<IssueModel>(Uri, new { title = title, body = body, assignee = assignee, milestone = milestone, labels = labels });
+            return GitHubRequest.Post<IssueModel>(Client, Uri, new { title = title, body = body, assignee = assignee, milestone = milestone, labels = labels });
         } 
 
         public override string Uri
@@ -105,29 +107,29 @@ namespace GitHubSharp.Controllers
             Id = id;
         }
 
-        public GitHubResponse<IssueModel> Get(bool forceCacheInvalidation = false)
+        public GitHubRequest<IssueModel> Get()
         {
-            return Client.Get<IssueModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
+            return GitHubRequest.Get<IssueModel>(Client, Uri);
         }
 
-        public GitHubResponse<List<IssueEventModel>> GetEvents(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<IssueEventModel>> GetEvents(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<IssueEventModel>>(Uri + "/events", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<IssueEventModel>>(Client, Uri + "/events", new { page = page, per_page = perPage });
         }
 
-        public GitHubResponse<List<IssueCommentModel>> GetComments(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<IssueCommentModel>> GetComments(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<IssueCommentModel>>(Uri + "/comments", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<IssueCommentModel>>(Client, Uri + "/comments", new { page = page, per_page = perPage });
         }
 
-        public GitHubResponse<IssueCommentModel> CreateComment(string body)
+        public GitHubRequest<IssueCommentModel> CreateComment(string body)
         {
-            return Client.Post<IssueCommentModel>(Uri + "/comments", new { body = body });
+            return GitHubRequest.Post<IssueCommentModel>(Client, Uri + "/comments", new { body = body });
         }
 
-        public GitHubResponse<IssueModel> Update(string title, string body, string state, string assignee, int? milestone, string[] labels)
+        public GitHubRequest<IssueModel> Update(string title, string body, string state, string assignee, int? milestone, string[] labels)
         {
-            return Client.Patch<IssueModel>(Uri, new { title = title, body = body, assignee = assignee, milestone = milestone, labels = labels, state = state });
+            return GitHubRequest.Patch<IssueModel>(Uri, new { title = title, body = body, assignee = assignee, milestone = milestone, labels = labels, state = state });
         } 
 
         public override string Uri

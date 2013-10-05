@@ -19,25 +19,19 @@ namespace GitHubSharp.Controllers
         {
         }
 
-        public GitHubResponse<List<GistModel>> GetGists(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<GistModel>> GetGists(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<GistModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<GistModel>>(Client, Uri, new { page = page, per_page = perPage });
         }
 
-        public GitHubResponse<List<GistModel>> GetPublicGists(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<GistModel>> GetPublicGists(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<GistModel>>(Uri + "/public", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<GistModel>>(Client, Uri + "/public", new { page = page, per_page = perPage });
         }
 
-        public GitHubResponse<List<GistModel>> GetStarredGists(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<GistModel>> GetStarredGists(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<GistModel>>(Uri + "/starred", forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
-        }
-        
-        public string GetFile(string url)
-        {
-            var response = Client.ExecuteRequest(url, RestSharp.Method.GET, null);
-            return response.Content;
+            return GitHubRequest.Get<List<GistModel>>(Client, Uri + "/starred", new { page = page, per_page = perPage });
         }
 
         public override string Uri
@@ -56,9 +50,9 @@ namespace GitHubSharp.Controllers
             _user = user;
         }
 
-        public GitHubResponse<List<GistModel>> GetGists(bool forceCacheInvalidation = false, int page = 1, int perPage = 100)
+        public GitHubRequest<List<GistModel>> GetGists(int page = 1, int perPage = 100)
         {
-            return Client.Get<List<GistModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage);
+            return GitHubRequest.Get<List<GistModel>>(Client, Uri, new { page = page, per_page = perPage });
         }
 
         public override string Uri
@@ -74,7 +68,7 @@ namespace GitHubSharp.Controllers
         {
         }
 
-        public GitHubResponse<GistModel> CreateGist(GistCreateModel gist)
+        public GitHubRequest<GistModel> CreateGist(GistCreateModel gist)
         {
             //Great... The RestSharp serializer can't handle this object...
             //Dictionary<string, obj> confuses it and converts it into {"key": "ok", "value": "dokie"}
@@ -96,8 +90,7 @@ namespace GitHubSharp.Controllers
                 }
             }
 
-            var uri = Client.ApiUri + "/gists";
-            return Client.Post<GistModel>(uri, obj);
+            return GitHubRequest.Post<GistModel>(Client, Client.ApiUri + "/gists", obj);
         }
     }
 
@@ -114,57 +107,48 @@ namespace GitHubSharp.Controllers
             GistsController = gistsController;
         }
 
-        public GitHubResponse<GistModel> Get(bool forceCacheInvalidation = false)
+        public GitHubRequest<GistModel> Get()
         {
-            return Client.Get<GistModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
+            return GitHubRequest.Get<GistModel>(Client, Uri);
         }
 
-        public void Star()
+        public GitHubRequest Star()
         {
-            Client.Put(Uri + "/star");
+            return GitHubRequest.Put(Uri + "/star");
         }
 
-        public void Unstar()
+        public GitHubRequest Unstar()
         {
-            Client.Delete(Uri + "/star");
+            return GitHubRequest.Delete(Uri + "/star");
         }
 
-        public GitHubResponse<List<GistCommentModel>> GetComments(bool forceCacheInvalidation = false)
+        public GitHubRequest<List<GistCommentModel>> GetComments()
         {
-            return Client.Get<List<GistCommentModel>>(Uri + "/comments", forceCacheInvalidation: forceCacheInvalidation);
+            return GitHubRequest.Get<List<GistCommentModel>>(Client, Uri + "/comments");
         }
 
-        public GitHubResponse<GistModel> ForkGist()
+        public GitHubRequest<GistModel> ForkGist()
         {
-            return Client.Post<GistModel>(Uri + "/forks", null);
+            return GitHubRequest.Post<GistModel>(Client, Uri + "/forks");
         }
 
-        public void Delete()
+        public GitHubRequest Delete()
         {
-            Client.Delete(Uri);
+            return GitHubRequest.Delete(Uri);
         }
 
-        public bool IsGistStarred()
+        public GitHubRequest<bool> IsGistStarred()
         {
-            try
-            {
-                var response = Client.ExecuteRequest(Client.ApiUri + "/" + Uri + "/star", RestSharp.Method.GET, null);
-                if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
-                    return true;
-            }
-            catch (NotFoundException)
-            {
-                //This means the gist was NOT starred...
-            }
-            return false;
+            return GitHubRequest.Get<bool>(Client, Client.ApiUri + "/" + Uri + "/star");
         }
 
-        public GitHubResponse<GistCommentModel> CreateGistComment(string body)
+        public GitHubRequest<GistCommentModel> CreateGistComment(string body)
         {
-            return Client.Post<GistCommentModel>(Uri + "/comments", new { body = body });
+            return GitHubRequest.Post<GistCommentModel>(Client, Uri + "/comments", new { body = body });
+
         }
 
-        public GitHubResponse<GistModel> EditGist(GistEditModel gist)
+        public GitHubRequest<GistModel> EditGist(GistEditModel gist)
         {
             var obj = new RestSharp.JsonObject();
             obj.Add(new KeyValuePair<string, object>("description", gist.Description));
@@ -192,7 +176,7 @@ namespace GitHubSharp.Controllers
                 }
             }
 
-            return Client.Patch<GistModel>(Uri, obj);
+            return GitHubRequest.Patch<GistModel>(Uri, obj);
         }
 
         public override string Uri

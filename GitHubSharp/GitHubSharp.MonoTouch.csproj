@@ -32,7 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="monotouch" />
   </ItemGroup>
@@ -43,7 +42,6 @@
     <Compile Include="Client.cs" />
     <Compile Include="Models\TreeModel.cs" />
     <Compile Include="Utils\ObjectToDictionaryConverter.cs" />
-    <Compile Include="ICacheProvider.cs" />
     <Compile Include="Models\IssueModel.cs" />
     <Compile Include="Models\HistoryModel.cs" />
     <Compile Include="Models\GistModel.cs" />
@@ -75,6 +73,8 @@
     <Compile Include="Models\SubscriptionModel.cs" />
     <Compile Include="Models\TeamModel.cs" />
     <Compile Include="Controllers\MilestonesController.cs" />
+    <Compile Include="GitHubRequest.cs" />
+    <Compile Include="ICache.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

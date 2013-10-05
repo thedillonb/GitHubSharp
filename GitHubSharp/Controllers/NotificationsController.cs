@@ -17,14 +17,14 @@ namespace GitHubSharp.Controllers
             Id = id;
         }
 
-        public GitHubResponse<NotificationModel> Get(bool forceCacheInvalidation = false)
+        public GitHubRequest<NotificationModel> Get()
         {
-            return Client.Get<NotificationModel>(Uri, forceCacheInvalidation: forceCacheInvalidation);
+            return GitHubRequest.Get<NotificationModel>(Client, Uri);
         }
 
-        public bool MarkAsRead()
+        public GitHubRequest<bool> MarkAsRead()
         {
-            return Client.Patch(Uri).StatusCode == 205;
+            return GitHubRequest.Patch<bool>(Uri);
         }
 
         public override string Uri
@@ -45,17 +45,17 @@ namespace GitHubSharp.Controllers
         {
         }
 
-        public GitHubResponse<List<NotificationModel>> GetAll(bool forceCacheInvalidation = false, int page = 1, int perPage = 100, bool? all = null, bool? participating = null)
+        public GitHubRequest<List<NotificationModel>> GetAll(int page = 1, int perPage = 100, bool? all = null, bool? participating = null)
         {
-            return Client.Get<List<NotificationModel>>(Uri, forceCacheInvalidation: forceCacheInvalidation, page: page, perPage: perPage, additionalArgs: new { All = all, Participating = participating });
+            return GitHubRequest.Get<List<NotificationModel>>(Client, Uri, new { page = page, per_page = perPage, all = all, participating = participating });
         }
 
-        public bool MarkAsRead(DateTime? lastReadAt)
+        public GitHubRequest<bool> MarkAsRead(DateTime? lastReadAt)
         {
             var data = new Dictionary<string,string>();
             if (lastReadAt != null)
                 data.Add("last_read_at", string.Concat(lastReadAt.Value.ToString("s"), "Z"));
-            return Client.Put(Uri, data).StatusCode == 205;
+            return GitHubRequest.Put<bool>(Uri, data);
         }
 
         public override string Uri

@@ -15,6 +15,12 @@ namespace GitHubSharp
         : base(HttpStatusCode.NotFound, "The server is unable to locate the requested resource.") { }
     }
 
+    public class NotModifiedException : StatusCodeException
+    {
+        public NotModifiedException()
+        : base(HttpStatusCode.NotModified, "This resource has not been modified since the last request.") { }
+    }
+
     public class UnauthorizedException : StatusCodeException
     {
         public UnauthorizedException()
@@ -54,6 +60,8 @@ namespace GitHubSharp
                     return new InternalServerException();
                 case HttpStatusCode.Unauthorized:
                     return new UnauthorizedException();
+                case HttpStatusCode.NotModified:
+                    return new NotModifiedException();
                 default:
                     return new StatusCodeException(statusCode);
             }

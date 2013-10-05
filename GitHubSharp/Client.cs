@@ -6,14 +6,17 @@ using RestSharp;
 using RestSharp.Deserializers;
 using GitHubSharp.Controllers;
 using System.Threading.Tasks;
+using GitHubSharp.Models;
 
 namespace GitHubSharp
 {
     public class Client
     {
-        private const string DefaultApi = "https://api.github.com";
+        public const string DefaultApi = "https://api.github.com";
 
-        public static string RawUri = "https://raw.github.com";
+        public const string RawUri = "https://raw.github.com";
+
+        private const string AccessTokenUri = "https://github.com";
 
         private readonly RestClient _client = new RestClient();
 
@@ -58,16 +61,16 @@ namespace GitHubSharp
         {
             get { return new GistsController(this); }
         }
+
+        public AuthorizationsController Authorizations
+        {
+            get { return new AuthorizationsController(this); }
+        }
         
         /// <summary>
         /// Gets the username for this client
         /// </summary>
-        public string Username { get; private set; }
-
-        /// <summary>
-        /// Gets the password.
-        /// </summary>
-        public string Password { get; private set; }
+        public string Username { get; set; }
         
         /// <summary>
         /// Gets or sets the timeout.
@@ -90,10 +93,16 @@ namespace GitHubSharp
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        public Client(String username, String password, String apiUri = DefaultApi)
+        private Client()
         {
+            Timeout = 30 * 1000;
+        }
+
+        public static Client Basic(string username, string password, string apiUri = DefaultApi)
+        {
+            if (string.IsNullOrEmpty(apiUri))
+                apiUri = DefaultApi;
+
             if (string.IsNullOrEmpty(username))
                 throw new ArgumentException("Username must be valid!");
 
@@ -104,10 +113,48 @@ namespace GitHubSharp
             if (!Uri.TryCreate(apiUri, UriKind.Absolute, out apiOut))
                 throw new ArgumentException("The URL, " + apiUri + ", is not valid!");
 
-            Username = username;
-            Password = password;
-            ApiUri = apiOut.AbsoluteUri.TrimEnd('/');
-            _client.Authenticator = new HttpBasicAuthenticator(username, password);
+            var c = new Client();
+            c.Username = username;
+            c.ApiUri = apiOut.AbsoluteUri.TrimEnd('/');
+            c._client.Authenticator = new HttpBasicAuthenticator(username, password);
+            return c;
+        }
+
+        public static Client BasicTwoFactorAuthentication(string username, string password, string twoFactor, string apiUri = DefaultApi)
+        {
+            var c = Basic(username, password, apiUri);
+            c._client.Authenticator = new Authenticators.TwoFactorAuthenticator(username, password, twoFactor);
+            return c;
+        }
+
+        public static Client BasicOAuth(string oauth, string apiUri = DefaultApi)
+        {
+            if (string.IsNullOrEmpty(apiUri))
+                apiUri = DefaultApi;
+
+            Uri apiOut;
+            if (!Uri.TryCreate(apiUri, UriKind.Absolute, out apiOut))
+                throw new ArgumentException("The URL, " + apiUri + ", is not valid!");
+
+            var c = new Client();
+            c.ApiUri = apiOut.AbsoluteUri.TrimEnd('/');
+            c._client.Authenticator = new HttpBasicAuthenticator(oauth, "x-oauth-basic");
+            return c;
+        }
+
+        public static AccessTokenModel RequestAccessToken(string clientId, string clientSecret, string code, string redirectUri, string domainUri = AccessTokenUri)
+        {
+            if (string.IsNullOrEmpty(domainUri))
+                domainUri = AccessTokenUri;
+
+            if (!domainUri.EndsWith("/"))
+                domainUri += "/";
+            domainUri += "login/oauth/access_token";
+
+            var c = new Client();
+            var request = GitHubRequest.Post<AccessTokenModel>(c, domainUri, new { client_id = clientId, client_secret = clientSecret, code = code, redirect_uri = redirectUri });
+            var response = c.Execute(request);
+            return response.Data;
         }
 
         /// <summary>
@@ -277,7 +324,7 @@ namespace GitHubSharp
             else
             {
                 if (response.StatusCode < (HttpStatusCode)200 || response.StatusCode >= (HttpStatusCode)300)
-                    throw StatusCodeException.FactoryCreate(response.StatusCode);
+                    throw StatusCodeException.FactoryCreate(response);
 
                 ghr.Data = new JsonDeserializer().Deserialize<T>(response);
             }
@@ -299,7 +346,7 @@ namespace GitHubSharp
             }
 
             if (response.StatusCode < (HttpStatusCode)200 || response.StatusCode >= (HttpStatusCode)300)
-                throw StatusCodeException.FactoryCreate(response.StatusCode);
+                throw StatusCodeException.FactoryCreate(response);
 
             return ghr;
         }

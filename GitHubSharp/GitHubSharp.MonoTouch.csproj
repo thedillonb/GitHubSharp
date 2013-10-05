@@ -75,6 +75,10 @@
     <Compile Include="Controllers\MilestonesController.cs" />
     <Compile Include="GitHubRequest.cs" />
     <Compile Include="ICache.cs" />
+    <Compile Include="Controllers\AuthorizationsController.cs" />
+    <Compile Include="Models\AuthorizationModel.cs" />
+    <Compile Include="Models\ErrorModel.cs" />
+    <Compile Include="Authenticators\TwoFactorAuthenticator.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -93,4 +97,7 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <ItemGroup>
+    <Folder Include="Authenticators\" />
+  </ItemGroup>
 </Project>

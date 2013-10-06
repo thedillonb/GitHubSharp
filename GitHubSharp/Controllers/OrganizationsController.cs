@@ -40,22 +40,22 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<UserModel> Get()
         {
-            return GitHubRequest.Get<UserModel>(Client, Uri);
+            return GitHubRequest.Get<UserModel>(Uri);
         }
 
         public GitHubRequest<List<BasicUserModel>> GetMembers(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<BasicUserModel>>(Client, Uri + "/members", new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<BasicUserModel>>(Uri + "/members", new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<List<TeamShortModel>> GetTeams(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<TeamShortModel>>(Client, Uri + "/teams", new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<TeamShortModel>>(Uri + "/teams", new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<List<EventModel>> GetEvents(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<EventModel>>(Client, Uri + "/events", new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<EventModel>>(Uri + "/events", new { page = page, per_page = perPage });
         }
 
         public override string Uri

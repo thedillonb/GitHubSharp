@@ -98,6 +98,9 @@ namespace GitHubSharp
             Timeout = 30 * 1000;
         }
 
+        /// <summary>
+        /// Create a BASIC Auth Client
+        /// </summary>
         public static Client Basic(string username, string password, string apiUri = DefaultApi)
         {
             if (string.IsNullOrEmpty(apiUri))
@@ -120,6 +123,9 @@ namespace GitHubSharp
             return c;
         }
 
+        /// <summary>
+        /// Create a TwoFactor(BASIC + X-GitHub-OTP) Auth Client
+        /// </summary>
         public static Client BasicTwoFactorAuthentication(string username, string password, string twoFactor, string apiUri = DefaultApi)
         {
             var c = Basic(username, password, apiUri);
@@ -127,6 +133,9 @@ namespace GitHubSharp
             return c;
         }
 
+        /// <summary>
+        /// Create a BASIC OAuth client
+        /// </summary>
         public static Client BasicOAuth(string oauth, string apiUri = DefaultApi)
         {
             if (string.IsNullOrEmpty(apiUri))
@@ -142,6 +151,9 @@ namespace GitHubSharp
             return c;
         }
 
+        /// <summary>
+        /// Request an access token
+        /// </summary>
         public static AccessTokenModel RequestAccessToken(string clientId, string clientSecret, string code, string redirectUri, string domainUri = AccessTokenUri)
         {
             if (string.IsNullOrEmpty(domainUri))
@@ -152,7 +164,7 @@ namespace GitHubSharp
             domainUri += "login/oauth/access_token";
 
             var c = new Client();
-            var request = GitHubRequest.Post<AccessTokenModel>(c, domainUri, new { client_id = clientId, client_secret = clientSecret, code = code, redirect_uri = redirectUri });
+            var request = GitHubRequest.Post<AccessTokenModel>(domainUri, new { client_id = clientId, client_secret = clientSecret, code = code, redirect_uri = redirectUri });
             var response = c.Execute(request);
             return response.Data;
         }
@@ -182,7 +194,10 @@ namespace GitHubSharp
             {
                 var cache = Cache.Get<GitHubResponse<T>>(absoluteUri);
                 if (cache != null)
+                {
+                    cache.WasCached = true;
                     return cache;
+                }
             }
             else
             {
@@ -307,7 +322,7 @@ namespace GitHubSharp
 
                         if (what.Equals("next"))
                         {
-                            ghr.More = GitHubRequest.Get<T>(this, url); 
+                            ghr.More = GitHubRequest.Get<T>(url); 
                         }
                     }
                 }
@@ -375,7 +390,7 @@ namespace GitHubSharp
                 default:
                     return null;
             }
-        } 
+        }
 
         public GitHubResponse<T> Execute<T>(GitHubRequest<T> request) where T : new()
         {

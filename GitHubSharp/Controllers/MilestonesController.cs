@@ -16,7 +16,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<List<MilestoneModel>> GetAll(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<MilestoneModel>>(Client, Uri, new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<MilestoneModel>>(Uri, new { page = page, per_page = perPage });
         }
 
         public override string Uri

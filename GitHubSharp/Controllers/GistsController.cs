@@ -21,17 +21,17 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<List<GistModel>> GetGists(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<GistModel>>(Client, Uri, new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<GistModel>>(Uri, new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<List<GistModel>> GetPublicGists(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<GistModel>>(Client, Uri + "/public", new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<GistModel>>(Uri + "/public", new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<List<GistModel>> GetStarredGists(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<GistModel>>(Client, Uri + "/starred", new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<GistModel>>(Uri + "/starred", new { page = page, per_page = perPage });
         }
 
         public override string Uri
@@ -52,7 +52,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<List<GistModel>> GetGists(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<GistModel>>(Client, Uri, new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<GistModel>>(Uri, new { page = page, per_page = perPage });
         }
 
         public override string Uri
@@ -90,7 +90,7 @@ namespace GitHubSharp.Controllers
                 }
             }
 
-            return GitHubRequest.Post<GistModel>(Client, Client.ApiUri + "/gists", obj);
+            return GitHubRequest.Post<GistModel>(Client.ApiUri + "/gists", obj);
         }
     }
 
@@ -109,7 +109,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<GistModel> Get()
         {
-            return GitHubRequest.Get<GistModel>(Client, Uri);
+            return GitHubRequest.Get<GistModel>(Uri);
         }
 
         public GitHubRequest Star()
@@ -124,12 +124,12 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<List<GistCommentModel>> GetComments()
         {
-            return GitHubRequest.Get<List<GistCommentModel>>(Client, Uri + "/comments");
+            return GitHubRequest.Get<List<GistCommentModel>>(Uri + "/comments");
         }
 
         public GitHubRequest<GistModel> ForkGist()
         {
-            return GitHubRequest.Post<GistModel>(Client, Uri + "/forks");
+            return GitHubRequest.Post<GistModel>(Uri + "/forks");
         }
 
         public GitHubRequest Delete()
@@ -139,12 +139,12 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<bool> IsGistStarred()
         {
-            return GitHubRequest.Get<bool>(Client, Client.ApiUri + "/" + Uri + "/star");
+            return GitHubRequest.Get<bool>(Client.ApiUri + "/" + Uri + "/star");
         }
 
         public GitHubRequest<GistCommentModel> CreateGistComment(string body)
         {
-            return GitHubRequest.Post<GistCommentModel>(Client, Uri + "/comments", new { body = body });
+            return GitHubRequest.Post<GistCommentModel>(Uri + "/comments", new { body = body });
 
         }
 

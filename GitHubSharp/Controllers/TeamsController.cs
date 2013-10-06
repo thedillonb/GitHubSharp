@@ -38,7 +38,7 @@ namespace GitHubSharp.Controllers
         /// <returns></returns>
         public GitHubRequest<List<TeamShortModel>> GetAll()
         {
-            return GitHubRequest.Get<List<TeamShortModel>>(Client, Uri);
+            return GitHubRequest.Get<List<TeamShortModel>>(Uri);
         }
 
         public override string Uri
@@ -82,17 +82,17 @@ namespace GitHubSharp.Controllers
         /// <returns></returns>
         public GitHubRequest<TeamModel> Get()
         {
-            return GitHubRequest.Get<TeamModel>(Client, Uri);
+            return GitHubRequest.Get<TeamModel>(Uri);
         }
 
         public GitHubRequest<List<BasicUserModel>> GetMembers(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<BasicUserModel>>(Client, Uri + "/members", new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<BasicUserModel>>(Uri + "/members", new { page = page, per_page = perPage });
         }
         
         public GitHubRequest<List<RepositoryModel>> GetRepositories()
         {
-            return GitHubRequest.Get<List<RepositoryModel>>(Client, Uri + "/repos");
+            return GitHubRequest.Get<List<RepositoryModel>>(Uri + "/repos");
         }
 
         public override string Uri

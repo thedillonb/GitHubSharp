@@ -23,7 +23,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<List<PullRequestModel>> GetAll(int page = 1, int perPage = 100, string state = "open")
         {
-            return GitHubRequest.Get<List<PullRequestModel>>(Client, Uri, new { page = page, per_page = perPage, state = state });
+            return GitHubRequest.Get<List<PullRequestModel>>(Uri, new { page = page, per_page = perPage, state = state });
         }
 
         public override string Uri
@@ -52,17 +52,17 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<PullRequestModel> Get()
         {
-            return GitHubRequest.Get<PullRequestModel>(Client, Uri);
+            return GitHubRequest.Get<PullRequestModel>(Uri);
         }
 
         public GitHubRequest<List<CommitModel.CommitFileModel>> GetFiles(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<CommitModel.CommitFileModel>>(Client, Uri + "/files", new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<CommitModel.CommitFileModel>>(Uri + "/files", new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<List<CommitModel>> GetCommits(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<CommitModel>>(Client, Uri + "/commits", new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<CommitModel>>(Uri + "/commits", new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<PullRequestMergeModel> Merge()
@@ -72,7 +72,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<bool> IsMerged()
         {
-            return GitHubRequest.Get<bool>(Client, Uri + "/merge");
+            return GitHubRequest.Get<bool>(Uri + "/merge");
         }
 
         public override string Uri

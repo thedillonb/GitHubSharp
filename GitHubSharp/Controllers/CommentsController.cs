@@ -20,7 +20,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<List<CommentModel>> GetAll(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<CommentModel>>(Client, Uri, new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<CommentModel>>(Uri, new { page = page, per_page = perPage });
         }
 
         public override string Uri
@@ -44,7 +44,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<CommentModel> Get()
         {
-            return GitHubRequest.Get<CommentModel>(Client, Uri);
+            return GitHubRequest.Get<CommentModel>(Uri);
         }
 
         public GitHubRequest<CommentModel> Update(string body)
@@ -80,12 +80,12 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<CommentModel> Create(string body, string path = null, int? position = null)
         {
-            return GitHubRequest.Post<CommentModel>(Client, Uri, new { body = body, path = path, position = position });
+            return GitHubRequest.Post<CommentModel>(Uri, new { body = body, path = path, position = position });
         }
 
         public GitHubRequest<List<CommentModel>> GetAll(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<CommentModel>>(Client, Uri, new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<CommentModel>>(Uri, new { page = page, per_page = perPage });
         }
 
         public override string Uri
@@ -106,17 +106,17 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<List<CommentModel>> GetAll(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<CommentModel>>(Client, Uri, new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<CommentModel>>(Uri, new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<CommentModel> Create(string body, string commitId, string path, int position)
         {
-            return GitHubRequest.Post<CommentModel>(Client, Uri, new { body = body, commit_id = commitId, path = path, position = position });
+            return GitHubRequest.Post<CommentModel>(Uri, new { body = body, commit_id = commitId, path = path, position = position });
         }
 
         public GitHubRequest<CommentModel> ReplyTo(string body, long replyToId)
         {
-            return GitHubRequest.Post<CommentModel>(Client, Uri, new { body = body, in_reply_to = replyToId });
+            return GitHubRequest.Post<CommentModel>(Uri, new { body = body, in_reply_to = replyToId });
         }
 
         public override string Uri

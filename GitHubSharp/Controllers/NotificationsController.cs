@@ -19,7 +19,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<NotificationModel> Get()
         {
-            return GitHubRequest.Get<NotificationModel>(Client, Uri);
+            return GitHubRequest.Get<NotificationModel>(Uri);
         }
 
         public GitHubRequest<bool> MarkAsRead()
@@ -47,7 +47,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<List<NotificationModel>> GetAll(int page = 1, int perPage = 100, bool? all = null, bool? participating = null)
         {
-            return GitHubRequest.Get<List<NotificationModel>>(Client, Uri, new { page = page, per_page = perPage, all = all, participating = participating });
+            return GitHubRequest.Get<List<NotificationModel>>(Uri, new { page = page, per_page = perPage, all = all, participating = participating });
         }
 
         public GitHubRequest<bool> MarkAsRead(DateTime? lastReadAt)

@@ -22,9 +22,9 @@ namespace GitHubSharp.Controllers
         public GitHubRequest<List<CommitModel>> GetAll(string sha = null)
         {
             if (sha == null)
-                return GitHubRequest.Get<List<CommitModel>>(Client, Uri);
+                return GitHubRequest.Get<List<CommitModel>>(Uri);
             else
-                return GitHubRequest.Get<List<CommitModel>>(Client, Uri, new { sha = sha });
+                return GitHubRequest.Get<List<CommitModel>>(Uri, new { sha = sha });
         }
 
         public override string Uri
@@ -53,7 +53,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<CommitModel> Get()
         {
-            return GitHubRequest.Get<CommitModel>(Client, Uri);
+            return GitHubRequest.Get<CommitModel>(Uri);
         }
 
         public override string Uri

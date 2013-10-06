@@ -16,7 +16,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<RepositorySearchModel> SearchRepositories(string keyword)
         {
-            return GitHubRequest.Get<RepositorySearchModel>(Client, Uri + "/search/" + keyword);
+            return GitHubRequest.Get<RepositorySearchModel>(Uri + "/search/" + keyword);
         }
 
         public override string Uri
@@ -42,12 +42,12 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<List<RepositoryModel>> GetAll(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<RepositoryModel>>(Client, Uri, new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<RepositoryModel>>(Uri, new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<List<RepositoryModel>> GetWatching()
         {
-            return GitHubRequest.Get<List<RepositoryModel>>(Client, UserController.Uri + "/subscriptions");
+            return GitHubRequest.Get<List<RepositoryModel>>(UserController.Uri + "/subscriptions");
         }
    
         public override string Uri
@@ -70,17 +70,17 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<List<RepositoryModel>> GetAll(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<RepositoryModel>>(Client, Uri + "/repos",  new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<RepositoryModel>>(Uri + "/repos",  new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<List<RepositoryModel>> GetStarred(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<RepositoryModel>>(Client, Uri + "/starred",  new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<RepositoryModel>>(Uri + "/starred",  new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<List<RepositoryModel>> GetWatching(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<RepositoryModel>>(Client, Uri + "/subscriptions",  new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<RepositoryModel>>(Uri + "/subscriptions",  new { page = page, per_page = perPage });
         }
 
         public override string Uri
@@ -106,7 +106,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<List<RepositoryModel>> GetAll(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<RepositoryModel>>(Client, Uri,  new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<RepositoryModel>>(Uri,  new { page = page, per_page = perPage });
         }
 
         public override string Uri
@@ -155,52 +155,52 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<RepositoryModel> Get()
         {
-            return GitHubRequest.Get<RepositoryModel>(Client, Uri);
+            return GitHubRequest.Get<RepositoryModel>( Uri);
         }
 
         public GitHubRequest<List<BasicUserModel>> GetContributors(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<BasicUserModel>>(Client, Uri + "/contributors", new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<BasicUserModel>>( Uri + "/contributors", new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<Dictionary<string, int>> GetLanguages(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<Dictionary<string, int>>(Client, Uri + "/languages",  new { page = page, per_page = perPage });
+            return GitHubRequest.Get<Dictionary<string, int>>( Uri + "/languages",  new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<List<TagModel>> GetTags(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<TagModel>>(Client, Uri + "/tags",  new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<TagModel>>( Uri + "/tags",  new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<List<BranchModel>> GetBranches(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<BranchModel>>(Client, Uri + "/branches",  new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<BranchModel>>(Uri + "/branches",  new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<List<EventModel>> GetEvents(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<EventModel>>(Client, Uri + "/events",  new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<EventModel>>(Uri + "/events",  new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<List<EventModel>> GetNetworkEvents(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<EventModel>>(Client, Uri + "/networks/" + User + "/" + Repo + "/events",  new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<EventModel>>(Uri + "/networks/" + User + "/" + Repo + "/events",  new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<ContentModel> GetReadme(string branch = "master")
         {
-            return GitHubRequest.Get<ContentModel>(Client, Uri + "/readme", new { Ref = branch });
+            return GitHubRequest.Get<ContentModel>(Uri + "/readme", new { Ref = branch });
         }
 
         public GitHubRequest<List<ContentModel>> GetContent(string path = "/", string branch = "master")
         {
-            return GitHubRequest.Get<List<ContentModel>>(Client, Uri + "/contents" + path, new { Ref = branch });
+            return GitHubRequest.Get<List<ContentModel>>(Uri + "/contents" + path, new { Ref = branch });
         }
 
         public GitHubRequest<TreeModel> GetTree(string sha)
         {
-            return GitHubRequest.Get<TreeModel>(Client, Uri + "/git/trees/" + sha);
+            return GitHubRequest.Get<TreeModel>(Uri + "/git/trees/" + sha);
         }
 
         public string GetFileRaw(string branch, string file, System.IO.Stream stream)
@@ -216,7 +216,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<bool> IsWatching()
         {
-            return GitHubRequest.Get<bool>(Client, Client.ApiUri + "/user/subscriptions/" + User + "/" + Repo);
+            return GitHubRequest.Get<bool>(Client.ApiUri + "/user/subscriptions/" + User + "/" + Repo);
         }
 
         public GitHubRequest Watch()
@@ -231,7 +231,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<SubscriptionModel> GetSubscription()
         {
-            return GitHubRequest.Get<SubscriptionModel>(Client, Uri + "/subscription");
+            return GitHubRequest.Get<SubscriptionModel>(Uri + "/subscription");
         }
 
         public GitHubRequest<SubscriptionModel> SetSubscription(bool subscribed, bool ignored)
@@ -247,13 +247,13 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<List<BasicUserModel>> GetStargazers(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<BasicUserModel>>(Client, Uri + "/stargazers",  new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<BasicUserModel>>(Uri + "/stargazers",  new { page = page, per_page = perPage });
         }
 
 
         public GitHubRequest<bool> IsStarred()
         {
-            return GitHubRequest.Get<bool>(Client, Client.ApiUri + "/user/starred/" + User + "/" + Repo);
+            return GitHubRequest.Get<bool>(Client.ApiUri + "/user/starred/" + User + "/" + Repo);
         }
 
         public GitHubRequest Star()
@@ -268,17 +268,17 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<List<BasicUserModel>> GetCollaborators(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<BasicUserModel>>(Client, Uri + "/collaborators",  new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<BasicUserModel>>(Uri + "/collaborators",  new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<List<RepositoryModel>> GetForks(string sort = "newest", int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<RepositoryModel>>(Client, Uri + "/forks",  new { page = page, per_page = perPage, sort = sort });
+            return GitHubRequest.Get<List<RepositoryModel>>(Uri + "/forks",  new { page = page, per_page = perPage, sort = sort });
         }
 
         public GitHubRequest<List<LabelModel>> GetLabels(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<LabelModel>>(Client, Uri + "/labels",  new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<LabelModel>>(Uri + "/labels",  new { page = page, per_page = perPage });
         }
 
         public override string Uri

@@ -31,7 +31,7 @@ namespace GitHubSharp
         {
             set
             {
-                    RequestFromCache = CacheResponse = CheckIfModified = value;
+                RequestFromCache = CacheResponse = CheckIfModified = value;
             }
         }
 
@@ -45,7 +45,7 @@ namespace GitHubSharp
             CheckIfModified = true;
         }
         
-        internal static GitHubRequest<T> Get<T>(Client client, string url, object args = null) where T : new()
+        internal static GitHubRequest<T> Get<T>(string url, object args = null) where T : new()
         {
             return new GitHubRequest<T>(url, RequestMethod.GET, args);
         }
@@ -55,7 +55,7 @@ namespace GitHubSharp
             return new GitHubRequest<T>(url, RequestMethod.PATCH, args);
         }
 
-        internal static GitHubRequest<T> Post<T>(Client client, string url, object args = null) where T : new()
+        internal static GitHubRequest<T> Post<T>(string url, object args = null) where T : new()
         {
             return new GitHubRequest<T>(url, RequestMethod.POST, args);
         }

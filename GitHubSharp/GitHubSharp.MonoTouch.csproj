@@ -63,7 +63,6 @@
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Controllers\GistsController.cs" />
     <Compile Include="Controllers\IssuesController.cs" />
-    <Compile Include="Controllers\MarkdownController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\OrganizationsController.cs" />
     <Compile Include="Controllers\PullRequestsController.cs" />
@@ -75,10 +74,11 @@
     <Compile Include="Controllers\MilestonesController.cs" />
     <Compile Include="GitHubRequest.cs" />
     <Compile Include="ICache.cs" />
-    <Compile Include="Controllers\AuthorizationsController.cs" />
     <Compile Include="Models\AuthorizationModel.cs" />
     <Compile Include="Models\ErrorModel.cs" />
     <Compile Include="Authenticators\TwoFactorAuthenticator.cs" />
+    <Compile Include="Controllers\MarkdownController.cs" />
+    <Compile Include="Controllers\AuthorizationsController.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -99,5 +99,6 @@
   </ProjectExtensions>
   <ItemGroup>
     <Folder Include="Authenticators\" />
+    <Folder Include="Api\" />
   </ItemGroup>
 </Project>

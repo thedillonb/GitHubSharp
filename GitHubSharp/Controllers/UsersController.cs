@@ -53,7 +53,7 @@ namespace GitHubSharp.Controllers
         /// </summary>
         public GitHubRequest<List<BasicUserModel>> GetFollowing(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<BasicUserModel>>(Client, Uri + "/following", new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<BasicUserModel>>(Uri + "/following", new { page = page, per_page = perPage });
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace GitHubSharp.Controllers
         /// </summary>
         public GitHubRequest<List<BasicUserModel>> GetFollowers(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<BasicUserModel>>(Client, Uri + "/followers", new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<BasicUserModel>>(Uri + "/followers", new { page = page, per_page = perPage });
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace GitHubSharp.Controllers
         /// </summary>
         public GitHubRequest<List<BasicUserModel>> GetOrganizations()
         {
-            return GitHubRequest.Get<List<BasicUserModel>>(Client, Uri + "/orgs");
+            return GitHubRequest.Get<List<BasicUserModel>>(Uri + "/orgs");
         }
     }
 
@@ -112,7 +112,7 @@ namespace GitHubSharp.Controllers
         /// </summary>
         public GitHubRequest<UserModel> Get()
         {
-            return GitHubRequest.Get<UserModel>(Client, Uri);
+            return GitHubRequest.Get<UserModel>(Uri);
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace GitHubSharp.Controllers
         /// <returns></returns>
         public GitHubRequest<List<EventModel>> GetEvents(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<EventModel>>(Client, Uri + "/events", new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<EventModel>>(Uri + "/events", new { page = page, per_page = perPage });
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace GitHubSharp.Controllers
         /// <returns></returns>
         public GitHubRequest<List<EventModel>> GetReceivedEvents(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<EventModel>>(Client, Uri + "/received_events", new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<EventModel>>(Uri + "/received_events", new { page = page, per_page = perPage });
         }
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace GitHubSharp.Controllers
         /// <param name="perPage">Per page.</param>
         public GitHubRequest<List<EventModel>> GetOrganizationEvents(string org, int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<EventModel>>(Client, Uri + "/events/orgs/" + org, new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<EventModel>>(Uri + "/events/orgs/" + org, new { page = page, per_page = perPage });
         }
 
 
@@ -186,17 +186,17 @@ namespace GitHubSharp.Controllers
         /// <returns></returns>
         public GitHubRequest<List<EventModel>> GetPublicEvents(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<EventModel>>(Client, Client.ApiUri + "/events", new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<EventModel>>(Client.ApiUri + "/events", new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<UserAuthenticatedModel> GetInfo()
         {
-            return GitHubRequest.Get<UserAuthenticatedModel>(Client, Uri);
+            return GitHubRequest.Get<UserAuthenticatedModel>(Uri);
         }
 
         public GitHubRequest<List<KeyModel>> GetKeys()
         {
-            return GitHubRequest.Get<List<KeyModel>>(Client, Uri + "/keys");
+            return GitHubRequest.Get<List<KeyModel>>(Uri + "/keys");
         }
 
         public override string Uri

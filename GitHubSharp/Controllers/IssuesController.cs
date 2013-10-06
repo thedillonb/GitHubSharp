@@ -19,7 +19,7 @@ namespace GitHubSharp.Controllers
                                                        string creator = null, string mentioned = null, string labels = null, 
                                                        string sort = null, string direction = null)
         {
-            return GitHubRequest.Get<List<IssueModel>>(Client, Uri, new {
+            return GitHubRequest.Get<List<IssueModel>>(Uri, new {
                 Milestone = milestone, State = state, Assignee = assignee,
                 Creator = creator, Mentioned = mentioned, Labels = labels,
                 Sort = sort, Direction = direction,
@@ -39,7 +39,7 @@ namespace GitHubSharp.Controllers
                                                        string filter = null, string state = null, string labels = null,
                                                        string sort = null, string direction = null, string since = null)
         {
-            return GitHubRequest.Get<List<IssueModel>>(Client, Uri, new {
+            return GitHubRequest.Get<List<IssueModel>>(Uri, new {
                 Filter = filter, State = state, Labels = labels,
                 Sort = sort, Direction = direction, Since = since,
                 page = page, per_page = perPage
@@ -85,7 +85,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<IssueModel> Create(string title, string body, string assignee, int? milestone, string[] labels)
         {
-            return GitHubRequest.Post<IssueModel>(Client, Uri, new { title = title, body = body, assignee = assignee, milestone = milestone, labels = labels });
+            return GitHubRequest.Post<IssueModel>(Uri, new { title = title, body = body, assignee = assignee, milestone = milestone, labels = labels });
         } 
 
         public override string Uri
@@ -109,22 +109,22 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<IssueModel> Get()
         {
-            return GitHubRequest.Get<IssueModel>(Client, Uri);
+            return GitHubRequest.Get<IssueModel>(Uri);
         }
 
         public GitHubRequest<List<IssueEventModel>> GetEvents(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<IssueEventModel>>(Client, Uri + "/events", new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<IssueEventModel>>(Uri + "/events", new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<List<IssueCommentModel>> GetComments(int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<IssueCommentModel>>(Client, Uri + "/comments", new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<IssueCommentModel>>(Uri + "/comments", new { page = page, per_page = perPage });
         }
 
         public GitHubRequest<IssueCommentModel> CreateComment(string body)
         {
-            return GitHubRequest.Post<IssueCommentModel>(Client, Uri + "/comments", new { body = body });
+            return GitHubRequest.Post<IssueCommentModel>(Uri + "/comments", new { body = body });
         }
 
         public GitHubRequest<IssueModel> Update(string title, string body, string state, string assignee, int? milestone, string[] labels)

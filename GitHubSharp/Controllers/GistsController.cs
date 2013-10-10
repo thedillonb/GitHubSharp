@@ -139,7 +139,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<bool> IsGistStarred()
         {
-            return GitHubRequest.Get<bool>(Client.ApiUri + "/" + Uri + "/star");
+            return GitHubRequest.Get<bool>(Uri + "/star");
         }
 
         public GitHubRequest<GistCommentModel> CreateGistComment(string body)

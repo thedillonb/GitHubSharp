@@ -10,7 +10,7 @@ namespace GitHubSharp.Controllers
     {
         public RepositoryController Parent { get; private set; }
 
-        public PullRequestController this[long id]
+        public PullRequestController this[ulong id]
         {
             get { return new PullRequestController(Client, this, id); }
         }
@@ -36,14 +36,14 @@ namespace GitHubSharp.Controllers
     {
         public PullRequestsController Parent { get; private set; }
 
-        public long Id { get; private set; }
+        public ulong Id { get; private set; }
 
         public PullRequestCommentsController Comments
         {
             get { return new PullRequestCommentsController(Client, this); }   
         }
 
-        public PullRequestController(Client client, PullRequestsController parent, long id) 
+        public PullRequestController(Client client, PullRequestsController parent, ulong id) 
             : base(client)
         {
             Parent = parent;

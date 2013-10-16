@@ -331,7 +331,7 @@ namespace GitHubSharp
             // Booleans have a special definition in the github responses.
             // They typically represent a status code Not Found = false
             // or 204 = true and 205 (reset content)
-            if (typeof(T) == typeof(bool))
+            if (typeof(T) == typeof(bool) && (ghr.StatusCode == 204 || ghr.StatusCode == 205 || ghr.StatusCode == 404))
             {
                 var b = ghr.StatusCode == 204 || ghr.StatusCode == 205;
                 ghr.Data = (T)(object)(b);

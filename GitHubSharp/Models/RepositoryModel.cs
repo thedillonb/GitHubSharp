@@ -6,7 +6,7 @@ namespace GitHubSharp.Models
     [Serializable]
     public class RepositoryModel
     {
-        public long Id { get; set; }
+        public ulong Id { get; set; }
         public BasicUserModel Owner { get; set; }
         public string Name { get; set; }
         public string FullName { get; set; }
@@ -16,13 +16,13 @@ namespace GitHubSharp.Models
         public string Url { get; set; }
         public string Homepage { get; set; }
         public string Language { get; set; }
-        public int Forks { get; set; }
-        public int ForksCount { get; set; }
-        public int Watchers { get; set; }
-        public int WatchersCount { get; set; }
-        public long Size { get; set; }
+        public uint Forks { get; set; }
+        public uint ForksCount { get; set; }
+        public uint Watchers { get; set; }
+        public uint WatchersCount { get; set; }
+        public ulong Size { get; set; }
         public string MasterBranch { get; set; }
-        public int OpenIssues { get; set; }
+        public uint OpenIssues { get; set; }
         public DateTime PushedAt { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
@@ -50,15 +50,15 @@ namespace GitHubSharp.Models
             public string Type { get; set; }
             public DateTime PushedAt { get; set; }
             public DateTime Pushed { get; set; }
-            public int Watchers { get; set; }
-            public int Forks { get; set; }
+            public uint Watchers { get; set; }
+            public uint Forks { get; set; }
             public string Owner { get; set; }
             public string Description { get; set; }
             public string Language { get; set; }
             public DateTime Created { get; set; }
             public bool Fork { get; set; }
-            public int Followers { get; set; }
-            public long Size { get; set; }
+            public uint Followers { get; set; }
+            public ulong Size { get; set; }
             public string Name { get; set; }
             public bool Private { get; set; }
             public DateTime CreatedAt { get; set; }
@@ -102,7 +102,7 @@ namespace GitHubSharp.Models
         public string GitUrl { get; set; }
         public string Encoding { get; set; }
         public string Url { get; set; }
-        public long? Size { get; set; }
+        public ulong? Size { get; set; }
         public string Name { get; set; }
         public string Content { get; set; }
     }

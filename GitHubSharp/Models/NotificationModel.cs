@@ -5,7 +5,7 @@ namespace GitHubSharp.Models
     [Serializable]
     public class NotificationModel
     {
-        public long Id { get; set; }
+        public ulong Id { get; set; }
         public RepositoryModel Repository { get; set; }
         public SubjectModel Subject { get; set; }
         public string Reason { get; set; }

@@ -8,7 +8,7 @@ namespace GitHubSharp.Models
     {
         public string Url { get; set; }
         public string HtmlUrl { get; set; }
-        public long Number { get; set; }
+        public ulong Number { get; set; }
         public string State { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
@@ -16,7 +16,7 @@ namespace GitHubSharp.Models
         public List<LabelModel> Labels { get; set; }
         public BasicUserModel Assignee { get; set; }
         public MilestoneModel Milestone { get; set; }
-        public int Comments { get; set; }
+        public uint Comments { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ClosedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
@@ -63,13 +63,13 @@ namespace GitHubSharp.Models
     [Serializable]
     public class MilestoneModel
     {
-        public int Number { get; set; }
+        public uint Number { get; set; }
         public string State { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public BasicUserModel Creator { get; set; }
-        public int OpenIssues { get; set; }
-        public int ClosedIssues { get; set; }
+        public uint OpenIssues { get; set; }
+        public uint ClosedIssues { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? DueOn { get; set; }
     }
@@ -77,7 +77,7 @@ namespace GitHubSharp.Models
     [Serializable]
     public class IssueCommentModel
     {
-        public long Id { get; set; }
+        public ulong Id { get; set; }
         public string Url { get; set; }
         public string Body { get; set; }
         public BasicUserModel User { get; set; }

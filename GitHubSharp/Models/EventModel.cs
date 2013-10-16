@@ -116,7 +116,7 @@ namespace GitHubSharp.Models
         [Serializable]
         public class RepoModel
         {
-            public long Id { get; set; }
+            public ulong Id { get; set; }
             public string Name { get; set; }
             public string Url { get; set; }
         }
@@ -223,7 +223,7 @@ namespace GitHubSharp.Models
         public class PullRequestEvent
         {
             public string Action { get; set; }
-            public long Number { get; set; }
+            public ulong Number { get; set; }
             public PullRequestModel PullRequest { get; set; }
         }
 
@@ -238,7 +238,7 @@ namespace GitHubSharp.Models
         {
             public string Before { get; set; }
             public string Ref { get; set; }
-            public long Size { get; set; }
+            public ulong Size { get; set; }
             public List<CommitModel> Commits { get; set; }
 
             [Serializable]

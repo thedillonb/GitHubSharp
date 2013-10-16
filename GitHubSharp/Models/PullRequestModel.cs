@@ -10,7 +10,7 @@ namespace GitHubSharp.Models
         public string DiffUrl { get; set; }
         public string PatchUrl { get; set; }
         public string IssueUrl { get; set; }
-        public long Number { get; set; }
+        public ulong Number { get; set; }
         public string State { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
@@ -25,11 +25,11 @@ namespace GitHubSharp.Models
         public bool? Mergable { get; set; }
         public BasicUserModel MergedBy { get; set; }
 
-        public int? Comments { get; set; }
-        public int? Commits { get; set; }
-        public int? Additions { get; set; }
-        public int? Deletions { get; set; }
-        public int? ChangedFiles { get; set; }
+        public uint? Comments { get; set; }
+        public uint? Commits { get; set; }
+        public uint? Additions { get; set; }
+        public uint? Deletions { get; set; }
+        public uint? ChangedFiles { get; set; }
 
         [Serializable]
         public class PullRequestCommitReferenceModel

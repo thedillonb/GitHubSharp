@@ -16,7 +16,7 @@ namespace GitHubSharp.Models
             public string Path { get; set; }
             public string Mode { get; set; }
             public string Type { get; set; }
-            public long Size { get; set; }
+            public ulong Size { get; set; }
             public string Sha { get; set; }
             public string Url { get; set; }
         }

@@ -52,7 +52,6 @@
     <Compile Include="Models\ChangeStatusModel.cs" />
     <Compile Include="Models\BasicUserModel.cs" />
     <Compile Include="Models\RepositoryModel.cs" />
-    <Compile Include="Models\NetworkModel.cs" />
     <Compile Include="Models\ObjectModel.cs" />
     <Compile Include="Models\PullRequestModel.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -99,6 +98,5 @@
   </ProjectExtensions>
   <ItemGroup>
     <Folder Include="Authenticators\" />
-    <Folder Include="Api\" />
   </ItemGroup>
 </Project>

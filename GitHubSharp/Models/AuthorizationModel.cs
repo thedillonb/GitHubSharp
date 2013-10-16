@@ -6,7 +6,7 @@ namespace GitHubSharp.Models
     [Serializable]
     public class AuthorizationModel
     {
-        public long Id { get; set; }
+        public ulong Id { get; set; }
         public string Url { get; set; }
         public List<string> Scopes { get; set; }
         public string Token { get; set; }

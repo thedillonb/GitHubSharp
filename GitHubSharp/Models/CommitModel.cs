@@ -27,9 +27,9 @@ namespace GitHubSharp.Models
         public class CommitFileModel
         {
             public string Filename { get; set; }
-            public int Additions { get; set; }
-            public int Deletions { get; set; }
-            public int Changes { get; set; }
+            public uint Additions { get; set; }
+            public uint Deletions { get; set; }
+            public uint Changes { get; set; }
             public string Status { get; set; }
             public string RawUrl { get; set; }
             public string BlobUrl { get; set; }

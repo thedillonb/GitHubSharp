@@ -31,6 +31,11 @@ namespace GitHubSharp.Controllers
 
         public OrganizationsController OrganizationsController { get; private set; }
 
+        public OrginzationRepositoriesController Repositories
+        {
+            get { return new OrginzationRepositoriesController(Client, this); }
+        }
+
         public OrganizationController(Client client, OrganizationsController organizationsController, string name)
             : base(client)
         {

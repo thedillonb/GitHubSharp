@@ -205,12 +205,14 @@ namespace GitHubSharp.Controllers
 
         public string GetFileRaw(string branch, string file, System.IO.Stream stream)
         {
-            var uri = Client.RawUri + "/" + User + "/" + Repo + "/" + branch + "/";
+            var uri = Uri + "/contents/";
             if (!uri.EndsWith("/") && !file.StartsWith("/"))
                 file = "/" + file;
 
             var request = new RestSharp.RestRequest(uri + file);
+            request.AddHeader("Accept", "application/vnd.github.raw");
             request.ResponseWriter = (s) => s.CopyTo(stream);
+            var response = Client.ExecuteRequest(request);
             return Client.ExecuteRequest(request).ContentType;
         }
 

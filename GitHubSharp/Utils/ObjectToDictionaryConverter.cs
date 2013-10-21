@@ -13,7 +13,13 @@ namespace GitHubSharp.Utils
                 var value = propertyInfo.GetValue(obj, null);
                 if (value != null)
                 {
-                    dictionary.Add(propertyInfo.Name.ToLower(), value.ToString());
+                    var valueStr = value.ToString();
+
+                    //Booleans need lowercase!
+                    if (value is bool)
+                        valueStr = valueStr.ToLower();
+
+                    dictionary.Add(propertyInfo.Name.ToLower(), valueStr);
                 }
             }
             return dictionary;

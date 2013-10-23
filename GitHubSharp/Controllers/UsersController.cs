@@ -173,6 +173,11 @@ namespace GitHubSharp.Controllers
             get { return new AuthenticatedUserIssuesController(Client); }
         }
 
+        public AuthenticatedGistsController Gists
+        {
+            get { return new AuthenticatedGistsController(Client); }
+        }
+
         public AuthenticatedUserController(Client client)
             : base(client)
         {

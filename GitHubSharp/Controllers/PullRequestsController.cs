@@ -65,9 +65,9 @@ namespace GitHubSharp.Controllers
             return GitHubRequest.Get<List<CommitModel>>(Uri + "/commits", new { page = page, per_page = perPage });
         }
 
-        public GitHubRequest<PullRequestMergeModel> Merge()
+        public GitHubRequest<PullRequestMergeModel> Merge(string commit_message = null)
         {
-            return GitHubRequest.Put<PullRequestMergeModel>(Uri + "/merge");
+            return GitHubRequest.Put<PullRequestMergeModel>(Uri + "/merge", new { commit_message = commit_message });
         }
 
         public GitHubRequest<bool> IsMerged()

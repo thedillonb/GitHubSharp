@@ -218,9 +218,11 @@ namespace GitHubSharp
         private RestRequest CreatePutRequest(GitHubRequest request)
         {
             var r = new RestRequest(request.Url, Method.PUT);
-            r.RequestFormat = DataFormat.Json;
             if (request.Args != null)
+            {
+                r.RequestFormat = DataFormat.Json;
                 r.AddBody(request.Args);
+            }
             else
                 r.AddHeader("Content-Length", "0");
 

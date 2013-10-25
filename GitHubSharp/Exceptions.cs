@@ -7,32 +7,32 @@ namespace GitHubSharp
 {
     public class ForbiddenException : StatusCodeException
     {
-        public ForbiddenException(Dictionary<string, string> headers = null)
-        : base(HttpStatusCode.Forbidden, "You do not have the permissions to access or modify this resource.", headers) { }
+        public ForbiddenException(string message, Dictionary<string, string> headers = null)
+        : base(HttpStatusCode.Forbidden, message, headers) { }
     }
 
     public class NotFoundException : StatusCodeException
     {
-        public NotFoundException(Dictionary<string, string> headers = null)
-        : base(HttpStatusCode.NotFound, "The server is unable to locate the requested resource.", headers) { }
+        public NotFoundException(string message, Dictionary<string, string> headers = null)
+        : base(HttpStatusCode.NotFound, message, headers) { }
     }
 
     public class NotModifiedException : StatusCodeException
     {
-        public NotModifiedException(Dictionary<string, string> headers = null)
-        : base(HttpStatusCode.NotModified, "This resource has not been modified since the last request.", headers) { }
+        public NotModifiedException(string message, Dictionary<string, string> headers = null)
+        : base(HttpStatusCode.NotModified, message, headers) { }
     }
 
     public class UnauthorizedException : StatusCodeException
     {
-        public UnauthorizedException(Dictionary<string, string> headers = null)
-        : base(HttpStatusCode.Unauthorized, "You are unauthorized to view the requested resource.", headers) { }
+        public UnauthorizedException(string message, Dictionary<string, string> headers = null)
+        : base(HttpStatusCode.Unauthorized, message, headers) { }
     }
 
     public class InternalServerException : StatusCodeException
     {
-        public InternalServerException(Dictionary<string, string> headers = null)
-        : base(HttpStatusCode.InternalServerError, "The request was unable to be processed due to an interal server error.", headers) { }
+        public InternalServerException(string message, Dictionary<string, string> headers = null)
+        : base(HttpStatusCode.InternalServerError, message, headers) { }
     }
 
     public class StatusCodeException : Exception
@@ -59,20 +59,30 @@ namespace GitHubSharp
             foreach (var h in response.Headers)
                 headers.Add(h.Name, h.Value.ToString());
 
+            string errorStr = null;
+            try
+            {
+                errorStr = new RestSharp.Deserializers.JsonDeserializer().Deserialize<GitHubSharp.Models.ErrorModel>(response).Message;
+            }
+            catch 
+            {
+                //Do nothing
+            }
+
             switch (response.StatusCode)
             {
                 case HttpStatusCode.Forbidden:
-                    return new ForbiddenException(headers);
+                    return new ForbiddenException(errorStr ?? "You do not have the permissions to access or modify this resource.", headers);
                 case HttpStatusCode.NotFound:
-                    return new NotFoundException(headers);
+                    return new NotFoundException(errorStr ?? "The server is unable to locate the requested resource.", headers);
                 case HttpStatusCode.InternalServerError:
-                    return new InternalServerException(headers);
+                    return new InternalServerException(errorStr ?? "The request was unable to be processed due to an interal server error.", headers);
                 case HttpStatusCode.Unauthorized:
-                    return new UnauthorizedException(headers);
+                    return new UnauthorizedException(errorStr ?? "You are unauthorized to view the requested resource.", headers);
                 case HttpStatusCode.NotModified:
-                    return new NotModifiedException(headers);
+                    return new NotModifiedException(errorStr ?? "This resource has not been modified since the last request.", headers);
                 default:
-                    return new StatusCodeException(response.StatusCode, headers);
+                    return new StatusCodeException(response.StatusCode, errorStr ?? response.StatusCode.ToString(), headers);
             }
         }
     }

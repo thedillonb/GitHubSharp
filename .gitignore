@@ -1,4 +1,5 @@
-*/bin
-*/obj
+bin
+obj
 *.userprefs
+*.suo
 *.DS_store

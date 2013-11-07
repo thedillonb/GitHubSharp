@@ -213,7 +213,7 @@ namespace GitHubSharp.Controllers
             request.AddHeader("Accept", "application/vnd.github.raw");
             request.ResponseWriter = (s) => s.CopyTo(stream);
             var response = Client.ExecuteRequest(request);
-            return Client.ExecuteRequest(request).ContentType;
+            return response.ContentType;
         }
 
         public GitHubRequest<bool> IsWatching()

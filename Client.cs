@@ -439,5 +439,14 @@ namespace GitHubSharp
             var response = ExecuteRequest(request);
             return response.ContentType;
         }
+
+        public string DownloadRawResource2(string rawUrl, System.IO.Stream downloadSream)
+        {
+            var request = new RestSharp.RestRequest(rawUrl, Method.GET);
+            request.AddHeader("Accept", "application/vnd.github.raw");
+            request.ResponseWriter = (s) => s.CopyTo(downloadSream);
+            var response = ExecuteRequest(request);
+            return response.ContentType;
+        }
     }
 }

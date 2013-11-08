@@ -50,12 +50,20 @@ namespace GitHubSharp.Controllers
             return GitHubRequest.Get<List<NotificationModel>>(Uri, new { page = page, per_page = perPage, all = all, participating = participating });
         }
 
-        public GitHubRequest<bool> MarkAsRead(DateTime? lastReadAt)
+        public GitHubRequest<bool> MarkAsRead(DateTime? lastReadAt = null)
         {
             var data = new Dictionary<string,string>();
             if (lastReadAt != null)
                 data.Add("last_read_at", string.Concat(lastReadAt.Value.ToString("s"), "Z"));
             return GitHubRequest.Put<bool>(Uri, data);
+        }
+
+        public GitHubRequest<bool> MarkRepoAsRead(string username, string repository, DateTime? lastReadAt = null)
+        {
+            var data = new Dictionary<string,string>();
+            if (lastReadAt != null)
+                data.Add("last_read_at", string.Concat(lastReadAt.Value.ToString("s"), "Z"));
+            return GitHubRequest.Put<bool>(Client.ApiUri + "/repos/" + username + "/" + repository + "/notifications", data);
         }
 
         public override string Uri

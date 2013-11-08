@@ -34,6 +34,7 @@ namespace GitHubSharp.Models
             public string RawUrl { get; set; }
             public string BlobUrl { get; set; }
             public string Patch { get; set; }
+            public string ContentsUrl { get; set; }
         }
 
         [Serializable]

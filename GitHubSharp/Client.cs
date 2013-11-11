@@ -60,6 +60,7 @@ namespace GitHubSharp
             Password = password;
             API = new GitHubSharp.API(this);
             _client.Authenticator = new HttpBasicAuthenticator(username, password);
+            _client.UserAgent = "Gistacular";
             _client.FollowRedirects = true;
         }
         

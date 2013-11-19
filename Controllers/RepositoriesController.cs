@@ -14,14 +14,21 @@ namespace GitHubSharp.Controllers
         {
         }
 
-        public GitHubRequest<RepositorySearchModel> SearchRepositories(string keyword)
+		public GitHubRequest<RepositorySearchModel> SearchRepositories(string[] keywords, string[] languages, string sort = null, uint page = 1)
         {
-            return GitHubRequest.Get<RepositorySearchModel>(Uri + "/search/" + keyword);
+			var sb = new StringBuilder();
+			sb.Append(string.Join(" ", keywords));
+			sb.Append(' ');
+			foreach (var l in languages)
+				sb.Append("language:").Append(l).Append(' ');
+
+
+			return GitHubRequest.Get<RepositorySearchModel>(Uri, new { q = sb.ToString().Trim(), page = page, sort = sort });
         }
 
         public override string Uri
         {
-            get { return Client.ApiUri + "/legacy/repos"; }
+			get { return Client.ApiUri + "/search/repositories"; }
         }
     }
 

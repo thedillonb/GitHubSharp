@@ -26,6 +26,7 @@ namespace GitHubSharp.Models
         public DateTime PushedAt { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+		public uint StargazersCount { get; set; }
 
         public BasicUserModel Organization { get; set; }
 

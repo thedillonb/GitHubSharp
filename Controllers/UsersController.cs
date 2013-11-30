@@ -204,6 +204,22 @@ namespace GitHubSharp.Controllers
             return GitHubRequest.Get<List<KeyModel>>(Uri + "/keys");
         }
 
+		public GitHubRequest<bool> IsFollowing(string username)
+		{
+			return GitHubRequest.Get<bool>(Client.ApiUri + "/users/" + Client.Username + "/following/" + username);
+		}
+
+		public GitHubRequest Follow(string username)
+		{
+			return GitHubRequest.Put(Uri + "/following/" + username);
+		}
+
+		public GitHubRequest Unfollow(string username)
+		{
+			return GitHubRequest.Delete(Uri + "/following/" + username);
+		}
+
+
         public override string Uri
         {
             get { return Client.ApiUri + "/user"; }

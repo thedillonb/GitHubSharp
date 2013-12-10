@@ -14,7 +14,7 @@ namespace GitHubSharp
     {
         public const string DefaultApi = "https://api.github.com";
 
-        private const string AccessTokenUri = "https://github.com";
+		public const string AccessTokenUri = "https://github.com";
 
         private readonly RestClient _client = new RestClient();
 

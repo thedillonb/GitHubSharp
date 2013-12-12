@@ -183,7 +183,6 @@ namespace GitHubSharp.Models
             [Serializable]
             public class PageModel
             {
-                public string Summary { get; set; }
                 public string PageName { get; set; }
                 public string Sha { get; set; }
                 public string Title { get; set; }

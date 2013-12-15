@@ -81,6 +81,7 @@
     <Compile Include="Authenticators\TwoFactorAuthenticator.cs" />
     <Compile Include="Controllers\MarkdownController.cs" />
     <Compile Include="Controllers\AuthorizationsController.cs" />
+    <Compile Include="Models\ReleaseModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <ProjectExtensions>

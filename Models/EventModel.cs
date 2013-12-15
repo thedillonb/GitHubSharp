@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using RestSharp.Serializers;
 using RestSharp;
 
 namespace GitHubSharp.Models
@@ -106,12 +105,22 @@ namespace GitHubSharp.Models
                     case "WatchEvent":
                         PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<WatchEvent>(payout);
                         return;
+					case "ReleaseEvent":
+						PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<ReleaseEvent>(payout);
+						return;
                 }
             } 
             catch
             {
             }
         }
+
+		[Serializable]
+		public class ReleaseEvent
+		{
+			public string Action { get; set; }
+			public ReleaseModel Release { get; set; }
+		}
 
         [Serializable]
         public class RepoModel

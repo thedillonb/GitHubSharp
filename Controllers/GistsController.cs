@@ -73,20 +73,20 @@ namespace GitHubSharp.Controllers
             //Great... The RestSharp serializer can't handle this object...
             //Dictionary<string, obj> confuses it and converts it into {"key": "ok", "value": "dokie"}
             //instead of {"ok": "dokie"}
-            var obj = new RestSharp.JsonObject();
-            obj.Add(new KeyValuePair<string, object>("description", gist.Description));
-            obj.Add(new KeyValuePair<string, object>("public", gist.Public));
+			var obj = new Dictionary<string, object>();
+            obj.Add("description", gist.Description);
+            obj.Add("public", gist.Public);
 
-            var files = new RestSharp.JsonObject();
-            obj.Add(new KeyValuePair<string, object>("files", files));
+			var files = new Dictionary<string, object>();
+            obj.Add("files", files);
 
             if (gist.Files != null)
             {
                 foreach (var f in gist.Files.Keys)
                 {
-                    var content = new RestSharp.JsonObject();
-                    files.Add(new KeyValuePair<string, object>(f, content));
-                    content.Add(new KeyValuePair<string, object>("content", gist.Files[f].Content));
+					var content = new Dictionary<string, object>();
+                    files.Add(f, content);
+                    content.Add("content", gist.Files[f].Content);
                 }
             }
 
@@ -150,11 +150,12 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<GistModel> EditGist(GistEditModel gist)
         {
-            var obj = new RestSharp.JsonObject();
-            obj.Add(new KeyValuePair<string, object>("description", gist.Description));
 
-            var files = new RestSharp.JsonObject();
-            obj.Add(new KeyValuePair<string, object>("files", files));
+			var obj = new Dictionary<string, object>();
+            obj.Add("description", gist.Description);
+
+			var files = new Dictionary<string, object>();
+            obj.Add("files", files);
 
             if (gist.Files != null)
             {
@@ -162,16 +163,16 @@ namespace GitHubSharp.Controllers
                 {
                     if (gist.Files[f] == null)
                     {
-                        files.Add(new KeyValuePair<string, object>(f, null));
+                        files.Add(f, null);
                     }
                     else
                     {
-                        var content = new RestSharp.JsonObject();
-                        files.Add(new KeyValuePair<string, object>(f, content));
-                        content.Add(new KeyValuePair<string, object>("content", gist.Files[f].Content));
+						var content = new Dictionary<string, object>();
+                        files.Add(f, content);
+                        content.Add("content", gist.Files[f].Content);
 
                         if (gist.Files[f].Filename != null)
-                            content.Add(new KeyValuePair<string, object>("filename", gist.Files[f].Filename));
+                            content.Add("filename", gist.Files[f].Filename);
                     }
                 }
             }

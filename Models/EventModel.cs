@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
-using RestSharp;
 
 namespace GitHubSharp.Models
 {
     [Serializable]
     public class EventModel
     {
-        private string _payload;
+		private string _payload;
         private string _type;
 
-        public string Type
+		public string Type
         {
             get { return _type; }
             set
@@ -21,12 +20,12 @@ namespace GitHubSharp.Models
         }
 
         public bool Public { get; set; }
-        public string Payload
+		public object Payload
         {
             get { return _payload; }
             set
             {
-                _payload = value;
+				_payload = value.ToString();
                 DeserializePayloadObject();
             }
         }
@@ -45,68 +44,68 @@ namespace GitHubSharp.Models
 
             try
             {
-                // The deserialize function on the JsonDeserializer only takes a IResponse object.
+                // The deserialize function on the JsonSerializer.Deserializer only takes a IResponse object.
                 // So, we'll just do what we have to to create one which is just assigning it's content to our payload.
-                var payout = new RestResponse { Content = Payload };
+				var payout = Payload.ToString();
 
                 switch (Type)
                 {
                     case "CommitCommentEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<CommitCommentEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<CommitCommentEvent>(payout);
                         return;
                     case "CreateEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<CreateEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<CreateEvent>(payout);
                         return;
                     case "DeleteEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<DeleteEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<DeleteEvent>(payout);
                         return;
                     case "DownloadEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<DownloadEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<DownloadEvent>(payout);
                         return;
                     case "FollowEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<FollowEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<FollowEvent>(payout);
                         return;
                     case "ForkEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<ForkEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<ForkEvent>(payout);
                         return;
                     case "ForkApplyEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<ForkApplyEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<ForkApplyEvent>(payout);
                         return;
                     case "GistEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<GistEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<GistEvent>(payout);
                         return;
                     case "GollumEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<GollumEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<GollumEvent>(payout);
                         return;
                     case "IssueCommentEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<IssueCommentEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<IssueCommentEvent>(payout);
                         return;
                     case "IssuesEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<IssuesEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<IssuesEvent>(payout);
                         return;
                     case "MemberEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<MemberEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<MemberEvent>(payout);
                         return;
                     case "PublicEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<PublicEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<PublicEvent>(payout);
                         return;
                     case "PullRequestEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<PullRequestEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<PullRequestEvent>(payout);
                         return;
                     case "PullRequestReviewCommentEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<PullRequestReviewCommentEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<PullRequestReviewCommentEvent>(payout);
                         return;
                     case "PushEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<PushEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<PushEvent>(payout);
                         return;
                     case "TeamAddEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<TeamAddEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<TeamAddEvent>(payout);
                         return;
                     case "WatchEvent":
-                        PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<WatchEvent>(payout);
+                        PayloadObject = Serializer.Deserialize<WatchEvent>(payout);
                         return;
 					case "ReleaseEvent":
-						PayloadObject = new RestSharp.Deserializers.JsonDeserializer().Deserialize<ReleaseEvent>(payout);
+						PayloadObject = Serializer.Deserialize<ReleaseEvent>(payout);
 						return;
                 }
             } 

@@ -31,12 +31,12 @@
     <ConsolePause>False</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RestSharp.MonoTouch">
-      <HintPath>lib\RestSharp\RestSharp.MonoTouch.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="monotouch" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" Condition="'$(windir)' != '' " />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -78,10 +78,10 @@
     <Compile Include="ICache.cs" />
     <Compile Include="Models\AuthorizationModel.cs" />
     <Compile Include="Models\ErrorModel.cs" />
-    <Compile Include="Authenticators\TwoFactorAuthenticator.cs" />
     <Compile Include="Controllers\MarkdownController.cs" />
     <Compile Include="Controllers\AuthorizationsController.cs" />
     <Compile Include="Models\ReleaseModel.cs" />
+    <Compile Include="Serializer.cs" />
   </ItemGroup>
   <ItemGroup />
   <ProjectExtensions>

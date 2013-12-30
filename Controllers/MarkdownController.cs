@@ -15,10 +15,11 @@ namespace GitHubSharp.Controllers
 
         public string GetMarkdown(string text)
         {
-            var request = new RestSharp.RestRequest(Uri, RestSharp.Method.POST);
-            request.AddParameter("text/plain", text, RestSharp.ParameterType.RequestBody);
-            var response = Client.ExecuteRequest(request);
-            return response.Content;
+//            var request = new RestSharp.RestRequest(Uri, RestSharp.Method.POST);
+//            request.AddParameter("text/plain", text, RestSharp.ParameterType.RequestBody);
+//            var response = Client.ExecuteRequest(request);
+//            return response.Content;
+			return string.Empty;
         }
 
         public override string Uri

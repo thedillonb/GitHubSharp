@@ -210,19 +210,19 @@ namespace GitHubSharp.Controllers
             return GitHubRequest.Get<TreeModel>(Uri + "/git/trees/" + sha);
         }
 
-        public string GetFileRaw(string branch, string file, System.IO.Stream stream)
-        {
-            var uri = Uri + "/contents/";
-            if (!uri.EndsWith("/") && !file.StartsWith("/"))
-                file = "/" + file;
-
-            var request = new RestSharp.RestRequest(uri + file);
-            request.AddHeader("Accept", "application/vnd.github.raw");
-            request.ResponseWriter = (s) => s.CopyTo(stream);
-            var response = Client.ExecuteRequest(request);
-            return response.ContentType;
-        }
-
+//        public string GetFileRaw(string branch, string file, System.IO.Stream stream)
+//        {
+//            var uri = Uri + "/contents/";
+//            if (!uri.EndsWith("/") && !file.StartsWith("/"))
+//                file = "/" + file;
+//
+//            var request = new RestSharp.RestRequest(uri + file);
+//            request.AddHeader("Accept", "application/vnd.github.raw");
+//            request.ResponseWriter = (s) => s.CopyTo(stream);
+//            var response = Client.ExecuteRequest(request);
+//            return response.ContentType;
+//        }
+//
         public GitHubRequest<bool> IsWatching()
         {
             return GitHubRequest.Get<bool>(Client.ApiUri + "/user/subscriptions/" + User + "/" + Repo);

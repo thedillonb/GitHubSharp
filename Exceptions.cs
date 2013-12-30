@@ -2,6 +2,8 @@ using System;
 using System.Net;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace GitHubSharp
 {
@@ -53,16 +55,16 @@ namespace GitHubSharp
             Headers = headers;
         }
 
-        internal static StatusCodeException FactoryCreate(RestSharp.IRestResponse response)
+		internal static StatusCodeException FactoryCreate(HttpResponseMessage response, string data)
         {
             var headers = new Dictionary<string, string>();
             foreach (var h in response.Headers)
-                headers.Add(h.Name, h.Value.ToString());
+				headers.Add(h.Key, h.Value.ToString());
 
             string errorStr = null;
             try
             {
-                errorStr = new RestSharp.Deserializers.JsonDeserializer().Deserialize<GitHubSharp.Models.ErrorModel>(response).Message;
+				errorStr = Serializer.Deserialize<GitHubSharp.Models.ErrorModel>(data).Message;
             }
             catch 
             {

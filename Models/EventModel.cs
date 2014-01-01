@@ -6,7 +6,7 @@ namespace GitHubSharp.Models
     [Serializable]
     public class EventModel
     {
-		private string _payload;
+		private object _payload;
         private string _type;
 
 		public string Type
@@ -25,7 +25,7 @@ namespace GitHubSharp.Models
             get { return _payload; }
             set
             {
-				_payload = value.ToString();
+				_payload = value;
                 DeserializePayloadObject();
             }
         }
@@ -46,66 +46,66 @@ namespace GitHubSharp.Models
             {
                 // The deserialize function on the JsonSerializer.Deserializer only takes a IResponse object.
                 // So, we'll just do what we have to to create one which is just assigning it's content to our payload.
-				var payout = Payload.ToString();
+				var payout = Client.Serializer.Serialize(Payload);
 
                 switch (Type)
                 {
                     case "CommitCommentEvent":
-                        PayloadObject = Serializer.Deserialize<CommitCommentEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<CommitCommentEvent>(payout);
                         return;
                     case "CreateEvent":
-                        PayloadObject = Serializer.Deserialize<CreateEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<CreateEvent>(payout);
                         return;
                     case "DeleteEvent":
-                        PayloadObject = Serializer.Deserialize<DeleteEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<DeleteEvent>(payout);
                         return;
                     case "DownloadEvent":
-                        PayloadObject = Serializer.Deserialize<DownloadEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<DownloadEvent>(payout);
                         return;
                     case "FollowEvent":
-                        PayloadObject = Serializer.Deserialize<FollowEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<FollowEvent>(payout);
                         return;
                     case "ForkEvent":
-                        PayloadObject = Serializer.Deserialize<ForkEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<ForkEvent>(payout);
                         return;
                     case "ForkApplyEvent":
-                        PayloadObject = Serializer.Deserialize<ForkApplyEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<ForkApplyEvent>(payout);
                         return;
                     case "GistEvent":
-                        PayloadObject = Serializer.Deserialize<GistEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<GistEvent>(payout);
                         return;
                     case "GollumEvent":
-                        PayloadObject = Serializer.Deserialize<GollumEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<GollumEvent>(payout);
                         return;
                     case "IssueCommentEvent":
-                        PayloadObject = Serializer.Deserialize<IssueCommentEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<IssueCommentEvent>(payout);
                         return;
                     case "IssuesEvent":
-                        PayloadObject = Serializer.Deserialize<IssuesEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<IssuesEvent>(payout);
                         return;
                     case "MemberEvent":
-                        PayloadObject = Serializer.Deserialize<MemberEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<MemberEvent>(payout);
                         return;
                     case "PublicEvent":
-                        PayloadObject = Serializer.Deserialize<PublicEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<PublicEvent>(payout);
                         return;
                     case "PullRequestEvent":
-                        PayloadObject = Serializer.Deserialize<PullRequestEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<PullRequestEvent>(payout);
                         return;
                     case "PullRequestReviewCommentEvent":
-                        PayloadObject = Serializer.Deserialize<PullRequestReviewCommentEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<PullRequestReviewCommentEvent>(payout);
                         return;
                     case "PushEvent":
-                        PayloadObject = Serializer.Deserialize<PushEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<PushEvent>(payout);
                         return;
                     case "TeamAddEvent":
-                        PayloadObject = Serializer.Deserialize<TeamAddEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<TeamAddEvent>(payout);
                         return;
                     case "WatchEvent":
-                        PayloadObject = Serializer.Deserialize<WatchEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<WatchEvent>(payout);
                         return;
 					case "ReleaseEvent":
-						PayloadObject = Serializer.Deserialize<ReleaseEvent>(payout);
+						PayloadObject = Client.Serializer.Deserialize<ReleaseEvent>(payout);
 						return;
                 }
             } 

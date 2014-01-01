@@ -64,7 +64,7 @@ namespace GitHubSharp
             string errorStr = null;
             try
             {
-				errorStr = Serializer.Deserialize<GitHubSharp.Models.ErrorModel>(data).Message;
+				errorStr = Client.Serializer.Deserialize<GitHubSharp.Models.ErrorModel>(data).Message;
             }
             catch 
             {

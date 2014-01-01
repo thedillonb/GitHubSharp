@@ -19,6 +19,8 @@ namespace GitHubSharp
 
 		public static Func<HttpClient> ClientConstructor = () => new HttpClient();
 
+		public static ISerializer Serializer;
+
 		private readonly HttpClient _client;
 
         public string ApiUri { get; private set; }
@@ -233,12 +235,15 @@ namespace GitHubSharp
 		private static HttpRequestMessage CreatePutRequest(GitHubRequest request)
         {
 			var r = new HttpRequestMessage(HttpMethod.Put, request.Url);
-            if (request.Args != null)
-            {
+			if (request.Args != null)
+			{
 				r.Content = new StringContent(Serializer.Serialize(request.Args), Encoding.UTF8, "application/json");
-            }
-            else
-				r.Headers.Add("Content-Length", "0");
+			}
+			else
+			{
+				r.Content = new StringContent("");
+				r.Content.Headers.ContentLength = 0;
+			}
             return r;
         }
         
@@ -373,7 +378,7 @@ namespace GitHubSharp
 		/// </summary>
 		private Task<HttpResponseMessage> ExecuteRequest(HttpRequestMessage request)
 		{
-			return _client.SendAsync(request);
+			return _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 		}
 
 		public GitHubResponse Execute(GitHubRequest request)
@@ -439,7 +444,7 @@ namespace GitHubSharp
 			var response = await ExecuteRequest(request);
 			var stream = await response.Content.ReadAsStreamAsync();
 			stream.CopyTo(downloadSream);
-			return response.Content.Headers.ContentType.ToString();
+			return "" + response.Content.Headers.ContentType;
         }
 
 		public async Task<string> DownloadRawResource2(string rawUrl, System.IO.Stream downloadSream)
@@ -450,7 +455,7 @@ namespace GitHubSharp
 			var response = await ExecuteRequest(request);
 			var stream = await response.Content.ReadAsStreamAsync();
 			stream.CopyTo(downloadSream);
-			return response.Content.Headers.ContentType.ToString();
+			return "" + response.Content.Headers.ContentType;
         }
     }
 }

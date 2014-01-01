@@ -34,9 +34,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" Condition="'$(windir)' != '' " />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -81,7 +78,7 @@
     <Compile Include="Controllers\MarkdownController.cs" />
     <Compile Include="Controllers\AuthorizationsController.cs" />
     <Compile Include="Models\ReleaseModel.cs" />
-    <Compile Include="Serializer.cs" />
+    <Compile Include="ISerializer.cs" />
   </ItemGroup>
   <ItemGroup />
   <ProjectExtensions>

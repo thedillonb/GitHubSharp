@@ -132,6 +132,21 @@ namespace GitHubSharp.Controllers
             return GitHubRequest.Patch<IssueModel>(Uri, new { title = title, body = body, assignee = assignee, milestone = milestone, labels = labels, state = state });
         } 
 
+		public GitHubRequest<IssueModel> UpdateAssignee(string assignee)
+		{
+			return GitHubRequest.Patch<IssueModel>(Uri, new { assignee });
+		} 
+
+		public GitHubRequest<IssueModel> UpdateMilestone(uint? milestone)
+		{
+			return GitHubRequest.Patch<IssueModel>(Uri, new { milestone });
+		} 
+
+		public GitHubRequest<IssueModel> UpdateLabels(string[] labels)
+		{
+			return GitHubRequest.Patch<IssueModel>(Uri, new { labels });
+		} 
+
         public override string Uri
         {
             get { return Parent.Uri + "/" + Id;  }

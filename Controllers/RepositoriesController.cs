@@ -280,6 +280,11 @@ namespace GitHubSharp.Controllers
             return GitHubRequest.Get<List<BasicUserModel>>(Uri + "/collaborators",  new { page = page, per_page = perPage });
         }
 
+		public GitHubRequest<List<BasicUserModel>> GetAssignees(int page = 1, int perPage = 100)
+		{
+			return GitHubRequest.Get<List<BasicUserModel>>(Uri + "/assignees",  new { page = page, per_page = perPage });
+		}
+
         public GitHubRequest<List<RepositoryModel>> GetForks(string sort = "newest", int page = 1, int perPage = 100)
         {
             return GitHubRequest.Get<List<RepositoryModel>>(Uri + "/forks",  new { page = page, per_page = perPage, sort = sort });

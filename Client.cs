@@ -269,7 +269,8 @@ namespace GitHubSharp
 		private async Task<GitHubResponse<T>> Post<T>(GitHubRequest request) where T : new()
         {
 			var r = new HttpRequestMessage(HttpMethod.Post, request.Url);
-			r.Content = new StringContent(Serializer.Serialize(request.Args), Encoding.UTF8, "application/json");
+			if (request.Args != null)
+				r.Content = new StringContent(Serializer.Serialize(request.Args), Encoding.UTF8, "application/json");
 			return await ParseResponse<T>(await ExecuteRequest(r));
         }
 

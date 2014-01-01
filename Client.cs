@@ -377,7 +377,7 @@ namespace GitHubSharp
 		/// <summary>
 		/// Executes a request to the server
 		/// </summary>
-		private Task<HttpResponseMessage> ExecuteRequest(HttpRequestMessage request)
+		internal Task<HttpResponseMessage> ExecuteRequest(HttpRequestMessage request)
 		{
 			return _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 		}

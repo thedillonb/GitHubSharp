@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace GitHubSharp.Controllers
 {
@@ -13,13 +14,12 @@ namespace GitHubSharp.Controllers
         {
         }
 
-        public string GetMarkdown(string text)
+		public async Task<string> GetMarkdown(string text)
         {
-//            var request = new RestSharp.RestRequest(Uri, RestSharp.Method.POST);
-//            request.AddParameter("text/plain", text, RestSharp.ParameterType.RequestBody);
-//            var response = Client.ExecuteRequest(request);
-//            return response.Content;
-			return string.Empty;
+			var req = new HttpRequestMessage(HttpMethod.Post, Uri);
+			req.Content = new StringContent(text, Encoding.UTF8, "text/plain");
+			var data = await Client.ExecuteRequest(req).ConfigureAwait(false);
+			return await data.Content.ReadAsStringAsync().ConfigureAwait(false);
         }
 
         public override string Uri

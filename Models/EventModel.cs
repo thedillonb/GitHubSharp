@@ -6,7 +6,7 @@ namespace GitHubSharp.Models
     [Serializable]
     public class EventModel
     {
-		private object _payload;
+		private string _payload;
         private string _type;
 
 		public string Type
@@ -20,12 +20,13 @@ namespace GitHubSharp.Models
         }
 
         public bool Public { get; set; }
+
 		public object Payload
         {
             get { return _payload; }
             set
             {
-				_payload = value;
+				_payload = Client.Serializer.Serialize(value);
                 DeserializePayloadObject();
             }
         }
@@ -46,7 +47,7 @@ namespace GitHubSharp.Models
             {
                 // The deserialize function on the JsonSerializer.Deserializer only takes a IResponse object.
                 // So, we'll just do what we have to to create one which is just assigning it's content to our payload.
-				var payout = Client.Serializer.Serialize(Payload);
+				var payout = Payload.ToString();
 
                 switch (Type)
                 {

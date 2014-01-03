@@ -11,7 +11,7 @@ namespace GitHubSharp.Models
         public string Reason { get; set; }
         public bool Unread { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public DateTime LastReadAt { get; set; }
+		public DateTime? LastReadAt { get; set; }
         public string Url { get; set; }
 
         [Serializable]

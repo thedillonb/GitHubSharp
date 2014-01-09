@@ -60,7 +60,7 @@ namespace GitHubSharp.Models
 			public string Url { get; set; }
 			public DateTime CreatedAt { get; set; }
 			public DateTime UpdatedAt { get; set; }
-			public DateTime PushedAt { get; set; }
+			public DateTime? PushedAt { get; set; }
 			public string Homepage { get; set; }
 			public uint StargazersCount { get; set; }
 			public uint WatchersCount { get; set; }

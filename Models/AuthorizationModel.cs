@@ -12,8 +12,8 @@ namespace GitHubSharp.Models
         public string Token { get; set; }
         public AppModel App { get; set; }
         public string Note { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public DateTime CreatedAt { get; set; }
+		public DateTimeOffset UpdatedAt { get; set; }
+		public DateTimeOffset CreatedAt { get; set; }
 
         [Serializable]
         public class AppModel

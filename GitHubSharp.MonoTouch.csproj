@@ -79,6 +79,7 @@
     <Compile Include="Controllers\AuthorizationsController.cs" />
     <Compile Include="Models\ReleaseModel.cs" />
     <Compile Include="ISerializer.cs" />
+    <Compile Include="Models\ContentModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <ProjectExtensions>

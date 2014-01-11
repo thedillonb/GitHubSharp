@@ -14,10 +14,10 @@ namespace GitHubSharp.Models
         public string State { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public DateTime? ClosedAt { get; set; }
-        public DateTime? MergedAt { get; set; }
+		public DateTimeOffset CreatedAt { get; set; }
+		public DateTimeOffset UpdatedAt { get; set; }
+		public DateTimeOffset? ClosedAt { get; set; }
+		public DateTimeOffset? MergedAt { get; set; }
         public PullRequestCommitReferenceModel Head { get; set; }
         public PullRequestCommitReferenceModel Base { get; set; }
         public BasicUserModel User { get; set; }
@@ -46,7 +46,7 @@ namespace GitHubSharp.Models
     public class PullRequestMergeModel
     {
         public string Sha { get; set; }
-        public bool Merged { get; set; }
+		public bool Merged { get; set; }
         public string Message { get; set; }
     }
 }

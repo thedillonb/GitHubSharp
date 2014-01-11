@@ -205,6 +205,22 @@ namespace GitHubSharp.Controllers
             return GitHubRequest.Get<List<ContentModel>>(Uri + "/contents" + path, new { Ref = branch });
         }
 
+		public GitHubRequest<ContentModel> GetContentFile(string path = "/", string branch = "master")
+		{
+			return GitHubRequest.Get<ContentModel>(Uri + "/contents" + path, new { Ref = branch });
+		}
+
+		public GitHubRequest<ContentUpdateModel> UpdateContentFile(string path, string message, string content, string sha, string branch = "master")
+		{
+			if (null == content)
+				throw new Exception("Content cannot be null!");
+			if (string.IsNullOrEmpty(message))
+				throw new Exception("Commit message cannot be empty!");
+
+			content = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(content));
+			return GitHubRequest.Put<ContentUpdateModel>(Uri + "/contents" + path, new { message, content, sha });
+		}
+
         public GitHubRequest<TreeModel> GetTree(string sha)
         {
             return GitHubRequest.Get<TreeModel>(Uri + "/git/trees/" + sha);

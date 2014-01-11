@@ -10,8 +10,8 @@ namespace GitHubSharp.Models
         public SubjectModel Subject { get; set; }
         public string Reason { get; set; }
         public bool Unread { get; set; }
-        public DateTime UpdatedAt { get; set; }
-		public DateTime? LastReadAt { get; set; }
+		public DateTimeOffset UpdatedAt { get; set; }
+		public DateTimeOffset? LastReadAt { get; set; }
         public string Url { get; set; }
 
         [Serializable]

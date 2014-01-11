@@ -17,9 +17,9 @@ namespace GitHubSharp.Models
         public BasicUserModel Assignee { get; set; }
         public MilestoneModel Milestone { get; set; }
         public uint Comments { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime? ClosedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+		public DateTimeOffset CreatedAt { get; set; }
+		public DateTimeOffset? ClosedAt { get; set; }
+		public DateTimeOffset UpdatedAt { get; set; }
         public PullRequestModel PullRequest { get; set; }
 
         [Serializable]
@@ -70,8 +70,8 @@ namespace GitHubSharp.Models
         public BasicUserModel Creator { get; set; }
         public uint OpenIssues { get; set; }
         public uint ClosedIssues { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime? DueOn { get; set; }
+		public DateTimeOffset CreatedAt { get; set; }
+		public DateTimeOffset? DueOn { get; set; }
     }
 
     [Serializable]
@@ -81,8 +81,8 @@ namespace GitHubSharp.Models
         public string Url { get; set; }
         public string Body { get; set; }
         public BasicUserModel User { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+		public DateTimeOffset CreatedAt { get; set; }
+		public DateTimeOffset UpdatedAt { get; set; }
     }
 
     [Serializable]
@@ -92,7 +92,7 @@ namespace GitHubSharp.Models
         public BasicUserModel Actor { get; set; }
         public string Event { get; set; }
         public string CommitId { get; set; }
-        public DateTime CreatedAt { get; set; }
+		public DateTimeOffset CreatedAt { get; set; }
         public IssueModel Issue { get; set; }
 
         public static class EventTypes

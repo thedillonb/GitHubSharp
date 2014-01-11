@@ -9,7 +9,7 @@ namespace GitHubSharp.Models
         public string Url { get; set; }
         public string Id { get; set; }
         public string Description { get; set; }
-        public bool Public { get; set; }
+		public bool? Public { get; set; }
         public BasicUserModel User { get; set; }
         public Dictionary<string, GistFileModel> Files { get; set; }
         public ulong Comments { get; set; }
@@ -17,10 +17,8 @@ namespace GitHubSharp.Models
         public string HtmlUrl { get; set; }
         public string GitPullUrl { get; set; }
         public string GitPushUrl { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-
-
+		public DateTimeOffset CreatedAt { get; set; }
+		public DateTimeOffset UpdatedAt { get; set; }
         public List<ForkModel> Forks { get; set; }
         public List<HistoryModel> History { get; set; }
     }
@@ -64,7 +62,7 @@ namespace GitHubSharp.Models
     public class GistCreateModel
     {
         public string Description { get; set; }
-        public bool Public { get; set; }
+		public bool? Public { get; set; }
         public Dictionary<string, File> Files { get; set; }
 
         [Serializable]

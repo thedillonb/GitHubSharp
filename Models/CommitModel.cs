@@ -65,7 +65,7 @@ namespace GitHubSharp.Models
             public class AuthorModel
             {
                 public string Name { get; set; }
-                public DateTime Date { get; set; }
+				public DateTimeOffset Date { get; set; }
                 public string Email { get; set; }
             }
         }

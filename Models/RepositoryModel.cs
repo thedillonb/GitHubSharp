@@ -23,9 +23,9 @@ namespace GitHubSharp.Models
         public ulong Size { get; set; }
         public string MasterBranch { get; set; }
         public uint OpenIssues { get; set; }
-        public DateTime PushedAt { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+		public DateTimeOffset? PushedAt { get; set; }
+		public DateTimeOffset CreatedAt { get; set; }
+		public DateTimeOffset UpdatedAt { get; set; }
 		public uint StargazersCount { get; set; }
 
         public BasicUserModel Organization { get; set; }
@@ -58,9 +58,9 @@ namespace GitHubSharp.Models
 			public string Description { get; set; }
 			public bool Fork { get; set; }
 			public string Url { get; set; }
-			public DateTime CreatedAt { get; set; }
-			public DateTime UpdatedAt { get; set; }
-			public DateTime? PushedAt { get; set; }
+			public DateTimeOffset CreatedAt { get; set; }
+			public DateTimeOffset UpdatedAt { get; set; }
+			public DateTimeOffset? PushedAt { get; set; }
 			public string Homepage { get; set; }
 			public uint StargazersCount { get; set; }
 			public uint WatchersCount { get; set; }

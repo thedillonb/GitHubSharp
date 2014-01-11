@@ -9,7 +9,7 @@ namespace GitHubSharp.Models
 	    public string Version { get; set; }
 	    public BasicUserModel User { get; set; }
 	    public ChangeStatusModel ChangeStatus { get; set; }
-	    public DateTime CommittedAt { get; set; }
+		public DateTimeOffset CommittedAt { get; set; }
 
 	}
 }

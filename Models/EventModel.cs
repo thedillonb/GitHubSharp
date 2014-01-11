@@ -35,7 +35,7 @@ namespace GitHubSharp.Models
         public RepoModel Repo { get; set; }
         public BasicUserModel Actor { get; set; }
         public BasicUserModel Org { get; set; }
-        public DateTime CreatedAt { get; set; }
+		public DateTimeOffset CreatedAt { get; set; }
         public string Id { get; set; }
 
         private void DeserializePayloadObject()
@@ -253,7 +253,7 @@ namespace GitHubSharp.Models
             public class CommitModel
             {
                 public CommitAuthorModel Author { get; set; }
-                public bool Distinct { get; set; }
+				public bool? Distinct { get; set; }
                 public string Url { get; set; }
                 public string Message { get; set; }
                 public string Sha { get; set; }

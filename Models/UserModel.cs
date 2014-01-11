@@ -3,23 +3,6 @@
 namespace GitHubSharp.Models
 {
     [Serializable]
-    public class UserInCollectionModel
-    {
-        public string Name { get; set; }
-        public string Location { get; set; }
-        public ulong Followers { get; set; }
-        public string Username { get; set; }
-        public string Language { get; set; }
-        public string Fullname { get; set; }
-        public ulong Repos { get; set; }
-        public string Id { get; set; }
-        public string Type { get; set; }
-        public DateTime Pushed { get; set; }
-        public float Score { get; set; }
-        public DateTime Created { get; set; }
-    }
-
-    [Serializable]
     public class UserModel
     {
         public string Login { get; set; }
@@ -39,7 +22,7 @@ namespace GitHubSharp.Models
         public ulong Followers { get; set; }
         public ulong Following { get; set; }
         public string HtmlUrl { get; set; }
-        public DateTime CreatedAt { get; set; }
+		public DateTimeOffset CreatedAt { get; set; }
         public string Type { get; set; }
     }
 

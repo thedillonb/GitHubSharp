@@ -16,8 +16,8 @@ namespace GitHubSharp.Models
 		public string Body { get; set; }
 		public bool Draft { get; set; }
 		public bool Prerelease { get; set; }
-		public DateTime CreatedAt { get; set; }
-		public DateTime PublishedAt { get; set; }
+		public DateTimeOffset CreatedAt { get; set; }
+		public DateTimeOffset? PublishedAt { get; set; }
     }
 }
 

@@ -15,8 +15,8 @@ namespace GitHubSharp.Models
         public uint? Line { get; set; }
         public string CommitId { get; set; }
         public BasicUserModel User { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+		public DateTimeOffset CreatedAt { get; set; }
+		public DateTimeOffset UpdatedAt { get; set; }
     }
 
     [Serializable]

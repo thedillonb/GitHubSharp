@@ -76,8 +76,8 @@ namespace GitHubSharp
 					if (getter.Value != null)
 					{
 						var value = getter.Value(input);
-						if (value == null)
-							continue;
+//						if (value == null)
+//							continue;
 
 						obj.Add(MapClrMemberNameToJsonFieldName(getter.Key), value);
 					}

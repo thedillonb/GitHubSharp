@@ -79,7 +79,7 @@ namespace GitHubSharp
     [Serializable]
     public class GitHubRequest<T> : GitHubRequest where T : new()
     {
-        internal GitHubRequest(string url, RequestMethod method, object args = null)
+        public GitHubRequest(string url, RequestMethod method, object args = null)
             : base(url, method, args)
         {
         }

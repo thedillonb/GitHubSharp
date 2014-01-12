@@ -6,7 +6,7 @@ namespace GitHubSharp.Models
     public class BasicUserModel
     {
         public string Login { get; set; }
-        public ulong Id { get; set; }
+        public long Id { get; set; }
         public string AvatarUrl { get; set; }
         public string GravatarId { get; set; }
         public string Url { get; set; }
@@ -16,7 +16,7 @@ namespace GitHubSharp.Models
     public class KeyModel
     {
         public string Url { get; set; }
-        public ulong Id { get; set; }
+        public long Id { get; set; }
         public string Title { get; set; }
         public string Key { get; set; }
     }

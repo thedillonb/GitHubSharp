@@ -78,8 +78,11 @@
     <Compile Include="Controllers\MarkdownController.cs" />
     <Compile Include="Controllers\AuthorizationsController.cs" />
     <Compile Include="Models\ReleaseModel.cs" />
-    <Compile Include="ISerializer.cs" />
     <Compile Include="Models\ContentModel.cs" />
+    <Compile Include="SimpleJson.cs" />
+    <Compile Include="SimpleJsonSerializer.cs" />
+    <Compile Include="IJsonSerializer.cs" />
+    <Compile Include="CacheObject.cs" />
   </ItemGroup>
   <ItemGroup />
   <ProjectExtensions>

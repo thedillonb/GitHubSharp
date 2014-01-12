@@ -12,7 +12,7 @@ namespace GitHubSharp.Models
 		public bool? Public { get; set; }
         public BasicUserModel User { get; set; }
         public Dictionary<string, GistFileModel> Files { get; set; }
-        public ulong Comments { get; set; }
+        public long Comments { get; set; }
         public string CommentsUrl { get; set; }
         public string HtmlUrl { get; set; }
         public string GitPullUrl { get; set; }
@@ -26,7 +26,7 @@ namespace GitHubSharp.Models
     [Serializable]
     public class GistFileModel
     {
-        public ulong Size { get; set; }
+        public long Size { get; set; }
         public string Filename { get; set; }
         public string RawUrl { get; set; }
         public string Content { get; set; }
@@ -37,7 +37,7 @@ namespace GitHubSharp.Models
     [Serializable]
     public class GistCommentModel
     {
-        public ulong Id { get; set; }
+        public long Id { get; set; }
         public string Url { get; set; }
         public string Body { get; set; }
         public BasicUserModel User { get; set; }

@@ -6,7 +6,7 @@ namespace GitHubSharp.Models
     [Serializable]
     public class RepositoryModel
     {
-        public ulong Id { get; set; }
+        public long Id { get; set; }
         public BasicUserModel Owner { get; set; }
         public string Name { get; set; }
         public string FullName { get; set; }
@@ -16,17 +16,17 @@ namespace GitHubSharp.Models
         public string Url { get; set; }
         public string Homepage { get; set; }
         public string Language { get; set; }
-        public uint Forks { get; set; }
-        public uint ForksCount { get; set; }
-        public uint Watchers { get; set; }
-        public uint WatchersCount { get; set; }
-        public ulong Size { get; set; }
+        public int Forks { get; set; }
+        public int ForksCount { get; set; }
+        public int Watchers { get; set; }
+        public int WatchersCount { get; set; }
+        public long Size { get; set; }
         public string MasterBranch { get; set; }
-        public uint OpenIssues { get; set; }
+        public int OpenIssues { get; set; }
 		public DateTimeOffset? PushedAt { get; set; }
 		public DateTimeOffset CreatedAt { get; set; }
 		public DateTimeOffset UpdatedAt { get; set; }
-		public uint StargazersCount { get; set; }
+		public int StargazersCount { get; set; }
 
         public BasicUserModel Organization { get; set; }
 
@@ -43,13 +43,13 @@ namespace GitHubSharp.Models
     [Serializable]
     public class RepositorySearchModel
     {
-		public uint TotalCount { get; set; }
+		public int TotalCount { get; set; }
 		public List<RepositoryModel> Items { get; set; }
 
         [Serializable]
         public class RepositoryModel
         {
-			public ulong Id { get; set; }
+			public long Id { get; set; }
 			public string Name { get; set; }
 			public string FullName { get; set; }
 			public BasicUserModel Owner { get; set; }
@@ -62,11 +62,11 @@ namespace GitHubSharp.Models
 			public DateTimeOffset UpdatedAt { get; set; }
 			public DateTimeOffset? PushedAt { get; set; }
 			public string Homepage { get; set; }
-			public uint StargazersCount { get; set; }
-			public uint WatchersCount { get; set; }
+			public int StargazersCount { get; set; }
+			public int WatchersCount { get; set; }
 			public string Language { get; set; }
-			public uint ForksCount { get; set; }
-			public uint OpenIssuesCount { get; set; }
+			public int ForksCount { get; set; }
+			public int OpenIssuesCount { get; set; }
 			public float Score { get; set; }
         }
     }
@@ -100,7 +100,7 @@ namespace GitHubSharp.Models
         public string HtmlUrl { get; set; }
         public string Encoding { get; set; }
         public string Url { get; set; }
-        public ulong? Size { get; set; }
+        public long? Size { get; set; }
         public string Name { get; set; }
         public string Content { get; set; }
     }

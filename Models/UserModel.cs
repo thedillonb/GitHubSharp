@@ -6,7 +6,7 @@ namespace GitHubSharp.Models
     public class UserModel
     {
         public string Login { get; set; }
-        public ulong Id { get; set; }
+        public long Id { get; set; }
         public string AvatarUrl { get; set; }
         public string GravatarId { get; set; }
         public string Url { get; set; }
@@ -17,10 +17,10 @@ namespace GitHubSharp.Models
         public string Email { get; set; }
         public bool Hireable { get; set; }
         public string Bio { get; set; }
-        public ulong PublicRepos { get; set; }
-        public ulong PublicGists { get; set; }
-        public ulong Followers { get; set; }
-        public ulong Following { get; set; }
+        public long PublicRepos { get; set; }
+        public long PublicGists { get; set; }
+        public long Followers { get; set; }
+        public long Following { get; set; }
         public string HtmlUrl { get; set; }
 		public DateTimeOffset CreatedAt { get; set; }
         public string Type { get; set; }
@@ -29,20 +29,20 @@ namespace GitHubSharp.Models
     [Serializable]
     public class UserAuthenticatedModel : UserModel
     {
-        public uint TotalPrivateRepos { get; set; }
-        public uint OwnedPrivateRepos { get; set; }
-        public ulong PrivateGists { get; set; }
-        public ulong DiskUsage { get; set; }
-        public ulong Collaborators { get; set; }
+        public int TotalPrivateRepos { get; set; }
+        public int OwnedPrivateRepos { get; set; }
+        public long PrivateGists { get; set; }
+        public long DiskUsage { get; set; }
+        public long Collaborators { get; set; }
 //        public UserAuthenticatedPlanModel Plan { get; set; }
 //
 //        [Serializable]
 //        public class UserAuthenticatedPlanModel
 //        {
 //            public string Name { get; set; }
-//            public ulong Collaborators { get; set; }
-//            public ulong Space { get; set; }
-//            public ulong PrivateRepos { get; set; }
+//            public long Collaborators { get; set; }
+//            public long Space { get; set; }
+//            public long PrivateRepos { get; set; }
 //        }
     }
 
@@ -50,7 +50,7 @@ namespace GitHubSharp.Models
     public class PublicKeyModel
     {
         public string Title { get; set; }
-        public ulong Id { get; set; }
+        public long Id { get; set; }
         public string Key { get; set; }
     }
 }

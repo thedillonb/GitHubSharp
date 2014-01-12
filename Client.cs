@@ -8,6 +8,7 @@ using GitHubSharp.Models;
 using System.Net.Http;
 using System.Text;
 using System.Linq;
+using Octokit.Internal;
 
 namespace GitHubSharp
 {
@@ -19,7 +20,7 @@ namespace GitHubSharp
 
 		public static Func<HttpClient> ClientConstructor = () => new HttpClient();
 
-		public static ISerializer Serializer;
+		public static IJsonSerializer Serializer = new SimpleJsonSerializer();
 
 		private readonly HttpClient _client;
 
@@ -204,15 +205,14 @@ namespace GitHubSharp
             //Build the absolute URI for the cache
 			var absoluteUri = url.ToString(); //_client.BuildUri(request).AbsoluteUri;
 
+            HttpResponseMessage response = null;
+            var retrievedFromCache = false;
+
             // If the request has UseCache enabled then attempt to get it from our cache
             if (githubRequest.RequestFromCache)
             {
-                var cache = Cache.Get<GitHubResponse<T>>(absoluteUri);
-                if (cache != null)
-                {
-                    cache.WasCached = true;
-                    return cache;
-                }
+                response = GetFromCache(absoluteUri);
+                retrievedFromCache = response != null;
             }
             else
             {
@@ -221,13 +221,18 @@ namespace GitHubSharp
 					request.Headers.Add("If-None-Match", string.Format("\"{0}\"", etag));
             }
 
-			var response = await ExecuteRequest(request);
+            if (response == null)
+			    response = await ExecuteRequest(request);
 			var parsedResponse = await ParseResponse<T>(response);
 
-            // ParseResponse will throw an exception if it's not a good response.
-            // So, if we get here, it means that the response is OK to cache
-            if (githubRequest.CacheResponse)
-                Cache.Set(absoluteUri, parsedResponse, parsedResponse.ETag);
+            if (retrievedFromCache)
+                parsedResponse.WasCached = true;
+            else if (githubRequest.CacheResponse)
+            {
+                // ParseResponse will throw an exception if it's not a good response.
+                // So, if we get here, it means that the response is OK to cache
+                SetCache(absoluteUri, response, parsedResponse.ETag);
+            }
 
             return parsedResponse;
         }
@@ -237,7 +242,8 @@ namespace GitHubSharp
 			var r = new HttpRequestMessage(HttpMethod.Put, request.Url);
 			if (request.Args != null)
 			{
-				r.Content = new StringContent(Serializer.Serialize(request.Args), Encoding.UTF8, "application/json");
+				var serialized = Serializer.Serialize(request.Args);
+				r.Content = new StringContent(serialized, Encoding.UTF8, "application/json");
 			}
 			else
 			{
@@ -245,6 +251,74 @@ namespace GitHubSharp
 				r.Content.Headers.ContentLength = 0;
 			}
             return r;
+        }
+
+        private void SetCache(string uri, HttpResponseMessage response, string etag)
+        {
+            try
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine(((int)response.StatusCode).ToString());
+                foreach (var header in response.Headers)
+                {
+                    foreach (var h in header.Value)
+                        sb.Append(header.Key).Append(": ").AppendLine(h);
+                }
+
+                sb.AppendLine();
+                sb.Append(response.Content.ReadAsStringAsync().Result);
+                Cache.Set(uri, Encoding.UTF8.GetBytes(sb.ToString()), etag);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Unable to set cache: " + e.Message);
+            }
+        }
+
+        private HttpResponseMessage GetFromCache(string uri)
+        {
+            try
+            {
+                var data = Cache.Get(uri);
+                if (data == null)
+                    return null;
+
+                using (var ms = new System.IO.MemoryStream(data))
+                {
+                    var newline = new System.IO.StreamReader(ms, Encoding.UTF8);
+
+                    var statusLine = newline.ReadLine();
+                    if (statusLine.Length > 32)
+                        return null;
+
+                    var response = new HttpResponseMessage((HttpStatusCode)Convert.ToInt32(statusLine));
+
+                    while (true)
+                    {
+                        var line = newline.ReadLine();
+                        if (line.Length == 0)
+                            break;
+
+                        try
+                        {
+                            var header = line.Split(new [] { ':' }, 2);
+                            response.Headers.Add(header[0], header[1].Trim());
+                        }
+                        catch
+                        {
+                            // Stupid bug with Vary header... It's a good thing we don't care about it
+                        }
+                    }
+
+                    response.Content = new StringContent(newline.ReadToEnd());
+                    return response;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Unable to deserialize header: " + e.Message);
+                return null;
+            }
         }
         
         /// <summary>
@@ -270,7 +344,10 @@ namespace GitHubSharp
         {
 			var r = new HttpRequestMessage(HttpMethod.Post, request.Url);
 			if (request.Args != null)
-				r.Content = new StringContent(Serializer.Serialize(request.Args), Encoding.UTF8, "application/json");
+			{
+				var serialized = Serializer.Serialize(request.Args);
+				r.Content = new StringContent(serialized, Encoding.UTF8, "application/json");
+			}
 			return await ParseResponse<T>(await ExecuteRequest(r));
         }
 
@@ -286,8 +363,11 @@ namespace GitHubSharp
 		private static HttpRequestMessage CreatePatchRequest(GitHubRequest request)
         {
 			var r = new HttpRequestMessage(new HttpMethod("PATCH"), request.Url);
-            if (request.Args != null)
-				r.Content = new StringContent(Serializer.Serialize(request.Args), Encoding.UTF8, "application/json");
+			if (request.Args != null)
+			{
+				var serialized = Serializer.Serialize(request.Args);
+				r.Content = new StringContent(serialized, Encoding.UTF8, "application/json");
+			}
             return r;
         }
 

@@ -22,7 +22,7 @@ namespace GitHubSharp.Models
         public string Name { get; set; }
         public string Sha { get; set; }
         public string Mode { get; set; }
-        public ulong Size { get; set; }
+        public long Size { get; set; }
         public string MimeType { get; set; }
         public string Data { get; set; }
     }

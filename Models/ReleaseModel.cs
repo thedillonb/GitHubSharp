@@ -9,7 +9,7 @@ namespace GitHubSharp.Models
 		public string HtmlUrl { get; set; }
 		public string AssetsUrl { get; set; }
 		public string UploadUrl { get; set; }
-		public ulong Id { get; set; }
+		public long Id { get; set; }
 		public string TagName { get; set; }
 		public string TargetCommitish { get; set; }
 		public string Name { get; set; }

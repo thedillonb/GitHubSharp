@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using Octokit.Internal;
+using Octokit;
 
 namespace GitHubSharp.Models
 {
     [Serializable]
     public class EventModel
     {
-		private string _payload;
+        private Dictionary<string, object> _payload;
         private string _type;
 
 		public string Type
@@ -21,17 +23,18 @@ namespace GitHubSharp.Models
 
         public bool Public { get; set; }
 
-		public object Payload
+        public Dictionary<string, object> Payload
         {
             get { return _payload; }
             set
             {
-				_payload = Client.Serializer.Serialize(value);
+                _payload = value;
                 DeserializePayloadObject();
             }
         }
 
-        public object PayloadObject { get; set; }
+        public object PayloadObject { get; private set; }
+
         public RepoModel Repo { get; set; }
         public BasicUserModel Actor { get; set; }
         public BasicUserModel Org { get; set; }
@@ -40,19 +43,19 @@ namespace GitHubSharp.Models
 
         private void DeserializePayloadObject()
         {
-            if (Type == null || Payload == null || PayloadObject != null)
+            if (Type == null || _payload == null || PayloadObject != null)
                 return;
 
             try
             {
                 // The deserialize function on the JsonSerializer.Deserializer only takes a IResponse object.
                 // So, we'll just do what we have to to create one which is just assigning it's content to our payload.
-				var payout = Payload.ToString();
+                var payout = Client.Serializer.Serialize(_payload);
 
                 switch (Type)
                 {
                     case "CommitCommentEvent":
-						PayloadObject = Client.Serializer.Deserialize<CommitCommentEvent>(payout);
+                        PayloadObject = Client.Serializer.Deserialize<CommitCommentEvent>(payout);
                         return;
                     case "CreateEvent":
 						PayloadObject = Client.Serializer.Deserialize<CreateEvent>(payout);
@@ -125,7 +128,7 @@ namespace GitHubSharp.Models
         [Serializable]
         public class RepoModel
         {
-            public ulong Id { get; set; }
+            public long Id { get; set; }
             public string Name { get; set; }
             public string Url { get; set; }
         }
@@ -231,7 +234,7 @@ namespace GitHubSharp.Models
         public class PullRequestEvent
         {
             public string Action { get; set; }
-            public ulong Number { get; set; }
+            public long Number { get; set; }
             public PullRequestModel PullRequest { get; set; }
         }
 
@@ -246,7 +249,7 @@ namespace GitHubSharp.Models
         {
             public string Before { get; set; }
             public string Ref { get; set; }
-            public ulong Size { get; set; }
+            public long Size { get; set; }
             public List<CommitModel> Commits { get; set; }
 
             [Serializable]

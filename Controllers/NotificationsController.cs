@@ -9,9 +9,9 @@ namespace GitHubSharp.Controllers
 {
     public class NotificationController : Controller
     {
-        public ulong Id { get; private set; }
+        public string Id { get; private set; }
 
-        public NotificationController(Client client, ulong id)
+        public NotificationController(Client client, string id)
             : base(client)
         {
             Id = id;
@@ -35,7 +35,7 @@ namespace GitHubSharp.Controllers
 
     public class NotificationsController : Controller
     {
-        public NotificationController this[ulong id]
+        public NotificationController this[string id]
         {
             get { return new NotificationController(Client, id); }
         }

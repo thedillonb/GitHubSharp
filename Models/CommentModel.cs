@@ -11,8 +11,8 @@ namespace GitHubSharp.Models
         public string Id { get; set; }
         public string Body { get; set; }
         public string Path { get; set; }
-        public uint? Position { get; set; }
-        public uint? Line { get; set; }
+        public int? Position { get; set; }
+        public int? Line { get; set; }
         public string CommitId { get; set; }
         public BasicUserModel User { get; set; }
 		public DateTimeOffset CreatedAt { get; set; }
@@ -24,7 +24,7 @@ namespace GitHubSharp.Models
     {
         public string Body { get; set; }
         public string Path { get; set; }
-        public uint? Position { get; set; }
+        public int? Position { get; set; }
     }
 
     [Serializable]

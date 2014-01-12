@@ -5,7 +5,7 @@ namespace GitHubSharp.Models
     [Serializable]
     public class NotificationModel
     {
-        public ulong Id { get; set; }
+        public string Id { get; set; } // NB: API currently returns this as string which is Weird
         public RepositoryModel Repository { get; set; }
         public SubjectModel Subject { get; set; }
         public string Reason { get; set; }

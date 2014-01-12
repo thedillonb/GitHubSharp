@@ -14,7 +14,7 @@ namespace GitHubSharp.Controllers
         {
         }
 
-		public GitHubRequest<RepositorySearchModel> SearchRepositories(string[] keywords, string[] languages, string sort = null, uint page = 1)
+		public GitHubRequest<RepositorySearchModel> SearchRepositories(string[] keywords, string[] languages, string sort = null, int page = 1)
         {
 			var sb = new StringBuilder();
 			sb.Append(string.Join(" ", keywords));

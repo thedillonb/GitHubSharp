@@ -8,9 +8,9 @@ namespace GitHubSharp
 
         string GetETag(string url);
 
-        T Get<T>(string url) where T : new();
+        byte[] Get(string url);
 
-        void Set(string url, object data, string etag);
+        void Set(string url, byte[] data, string etag);
     }
 }
 

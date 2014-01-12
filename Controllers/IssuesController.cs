@@ -72,7 +72,7 @@ namespace GitHubSharp.Controllers
     {
         public RepositoryController Parent { get; private set; }
 
-        public IssueController this[ulong id]
+        public IssueController this[long id]
         {
             get { return new IssueController(Client, this, id); }
         }
@@ -83,7 +83,7 @@ namespace GitHubSharp.Controllers
             Parent = parent;
         }
 
-        public GitHubRequest<IssueModel> Create(string title, string body, string assignee, uint? milestone, string[] labels)
+        public GitHubRequest<IssueModel> Create(string title, string body, string assignee, int? milestone, string[] labels)
         {
             return GitHubRequest.Post<IssueModel>(Uri, new { title = title, body = body, assignee = assignee, milestone = milestone, labels = labels });
         } 
@@ -96,11 +96,11 @@ namespace GitHubSharp.Controllers
 
     public class IssueController : Controller
     {
-        public ulong Id { get; private set; }
+        public long Id { get; private set; }
 
         public RepositoryIssuesController Parent { get; private set; }
 
-        public IssueController(Client client, RepositoryIssuesController parent, ulong id)
+        public IssueController(Client client, RepositoryIssuesController parent, long id)
             : base(client)
         {
             Parent = parent;
@@ -127,7 +127,7 @@ namespace GitHubSharp.Controllers
             return GitHubRequest.Post<IssueCommentModel>(Uri + "/comments", new { body = body });
         }
 
-        public GitHubRequest<IssueModel> Update(string title, string body, string state, string assignee, uint? milestone, string[] labels)
+        public GitHubRequest<IssueModel> Update(string title, string body, string state, string assignee, int? milestone, string[] labels)
         {
             return GitHubRequest.Patch<IssueModel>(Uri, new { title = title, body = body, assignee = assignee, milestone = milestone, labels = labels, state = state });
         } 
@@ -137,7 +137,7 @@ namespace GitHubSharp.Controllers
 			return GitHubRequest.Patch<IssueModel>(Uri, new { assignee });
 		} 
 
-		public GitHubRequest<IssueModel> UpdateMilestone(uint? milestone)
+		public GitHubRequest<IssueModel> UpdateMilestone(int? milestone)
 		{
 			return GitHubRequest.Patch<IssueModel>(Uri, new { milestone });
 		} 

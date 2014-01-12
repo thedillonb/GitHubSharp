@@ -17,7 +17,7 @@ namespace GitHubSharp.Controllers
         /// </summary>
         /// <param name="id">The id of the team</param>
         /// <returns></returns>
-        public TeamController this[ulong id]
+        public TeamController this[long id]
         {
             get { return new TeamController(Client, this, id); }
         }
@@ -55,7 +55,7 @@ namespace GitHubSharp.Controllers
         /// <summary>
         /// Gets the id of this team
         /// </summary>
-        public ulong Id { get; private set; }
+        public long Id { get; private set; }
 
         /// <summary>
         /// Gets the parent controller
@@ -68,7 +68,7 @@ namespace GitHubSharp.Controllers
         /// <param name="client">The GitHubSharp client</param>
         /// <param name="teamsController">The parent controller</param>
         /// <param name="id">The id of this team</param>
-        public TeamController(Client client, TeamsController teamsController, ulong id)
+        public TeamController(Client client, TeamsController teamsController, long id)
             : base(client)
         {
             Id = id;

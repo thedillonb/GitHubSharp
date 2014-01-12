@@ -42,6 +42,7 @@
 // If you are targetting WinStore, WP8 and NET4.5+ PCL make sure to #define SIMPLE_JSON_TYPEINFO;
 
 // original json parsing code from http://techblog.procurios.nl/k/618/news/view/14605/14863/How-do-I-write-my-own-parser-for-JSON.html
+using GitHubSharp.Internal;
 
 #if NETFX_CORE
 #define SIMPLE_JSON_TYPEINFO
@@ -63,12 +64,11 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
-using Octokit.Internal;
 
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable SuggestUseVarKeywordEvident
-namespace Octokit
+namespace GitHubSharp
 {
 	/// <summary>
 	/// Represents the json array.
@@ -481,7 +481,7 @@ namespace Octokit
 	}
 }
 
-namespace Octokit
+namespace GitHubSharp
 {
 	/// <summary>
 	/// This class encodes and decodes JSON strings.

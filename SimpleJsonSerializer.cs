@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Octokit.Internal;
 using GitHubSharp.Internal;
 
 namespace GitHubSharp

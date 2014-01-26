@@ -1,4 +1,4 @@
-namespace Octokit.Internal
+namespace GitHubSharp
 {
 	public interface IJsonSerializer
 	{

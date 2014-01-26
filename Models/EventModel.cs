@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Octokit.Internal;
-using Octokit;
 
 namespace GitHubSharp.Models
 {

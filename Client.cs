@@ -8,7 +8,6 @@ using GitHubSharp.Models;
 using System.Net.Http;
 using System.Text;
 using System.Linq;
-using Octokit.Internal;
 
 namespace GitHubSharp
 {

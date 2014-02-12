@@ -458,6 +458,7 @@ namespace GitHubSharp
 		/// </summary>
 		internal Task<HttpResponseMessage> ExecuteRequest(HttpRequestMessage request)
 		{
+			request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 			return _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 		}
 

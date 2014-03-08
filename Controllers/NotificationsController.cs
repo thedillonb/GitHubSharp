@@ -71,20 +71,4 @@ namespace GitHubSharp.Controllers
             get { return Client.ApiUri + "/notifications"; }
         }
     }
-
-    public class RepositoryNotificationsController : NotificationsController
-    {
-        public RepositoryController Parent { get; private set; }
-
-        public RepositoryNotificationsController(Client client, RepositoryController parent)
-            : base(client)
-        {
-            Parent = parent;
-        }
-
-        public override string Uri
-        {
-            get { return Parent.Uri + "/notifications"; }
-        }
-    }
 }

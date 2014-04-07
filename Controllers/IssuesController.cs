@@ -129,7 +129,7 @@ namespace GitHubSharp.Controllers
 
         public GitHubRequest<IssueModel> Update(string title, string body, string state, string assignee, int? milestone, string[] labels)
         {
-            return GitHubRequest.Patch<IssueModel>(Uri, new { title = title, body = body, assignee = assignee, milestone = milestone, labels = labels, state = state });
+            return GitHubRequest.Patch<IssueModel>(Uri, new { title, body, assignee, milestone, labels, state });
         } 
 
 		public GitHubRequest<IssueModel> UpdateAssignee(string assignee)
@@ -146,6 +146,11 @@ namespace GitHubSharp.Controllers
 		{
 			return GitHubRequest.Patch<IssueModel>(Uri, new { labels });
 		} 
+
+        public GitHubRequest<IssueModel> UpdateState(string state)
+        {
+            return GitHubRequest.Patch<IssueModel>(Uri, new { state });
+        } 
 
         public override string Uri
         {

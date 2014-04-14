@@ -15,13 +15,13 @@ namespace GitHubSharp
     {
         public const string DefaultApi = "https://api.github.com";
 
-		public const string AccessTokenUri = "https://github.com";
+        public const string AccessTokenUri = "https://github.com";
 
-		public static Func<HttpClient> ClientConstructor = () => new HttpClient();
+        public static Func<HttpClient> ClientConstructor = () => new HttpClient();
 
-		public static IJsonSerializer Serializer = new SimpleJsonSerializer();
+        public static IJsonSerializer Serializer = new SimpleJsonSerializer();
 
-		private readonly HttpClient _client;
+        private readonly HttpClient _client;
 
         public string ApiUri { get; private set; }
 
@@ -81,7 +81,7 @@ namespace GitHubSharp
         /// <value>
         /// The timeout.
         /// </value>
-		public TimeSpan Timeout 
+        public TimeSpan Timeout 
         {
             get { return _client.Timeout; }
             set { _client.Timeout = value; }
@@ -98,9 +98,9 @@ namespace GitHubSharp
         /// </summary>
         private Client()
         {
-			_client = ClientConstructor();
-			_client.DefaultRequestHeaders.UserAgent.ParseAdd("GithubSharp");
-			Timeout = new TimeSpan(0, 0, 30);
+            _client = ClientConstructor();
+            _client.DefaultRequestHeaders.UserAgent.ParseAdd("GithubSharp");
+            Timeout = new TimeSpan(0, 0, 20);
         }
 
         /// <summary>
@@ -125,8 +125,8 @@ namespace GitHubSharp
             c.Username = username;
             c.ApiUri = apiOut.AbsoluteUri.TrimEnd('/');
 
-			var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", username, password)));
-			c._client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", token);
+            var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", username, password)));
+            c._client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", token);
             return c;
         }
 
@@ -136,7 +136,7 @@ namespace GitHubSharp
         public static Client BasicTwoFactorAuthentication(string username, string password, string twoFactor, string apiUri = DefaultApi)
         {
             var c = Basic(username, password, apiUri);
-			c._client.DefaultRequestHeaders.Add("X-GitHub-OTP", twoFactor);
+            c._client.DefaultRequestHeaders.Add("X-GitHub-OTP", twoFactor);
             return c;
         }
 
@@ -154,15 +154,15 @@ namespace GitHubSharp
 
             var c = new Client();
             c.ApiUri = apiOut.AbsoluteUri.TrimEnd('/');
-			var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", oauth, "x-oauth-basic")));
-			c._client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", token);
+            var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", oauth, "x-oauth-basic")));
+            c._client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", token);
             return c;
         }
 
         /// <summary>
         /// Request an access token
         /// </summary>
-		public static async Task<AccessTokenModel> RequestAccessToken(string clientId, string clientSecret, string code, string redirectUri, string domainUri = AccessTokenUri)
+        public static async Task<AccessTokenModel> RequestAccessToken(string clientId, string clientSecret, string code, string redirectUri, string domainUri = AccessTokenUri)
         {
             if (string.IsNullOrEmpty(domainUri))
                 domainUri = AccessTokenUri;
@@ -173,82 +173,97 @@ namespace GitHubSharp
 
             var c = new Client();
             var request = GitHubRequest.Post<AccessTokenModel>(domainUri, new { client_id = clientId, client_secret = clientSecret, code, redirect_uri = redirectUri });
-			var response = await c.ExecuteAsync(request);
+            var response = await c.ExecuteAsync(request);
             return response.Data;
         }
 
-		private static string ToQueryString(IEnumerable<KeyValuePair<string, string>> nvc)
-		{
-			var array = (from key in nvc
-				select string.Format("{0}={1}", Uri.EscapeUriString(key.Key), Uri.EscapeUriString(key.Value)))
-				.ToArray();
-			return "?" + string.Join("&", array);
-		}
+        private static string ToQueryString(IEnumerable<KeyValuePair<string, string>> nvc)
+        {
+            var array = (from key in nvc
+                select string.Format("{0}={1}", Uri.EscapeUriString(key.Key), Uri.EscapeUriString(key.Value)))
+                .ToArray();
+            return "?" + string.Join("&", array);
+        }
 
         /// <summary>
         /// Makes a 'GET' request to the server using a URI
         /// </summary>
         /// <typeparam name="T">The type of object the response should be deserialized ot</typeparam>
         /// <returns>An object with response data</returns>
-		private async Task<GitHubResponse<T>> Get<T>(GitHubRequest githubRequest) where T : new()
+        private async Task<GitHubResponse<T>> Get<T>(GitHubRequest githubRequest) where T : new()
         {
-			var url = new StringBuilder().Append(githubRequest.Url);
-			if (githubRequest.Args != null)
-				url.Append(ToQueryString(ObjectToDictionaryConverter.Convert(githubRequest.Args).ToArray()));
-			var request = new HttpRequestMessage(HttpMethod.Get, url.ToString());
+            var url = new StringBuilder().Append(githubRequest.Url);
+            if (githubRequest.Args != null)
+                url.Append(ToQueryString(ObjectToDictionaryConverter.Convert(githubRequest.Args).ToArray()));
 
-            // If there is no cache, just directly execute and parse. Nothing more
-            if (Cache == null)
-				return await ParseResponse<T>(await ExecuteRequest(request));
-
-            //Build the absolute URI for the cache
-			var absoluteUri = url.ToString(); //_client.BuildUri(request).AbsoluteUri;
-
-            HttpResponseMessage response = null;
-            var retrievedFromCache = false;
-
-            // If the request has UseCache enabled then attempt to get it from our cache
-            if (githubRequest.RequestFromCache)
+            using (var request = new HttpRequestMessage(HttpMethod.Get, url.ToString()))
             {
-                response = GetFromCache(absoluteUri);
-                retrievedFromCache = response != null;
+                // If there is no cache, just directly execute and parse. Nothing more
+                if (Cache == null)
+                {
+                    using (var requestResponse = await ExecuteRequest(request))
+                    {
+                        return await ParseResponse<T>(requestResponse);
+                    }
+                }
+
+                //Build the absolute URI for the cache
+                var absoluteUri = url.ToString(); //_client.BuildUri(request).AbsoluteUri;
+
+                HttpResponseMessage response = null;
+                var retrievedFromCache = false;
+
+                try
+                {
+                    // If the request has UseCache enabled then attempt to get it from our cache
+                    if (githubRequest.RequestFromCache)
+                    {
+                        response = GetFromCache(absoluteUri);
+                        retrievedFromCache = response != null;
+                    }
+                    else
+                    {
+                        var etag = githubRequest.CheckIfModified ? Cache.GetETag(absoluteUri) : null;
+                        if (etag != null)
+                            request.Headers.Add("If-None-Match", string.Format("\"{0}\"", etag));
+                    }
+
+                    if (response == null)
+                        response = await ExecuteRequest(request);
+                    var parsedResponse = await ParseResponse<T>(response);
+
+                    if (retrievedFromCache)
+                        parsedResponse.WasCached = true;
+                    else if (githubRequest.CacheResponse)
+                    {
+                        // ParseResponse will throw an exception if it's not a good response.
+                        // So, if we get here, it means that the response is OK to cache
+                        SetCache(absoluteUri, response, parsedResponse.ETag);
+                    }
+
+                    return parsedResponse;
+                }
+                finally
+                {
+                    if (response != null)
+                        response.Dispose();
+                }
+            }
+        }
+
+        private static HttpRequestMessage CreatePutRequest(GitHubRequest request)
+        {
+            var r = new HttpRequestMessage(HttpMethod.Put, request.Url);
+            if (request.Args != null)
+            {
+                var serialized = Serializer.Serialize(request.Args);
+                r.Content = new StringContent(serialized, Encoding.UTF8, "application/json");
             }
             else
             {
-                var etag = githubRequest.CheckIfModified ? Cache.GetETag(absoluteUri) : null;
-                if (etag != null)
-					request.Headers.Add("If-None-Match", string.Format("\"{0}\"", etag));
+                r.Content = new StringContent("");
+                r.Content.Headers.ContentLength = 0;
             }
-
-            if (response == null)
-			    response = await ExecuteRequest(request);
-			var parsedResponse = await ParseResponse<T>(response);
-
-            if (retrievedFromCache)
-                parsedResponse.WasCached = true;
-            else if (githubRequest.CacheResponse)
-            {
-                // ParseResponse will throw an exception if it's not a good response.
-                // So, if we get here, it means that the response is OK to cache
-                SetCache(absoluteUri, response, parsedResponse.ETag);
-            }
-
-            return parsedResponse;
-        }
-
-		private static HttpRequestMessage CreatePutRequest(GitHubRequest request)
-        {
-			var r = new HttpRequestMessage(HttpMethod.Put, request.Url);
-			if (request.Args != null)
-			{
-				var serialized = Serializer.Serialize(request.Args);
-				r.Content = new StringContent(serialized, Encoding.UTF8, "application/json");
-			}
-			else
-			{
-				r.Content = new StringContent("");
-				r.Content.Headers.ContentLength = 0;
-			}
             return r;
         }
 
@@ -323,78 +338,115 @@ namespace GitHubSharp
         /// <summary>
         /// Makes a 'PUT' request to the server
         /// </summary>
-		private async Task<GitHubResponse<T>> Put<T>(GitHubRequest request) where T : new()
+        private async Task<GitHubResponse<T>> Put<T>(GitHubRequest gitHubRequest) where T : new()
         {
-			return await ParseResponse<T>(await ExecuteRequest(CreatePutRequest(request)));
+            using (var request = CreatePutRequest(gitHubRequest))
+            {
+                using (var response = await ExecuteRequest(request))
+                {
+                    return await ParseResponse<T>(response);
+                }
+            }
         }
 
         /// <summary>
         /// Makes a 'PUT' request to the server
         /// </summary>
-		private async Task<GitHubResponse> Put(GitHubRequest request)
+        private async Task<GitHubResponse> Put(GitHubRequest gitHubRequest)
         {
-			return await ParseResponse(await ExecuteRequest(CreatePutRequest(request)));
+            using (var request = CreatePutRequest(gitHubRequest))
+            {
+                using (var response = await ExecuteRequest(request))
+                {
+                    return await ParseResponse(response);
+                }
+            }
         }
 
         /// <summary>
         /// Makes a 'POST' request to the server
         /// </summary>
-		private async Task<GitHubResponse<T>> Post<T>(GitHubRequest request) where T : new()
+        private async Task<GitHubResponse<T>> Post<T>(GitHubRequest request) where T : new()
         {
-			var r = new HttpRequestMessage(HttpMethod.Post, request.Url);
-			if (request.Args != null)
-			{
-				var serialized = Serializer.Serialize(request.Args);
-				r.Content = new StringContent(serialized, Encoding.UTF8, "application/json");
-			}
-			return await ParseResponse<T>(await ExecuteRequest(r));
+            using (var r = new HttpRequestMessage(HttpMethod.Post, request.Url))
+            {
+                if (request.Args != null)
+                {
+                    var serialized = Serializer.Serialize(request.Args);
+                    r.Content = new StringContent(serialized, Encoding.UTF8, "application/json");
+                }
+
+                using (var response = await ExecuteRequest(r))
+                {
+                    return await ParseResponse<T>(response);
+                }
+            }
         }
 
         /// <summary>
         /// Makes a 'DELETE' request to the server
         /// </summary>
-		private async Task<GitHubResponse> Delete(GitHubRequest request)
+        private async Task<GitHubResponse> Delete(GitHubRequest request)
         {
-			var r = new HttpRequestMessage(HttpMethod.Delete, request.Url);
-			return await ParseResponse(await ExecuteRequest(r));
+            using (var r = new HttpRequestMessage(HttpMethod.Delete, request.Url))
+            {
+                using (var response = await ExecuteRequest(r))
+                {
+                    return await ParseResponse(response);
+                }
+            }
         }
 
-		private static HttpRequestMessage CreatePatchRequest(GitHubRequest request)
+        private static HttpRequestMessage CreatePatchRequest(GitHubRequest request)
         {
-			var r = new HttpRequestMessage(new HttpMethod("PATCH"), request.Url);
-			if (request.Args != null)
-			{
-				var serialized = Serializer.Serialize(request.Args);
-				r.Content = new StringContent(serialized, Encoding.UTF8, "application/json");
-			}
-            return r;
+            using (var r = new HttpRequestMessage(new HttpMethod("PATCH"), request.Url))
+            {
+                if (request.Args != null)
+                {
+                    var serialized = Serializer.Serialize(request.Args);
+                    r.Content = new StringContent(serialized, Encoding.UTF8, "application/json");
+                }
+                return r;
+            }
         }
 
-		private async Task<GitHubResponse<T>> Patch<T>(GitHubRequest request) where T : new()
+        private async Task<GitHubResponse<T>> Patch<T>(GitHubRequest gitHubRequest) where T : new()
         {
-			return await ParseResponse<T>(await ExecuteRequest(CreatePatchRequest(request)));
+            using (var request = CreatePatchRequest(gitHubRequest))
+            {
+                using (var response = await ExecuteRequest(request))
+                {
+                    return await ParseResponse<T>(response);
+                }
+            }
         }
 
-		private async Task<GitHubResponse> Patch(GitHubRequest request)
+        private async Task<GitHubResponse> Patch(GitHubRequest gitHubRequest)
         {
-			return await ParseResponse(await ExecuteRequest(CreatePatchRequest(request)));
+            using (var request = CreatePatchRequest(gitHubRequest))
+            {
+                using (var response = await ExecuteRequest(request))
+                {
+                    return await ParseResponse(response);
+                }
+            }
         }
 
-		private static async Task<GitHubResponse<T>> ParseResponse<T>(HttpResponseMessage response) where T : new()
+        private static async Task<GitHubResponse<T>> ParseResponse<T>(HttpResponseMessage response) where T : new()
         {
             var ghr = new GitHubResponse<T> { StatusCode = (int)response.StatusCode };
            
             foreach (var h in response.Headers)
             {
-				if (h.Key.Equals("X-RateLimit-Limit"))
-					ghr.RateLimitLimit = Convert.ToInt32(h.Value.First());
-				else if (h.Key.Equals("X-RateLimit-Remaining"))
-					ghr.RateLimitRemaining = Convert.ToInt32(h.Value.First());
-				else if (h.Key.Equals("ETag"))
-					ghr.ETag = h.Value.First().Replace("\"", "").Trim();
-				else if (h.Key.Equals("Link"))
+                if (h.Key.Equals("X-RateLimit-Limit"))
+                    ghr.RateLimitLimit = Convert.ToInt32(h.Value.First());
+                else if (h.Key.Equals("X-RateLimit-Remaining"))
+                    ghr.RateLimitRemaining = Convert.ToInt32(h.Value.First());
+                else if (h.Key.Equals("ETag"))
+                    ghr.ETag = h.Value.First().Replace("\"", "").Trim();
+                else if (h.Key.Equals("Link"))
                 {
-					var s = h.Value.First().Split(',');
+                    var s = h.Value.First().Split(',');
                     foreach (var link in s)
                     {
                         var splitted = link.Split(';');
@@ -420,90 +472,90 @@ namespace GitHubSharp
             {
                 var b = ghr.StatusCode == 204 || ghr.StatusCode == 205;
                 ghr.Data = (T)(object)(b);
-				return ghr;
+                return ghr;
             }
 
-			var content = await response.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadAsStringAsync();
 
-			if (response.StatusCode < (HttpStatusCode)200 || response.StatusCode >= (HttpStatusCode)300)
-				throw StatusCodeException.FactoryCreate(response, content);
+            if (response.StatusCode < (HttpStatusCode)200 || response.StatusCode >= (HttpStatusCode)300)
+                throw StatusCodeException.FactoryCreate(response, content);
 
-			ghr.Data = Serializer.Deserialize<T>(content);
+            ghr.Data = Serializer.Deserialize<T>(content);
 
             return ghr;
         }
 
-		private static async Task<GitHubResponse> ParseResponse(HttpResponseMessage response)
+        private static async Task<GitHubResponse> ParseResponse(HttpResponseMessage response)
         {
             var ghr = new GitHubResponse { StatusCode = (int)response.StatusCode };
             foreach (var h in response.Headers)
             {
-				if (h.Key.Equals("X-RateLimit-Limit"))
-					ghr.RateLimitLimit = Convert.ToInt32(h.Value.First());
-				else if (h.Key.Equals("X-RateLimit-Remaining"))
-					ghr.RateLimitRemaining = Convert.ToInt32(h.Value.First());
-				else if (h.Key.Equals("ETag"))
-					ghr.ETag = h.Value.First().Replace("\"", "");
+                if (h.Key.Equals("X-RateLimit-Limit"))
+                    ghr.RateLimitLimit = Convert.ToInt32(h.Value.First());
+                else if (h.Key.Equals("X-RateLimit-Remaining"))
+                    ghr.RateLimitRemaining = Convert.ToInt32(h.Value.First());
+                else if (h.Key.Equals("ETag"))
+                    ghr.ETag = h.Value.First().Replace("\"", "");
             }
 
-			var content = await response.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadAsStringAsync();
             if (response.StatusCode < (HttpStatusCode)200 || response.StatusCode >= (HttpStatusCode)300)
-				throw StatusCodeException.FactoryCreate(response, content);
+                throw StatusCodeException.FactoryCreate(response, content);
 
             return ghr;
         }
 
-		/// <summary>
-		/// Executes a request to the server
-		/// </summary>
-		internal Task<HttpResponseMessage> ExecuteRequest(HttpRequestMessage request)
-		{
-			request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-			return _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-		}
-
-		public GitHubResponse Execute(GitHubRequest request)
+        /// <summary>
+        /// Executes a request to the server
+        /// </summary>
+        internal Task<HttpResponseMessage> ExecuteRequest(HttpRequestMessage request)
         {
-			var r = ExecuteAsync(request);
-			return r.Result;
+            request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            return _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
         }
 
-		public GitHubResponse<T> Execute<T>(GitHubRequest<T> request) where T : new()
+        public GitHubResponse Execute(GitHubRequest request)
         {
-			var r = ExecuteAsync<T>(request);
-			return r.Result;
+            var r = ExecuteAsync(request);
+            return r.Result;
+        }
+
+        public GitHubResponse<T> Execute<T>(GitHubRequest<T> request) where T : new()
+        {
+            var r = ExecuteAsync<T>(request);
+            return r.Result;
         }
 
         public Task<GitHubResponse> ExecuteAsync(GitHubRequest request)
         {
-			switch (request.RequestMethod)
-			{
-				case RequestMethod.DELETE:
-					return Delete(request);
-				case RequestMethod.PUT:
-					return Put(request);
-				case RequestMethod.PATCH:
-					return Patch(request);
-				default:
-					return null;
-			}
+            switch (request.RequestMethod)
+            {
+                case RequestMethod.DELETE:
+                    return Delete(request);
+                case RequestMethod.PUT:
+                    return Put(request);
+                case RequestMethod.PATCH:
+                    return Patch(request);
+                default:
+                    return null;
+            }
         }
 
         public Task<GitHubResponse<T>> ExecuteAsync<T>(GitHubRequest<T> request) where T : new()
         {
-			switch (request.RequestMethod)
-			{
-				case RequestMethod.GET:
-					return Get<T>(request);
-				case RequestMethod.POST:
-					return Post<T>(request);
-				case RequestMethod.PUT:
-					return Put<T>(request);
-				case RequestMethod.PATCH:
-					return Patch<T>(request);
-				default:
-					return null;
-			}
+            switch (request.RequestMethod)
+            {
+                case RequestMethod.GET:
+                    return Get<T>(request);
+                case RequestMethod.POST:
+                    return Post<T>(request);
+                case RequestMethod.PUT:
+                    return Put<T>(request);
+                case RequestMethod.PATCH:
+                    return Patch<T>(request);
+                default:
+                    return null;
+            }
         }
 
 //        public bool IsCached(GitHubRequest request)
@@ -519,24 +571,36 @@ namespace GitHubSharp
 //            return Cache.Exists(_client.BuildUri(req).AbsoluteUri);
 //        }
 
-		public async Task<string> DownloadRawResource(string rawUrl, System.IO.Stream downloadSream)
+        public async Task<string> DownloadRawResource(string rawUrl, System.IO.Stream downloadSream)
         {
-			var request = new HttpRequestMessage(HttpMethod.Get, rawUrl);
-			var response = await ExecuteRequest(request);
-			var stream = await response.Content.ReadAsStreamAsync();
-			stream.CopyTo(downloadSream);
-			return "" + response.Content.Headers.ContentType;
+            using (var request = new HttpRequestMessage(HttpMethod.Get, rawUrl))
+            {
+                using (var response = await ExecuteRequest(request))
+                {
+                    using (var stream = await response.Content.ReadAsStreamAsync())
+                    {
+                        stream.CopyTo(downloadSream);
+                        return "" + response.Content.Headers.ContentType;
+                    }
+                }
+            }
         }
 
-		public async Task<string> DownloadRawResource2(string rawUrl, System.IO.Stream downloadSream)
+        public async Task<string> DownloadRawResource2(string rawUrl, System.IO.Stream downloadSream)
         {
-			var request = new HttpRequestMessage(HttpMethod.Get, rawUrl);
-			request.Headers.Accept.Clear();
-			request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github.raw"));
-			var response = await ExecuteRequest(request);
-			var stream = await response.Content.ReadAsStreamAsync();
-			stream.CopyTo(downloadSream);
-			return "" + response.Content.Headers.ContentType;
+            using (var request = new HttpRequestMessage(HttpMethod.Get, rawUrl))
+            {
+                request.Headers.Accept.Clear();
+                request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github.raw"));
+                using (var response = await ExecuteRequest(request))
+                {
+                    using (var stream = await response.Content.ReadAsStreamAsync())
+                    {
+                        stream.CopyTo(downloadSream);
+                        return "" + response.Content.Headers.ContentType;
+                    }
+                }
+            }
         }
     }
 }

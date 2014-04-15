@@ -74,15 +74,15 @@ namespace GitHubSharp
             switch (response.StatusCode)
             {
                 case HttpStatusCode.Forbidden:
-                    return new ForbiddenException(errorStr ?? "You do not have the permissions to access or modify this resource.", headers);
+                    return new ForbiddenException("You do not have the permissions to access or modify this resource.", headers);
                 case HttpStatusCode.NotFound:
-                    return new NotFoundException(errorStr ?? "The server is unable to locate the requested resource.", headers);
+                    return new NotFoundException("The server is unable to locate the requested resource.", headers);
                 case HttpStatusCode.InternalServerError:
-                    return new InternalServerException(errorStr ?? "The request was unable to be processed due to an interal server error.", headers);
+                    return new InternalServerException("The request was unable to be processed due to an interal server error.", headers);
                 case HttpStatusCode.Unauthorized:
-                    return new UnauthorizedException(errorStr ?? "You are unauthorized to view the requested resource.", headers);
+                    return new UnauthorizedException("You are unauthorized to view the requested resource.", headers);
                 case HttpStatusCode.NotModified:
-                    return new NotModifiedException(errorStr ?? "This resource has not been modified since the last request.", headers);
+                    return new NotModifiedException("This resource has not been modified since the last request.", headers);
                 default:
                     return new StatusCodeException(response.StatusCode, errorStr ?? response.StatusCode.ToString(), headers);
             }

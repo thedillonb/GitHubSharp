@@ -70,6 +70,11 @@ namespace GitHubSharp.Controllers
             return GitHubRequest.Put<PullRequestMergeModel>(Uri + "/merge", new { commit_message = commit_message });
         }
 
+        public GitHubRequest<PullRequestModel> UpdateState(string state)
+        {
+            return GitHubRequest.Patch<PullRequestModel>(Uri, new { state });
+        } 
+
         public GitHubRequest<bool> IsMerged()
         {
             return GitHubRequest.Get<bool>(Uri + "/merge");

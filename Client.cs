@@ -508,17 +508,22 @@ namespace GitHubSharp
         /// <summary>
         /// Executes a request to the server
         /// </summary>
-        internal Task<HttpResponseMessage> ExecuteRequest(HttpRequestMessage request)
+        internal async Task<HttpResponseMessage> ExecuteRequest(HttpRequestMessage request)
         {
             try
             {
                 request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                return _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                return await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
             }
             catch (TaskCanceledException e)
             {
                 // Provide a better error message
                 throw new TaskCanceledException("Timeout waiting for GitHub to respond. Check your connection and try again.", e);
+            }
+            catch(WebException e)
+            {
+                // Provide a better error message
+                throw new WebException("Unable to communicate with GitHub. Please check your connection and try again.", e);
             }
         }
 

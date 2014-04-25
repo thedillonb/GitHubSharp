@@ -92,6 +92,11 @@ namespace GitHubSharp.Controllers
         {
             get { return Parent.Uri + "/issues"; }
         }
+
+        public GitHubRequest<List<IssueEventModel>>  GetEvents()
+        {
+            return GitHubRequest.Get<List<IssueEventModel>>(Uri + "/events");
+        }
     }
 
     public class IssueController : Controller

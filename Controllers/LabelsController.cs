@@ -23,9 +23,9 @@ namespace GitHubSharp.Controllers
             return GitHubRequest.Get<List<LabelModel>>(Uri, new { page, per_page = perPage });
         }
 
-        public GitHubRequest<LabelModel> Create(string title, string color)
+        public GitHubRequest<LabelModel> Create(string name, string color)
         {
-            return GitHubRequest.Post<LabelModel>(Uri, new { title, color });
+            return GitHubRequest.Post<LabelModel>(Uri, new { name, color });
         }
 
         public override string Uri

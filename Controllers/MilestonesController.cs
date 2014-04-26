@@ -23,6 +23,12 @@ namespace GitHubSharp.Controllers
         {
             get { return RepositoryController.Uri + "/milestones"; }
         }
+
+        public GitHubRequest<MilestoneModel> Create(string title, bool open, string description, DateTime dueDate)
+        {
+            return GitHubRequest.Post<MilestoneModel>(Uri,
+                new {Title = title, State = open ? "open" : "closed", Description = description, DueOn = dueDate});
+        }
     }
 }
 

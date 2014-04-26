@@ -153,6 +153,11 @@ namespace GitHubSharp.Controllers
             get { return new MilestonesController(Client, this); }
         }
 
+        public LabelsController Labels
+        {
+            get { return new LabelsController(Client, this); }
+        }
+
         public RepositoryController(Client client, string user, string repo)
             : base(client)
         {
@@ -304,11 +309,6 @@ namespace GitHubSharp.Controllers
         public GitHubRequest<List<RepositoryModel>> GetForks(string sort = "newest", int page = 1, int perPage = 100)
         {
             return GitHubRequest.Get<List<RepositoryModel>>(Uri + "/forks",  new { page = page, per_page = perPage, sort = sort });
-        }
-
-        public GitHubRequest<List<LabelModel>> GetLabels(int page = 1, int perPage = 100)
-        {
-            return GitHubRequest.Get<List<LabelModel>>(Uri + "/labels",  new { page = page, per_page = perPage });
         }
 
         public override string Uri

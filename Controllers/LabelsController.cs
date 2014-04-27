@@ -47,9 +47,9 @@ namespace GitHubSharp.Controllers
             Name = name;
         }
 
-        public void Delete()
+        public GitHubRequest Delete()
         {
-            GitHubRequest.Delete(Uri);
+            return GitHubRequest.Delete(Uri);
         }
 
         public GitHubRequest<LabelModel> Update(string title, string color)
@@ -59,7 +59,7 @@ namespace GitHubSharp.Controllers
 
         public override string Uri
         {
-            get { return Parent.Uri + "/" + Name; }
+            get { return Parent.Uri + "/" + System.Uri.EscapeDataString(Name); }
         }
     }
 }

@@ -14,9 +14,9 @@ namespace GitHubSharp.Controllers
             RepositoryController = repository;
         }
 
-        public GitHubRequest<List<MilestoneModel>> GetAll(int page = 1, int perPage = 100)
+        public GitHubRequest<List<MilestoneModel>> GetAll(bool opened = true, string sort = "due_date", string direction = "desc")
         {
-            return GitHubRequest.Get<List<MilestoneModel>>(Uri, new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<MilestoneModel>>(Uri, new { state = opened ? "open" : "closed", sort, direction });
         }
 
         public override string Uri

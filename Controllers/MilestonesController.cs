@@ -19,6 +19,11 @@ namespace GitHubSharp.Controllers
             return GitHubRequest.Get<List<MilestoneModel>>(Uri, new { state = opened ? "open" : "closed", sort, direction });
         }
 
+        public GitHubRequest<MilestoneModel> Get(int milestoneNumber)
+        {
+            return GitHubRequest.Get<MilestoneModel>(Uri + "/" + milestoneNumber);
+        }
+
         public override string Uri
         {
             get { return RepositoryController.Uri + "/milestones"; }

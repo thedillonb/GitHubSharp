@@ -147,9 +147,9 @@ namespace GitHubSharp.Controllers
 			return GitHubRequest.Patch<IssueModel>(Uri, new { milestone });
 		} 
 
-		public GitHubRequest<IssueModel> UpdateLabels(string[] labels)
+		public GitHubRequest<IssueModel> UpdateLabels(IEnumerable<string> labels)
 		{
-			return GitHubRequest.Patch<IssueModel>(Uri, new { labels });
+			return GitHubRequest.Patch<IssueModel>(Uri, new { labels = labels.ToArray() });
 		} 
 
         public GitHubRequest<IssueModel> UpdateState(string state)

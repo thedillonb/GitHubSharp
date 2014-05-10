@@ -10,7 +10,7 @@ namespace GitHubSharp.Models
         public string Id { get; set; }
         public string Description { get; set; }
 		public bool? Public { get; set; }
-        public BasicUserModel User { get; set; }
+        public BasicUserModel Owner { get; set; }
         public Dictionary<string, GistFileModel> Files { get; set; }
         public long Comments { get; set; }
         public string CommentsUrl { get; set; }

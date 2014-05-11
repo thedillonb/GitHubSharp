@@ -25,7 +25,7 @@ namespace GitHubSharp.Models
 
         public string Email { get; set; }
 
-        public bool Hireable { get; set; }
+        public bool? Hireable { get; set; }
 
         public string Bio { get; set; }
 

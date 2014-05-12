@@ -1,16 +1,13 @@
 using System;
+using System.Threading.Tasks;
 
 namespace GitHubSharp
 {
     public interface ICache
     {
-        bool Exists(string url);
+        T Get<T>(string url);
 
-        string GetETag(string url);
-
-        byte[] Get(string url);
-
-        void Set(string url, byte[] data, string etag);
+        void Set<T>(string url, T data);
     }
 }
 

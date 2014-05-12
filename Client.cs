@@ -173,7 +173,7 @@ namespace GitHubSharp
 
             var c = new Client();
             var request = GitHubRequest.Post<AccessTokenModel>(domainUri, new { client_id = clientId, client_secret = clientSecret, code, redirect_uri = redirectUri });
-            var response = await c.ExecuteAsync(request);
+            var response = await c.ExecuteAsync(request).ConfigureAwait(false);
             return response.Data;
         }
 
@@ -195,59 +195,56 @@ namespace GitHubSharp
             var url = new StringBuilder().Append(githubRequest.Url);
             if (githubRequest.Args != null)
                 url.Append(ToQueryString(ObjectToDictionaryConverter.Convert(githubRequest.Args).ToArray()));
+            var absoluteUrl = url.ToString();
 
-            using (var request = new HttpRequestMessage(HttpMethod.Get, url.ToString()))
+            // If there is no cache, just directly execute and parse. Nothing more
+            if (Cache == null)
             {
-                // If there is no cache, just directly execute and parse. Nothing more
-                if (Cache == null)
+                using (var request = new HttpRequestMessage(HttpMethod.Get, absoluteUrl))
                 {
-                    using (var requestResponse = await ExecuteRequest(request))
+                    using (var requestResponse = await ExecuteRequest(request).ConfigureAwait(false))
                     {
-                        return await ParseResponse<T>(requestResponse);
+                        return await ParseResponse<T>(requestResponse).ConfigureAwait(false);
                     }
                 }
+            }
 
-                //Build the absolute URI for the cache
-                var absoluteUri = url.ToString(); //_client.BuildUri(request).AbsoluteUri;
+            // Attempt to get the cached response
+            GitHubResponse<T> cachedResponse = null;
 
-                HttpResponseMessage response = null;
-                var retrievedFromCache = false;
-
+            if (githubRequest.RequestFromCache || githubRequest.CheckIfModified)
+            {
                 try
                 {
-                    // If the request has UseCache enabled then attempt to get it from our cache
-                    if (githubRequest.RequestFromCache)
+                    cachedResponse = Cache.Get<GitHubResponse<T>>(absoluteUrl);
+                    if (githubRequest.RequestFromCache && cachedResponse != null)
                     {
-                        response = GetFromCache(absoluteUri);
-                        retrievedFromCache = response != null;
+                        cachedResponse.WasCached = true;
+                        return cachedResponse;
                     }
-                    else
-                    {
-                        var etag = githubRequest.CheckIfModified ? Cache.GetETag(absoluteUri) : null;
-                        if (etag != null)
-                            request.Headers.Add("If-None-Match", string.Format("\"{0}\"", etag));
-                    }
+                }
+                catch
+                {
+                }
+            }
 
-                    if (response == null)
-                        response = await ExecuteRequest(request);
-                    var parsedResponse = await ParseResponse<T>(response);
+            using (var request = new HttpRequestMessage(HttpMethod.Get, absoluteUrl))
+            {
 
-                    if (retrievedFromCache)
-                        parsedResponse.WasCached = true;
-                    else if (githubRequest.CacheResponse)
-                    {
-                        // ParseResponse will throw an exception if it's not a good response.
-                        // So, if we get here, it means that the response is OK to cache
-                        SetCache(absoluteUri, response, parsedResponse.ETag);
-                    }
+                var etag = (githubRequest.CheckIfModified && cachedResponse != null) ? cachedResponse.ETag : null;
+                if (etag != null)
+                    request.Headers.Add("If-None-Match", string.Format("\"{0}\"", etag));
+
+                using (var response = await ExecuteRequest(request).ConfigureAwait(false))
+                {
+                    var parsedResponse = await ParseResponse<T>(response).ConfigureAwait(false);
+
+                    if (githubRequest.CacheResponse)
+                        Cache.Set(absoluteUrl, parsedResponse);
 
                     return parsedResponse;
                 }
-                finally
-                {
-                    if (response != null)
-                        response.Dispose();
-                }
+     
             }
         }
 
@@ -267,74 +264,6 @@ namespace GitHubSharp
             return r;
         }
 
-        private void SetCache(string uri, HttpResponseMessage response, string etag)
-        {
-            try
-            {
-                var sb = new StringBuilder();
-                sb.AppendLine(((int)response.StatusCode).ToString());
-                foreach (var header in response.Headers)
-                {
-                    foreach (var h in header.Value)
-                        sb.Append(header.Key).Append(": ").AppendLine(h);
-                }
-
-                sb.AppendLine();
-                sb.Append(response.Content.ReadAsStringAsync().Result);
-                Cache.Set(uri, Encoding.UTF8.GetBytes(sb.ToString()), etag);
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine("Unable to set cache: " + e.Message);
-            }
-        }
-
-        private HttpResponseMessage GetFromCache(string uri)
-        {
-            try
-            {
-                var data = Cache.Get(uri);
-                if (data == null)
-                    return null;
-
-                using (var ms = new System.IO.MemoryStream(data))
-                {
-                    var newline = new System.IO.StreamReader(ms, Encoding.UTF8);
-
-                    var statusLine = newline.ReadLine();
-                    if (statusLine.Length > 32)
-                        return null;
-
-                    var response = new HttpResponseMessage((HttpStatusCode)Convert.ToInt32(statusLine));
-
-                    while (true)
-                    {
-                        var line = newline.ReadLine();
-                        if (line.Length == 0)
-                            break;
-
-                        try
-                        {
-                            var header = line.Split(new [] { ':' }, 2);
-                            response.Headers.Add(header[0], header[1].Trim());
-                        }
-                        catch
-                        {
-                            // Stupid bug with Vary header... It's a good thing we don't care about it
-                        }
-                    }
-
-                    response.Content = new StringContent(newline.ReadToEnd());
-                    return response;
-                }
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine("Unable to deserialize header: " + e.Message);
-                return null;
-            }
-        }
-        
         /// <summary>
         /// Makes a 'PUT' request to the server
         /// </summary>
@@ -342,9 +271,9 @@ namespace GitHubSharp
         {
             using (var request = CreatePutRequest(gitHubRequest))
             {
-                using (var response = await ExecuteRequest(request))
+                using (var response = await ExecuteRequest(request).ConfigureAwait(false))
                 {
-                    return await ParseResponse<T>(response);
+                    return await ParseResponse<T>(response).ConfigureAwait(false);
                 }
             }
         }
@@ -356,9 +285,9 @@ namespace GitHubSharp
         {
             using (var request = CreatePutRequest(gitHubRequest))
             {
-                using (var response = await ExecuteRequest(request))
+                using (var response = await ExecuteRequest(request).ConfigureAwait(false))
                 {
-                    return await ParseResponse(response);
+                    return await ParseResponse(response).ConfigureAwait(false);
                 }
             }
         }
@@ -376,9 +305,9 @@ namespace GitHubSharp
                     r.Content = new StringContent(serialized, Encoding.UTF8, "application/json");
                 }
 
-                using (var response = await ExecuteRequest(r))
+                using (var response = await ExecuteRequest(r).ConfigureAwait(false))
                 {
-                    return await ParseResponse<T>(response);
+                    return await ParseResponse<T>(response).ConfigureAwait(false);
                 }
             }
         }
@@ -390,9 +319,9 @@ namespace GitHubSharp
         {
             using (var r = new HttpRequestMessage(HttpMethod.Delete, request.Url))
             {
-                using (var response = await ExecuteRequest(r))
+                using (var response = await ExecuteRequest(r).ConfigureAwait(false))
                 {
-                    return await ParseResponse(response);
+                    return await ParseResponse(response).ConfigureAwait(false);
                 }
             }
         }
@@ -414,9 +343,9 @@ namespace GitHubSharp
         {
             using (var request = CreatePatchRequest(gitHubRequest))
             {
-                using (var response = await ExecuteRequest(request))
+                using (var response = await ExecuteRequest(request).ConfigureAwait(false))
                 {
-                    return await ParseResponse<T>(response);
+                    return await ParseResponse<T>(response).ConfigureAwait(false);
                 }
             }
         }
@@ -425,9 +354,9 @@ namespace GitHubSharp
         {
             using (var request = CreatePatchRequest(gitHubRequest))
             {
-                using (var response = await ExecuteRequest(request))
+                using (var response = await ExecuteRequest(request).ConfigureAwait(false))
                 {
-                    return await ParseResponse(response);
+                    return await ParseResponse(response).ConfigureAwait(false);
                 }
             }
         }
@@ -475,7 +404,7 @@ namespace GitHubSharp
                 return ghr;
             }
 
-            var content = await response.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (response.StatusCode < (HttpStatusCode)200 || response.StatusCode >= (HttpStatusCode)300)
                 throw StatusCodeException.FactoryCreate(response, content);
@@ -525,18 +454,6 @@ namespace GitHubSharp
                 // Provide a better error message
                 throw new WebException("Unable to communicate with GitHub. Please check your connection and try again.", e);
             }
-        }
-
-        public GitHubResponse Execute(GitHubRequest request)
-        {
-            var r = ExecuteAsync(request);
-            return r.Result;
-        }
-
-        public GitHubResponse<T> Execute<T>(GitHubRequest<T> request) where T : new()
-        {
-            var r = ExecuteAsync<T>(request);
-            return r.Result;
         }
 
         public Task<GitHubResponse> ExecuteAsync(GitHubRequest request)

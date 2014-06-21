@@ -215,6 +215,11 @@ namespace GitHubSharp.Controllers
 			return GitHubRequest.Get<ContentModel>(Uri + "/contents" + path, new { Ref = branch });
 		}
 
+        public GitHubRequest<List<ReleaseModel>> GetReleases(int page = 1, int perPage = 100)
+        {
+            return GitHubRequest.Get<List<ReleaseModel>>(Uri + "/releases", new { page = page, per_page = perPage });
+        } 
+
 		public GitHubRequest<ContentUpdateModel> UpdateContentFile(string path, string message, string content, string sha, string branch = "master")
 		{
 			if (null == content)

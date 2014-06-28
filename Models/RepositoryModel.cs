@@ -20,6 +20,7 @@ namespace GitHubSharp.Models
         public int ForksCount { get; set; }
         public int Watchers { get; set; }
         public int WatchersCount { get; set; }
+        public int SubscribersCount { get; set; }
         public long Size { get; set; }
         public string MasterBranch { get; set; }
         public int OpenIssues { get; set; }

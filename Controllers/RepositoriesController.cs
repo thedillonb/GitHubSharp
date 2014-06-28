@@ -285,6 +285,11 @@ namespace GitHubSharp.Controllers
             return GitHubRequest.Get<List<BasicUserModel>>(Uri + "/stargazers",  new { page = page, per_page = perPage });
         }
 
+        public GitHubRequest<List<BasicUserModel>> GetWatchers(int page = 1, int perPage = 100)
+        {
+            return GitHubRequest.Get<List<BasicUserModel>>(Uri + "/subscribers",  new { page = page, per_page = perPage });
+        }
+
 
         public GitHubRequest<bool> IsStarred()
         {

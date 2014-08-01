@@ -2,7 +2,7 @@ using System;
 
 namespace GitHubSharp.Models
 {
-	[Serializable]
+	
     public class ReleaseModel
     {
 		public string Url { get; set; }

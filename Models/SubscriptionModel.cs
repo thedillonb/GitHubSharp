@@ -2,7 +2,7 @@
 
 namespace GitHubSharp.Models
 {
-    [Serializable]
+    
     public class SubscriptionModel
     {
         public bool Subscribed { get; set; }

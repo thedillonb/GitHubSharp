@@ -12,7 +12,7 @@ namespace GitHubSharp
         PATCH
     }
 
-    [Serializable]
+    
     public class GitHubRequest
     {
         public RequestMethod RequestMethod { get; private set; }
@@ -76,7 +76,7 @@ namespace GitHubSharp
         }
     }
 
-    [Serializable]
+    
     public class GitHubRequest<T> : GitHubRequest where T : new()
     {
         public GitHubRequest(string url, RequestMethod method, object args = null)

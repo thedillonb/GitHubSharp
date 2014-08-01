@@ -2,7 +2,7 @@ using System;
 
 namespace GitHubSharp
 {
-    [Serializable]
+    
     public class GitHubResponse
     {
         public int StatusCode { get; set; }
@@ -16,7 +16,7 @@ namespace GitHubSharp
         public bool WasCached { get; set; }
     }
 
-    [Serializable]
+    
     public class GitHubResponse<T> : GitHubResponse where T : new()
     {
         public T Data { get; set; }

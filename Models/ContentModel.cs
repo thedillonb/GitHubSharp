@@ -2,7 +2,6 @@ using System;
 
 namespace GitHubSharp.Models
 {
-	[Serializable]
 	public class ContentUpdateModel
     {
 		public SlimContentModel Content { get; set; }
@@ -10,7 +9,6 @@ namespace GitHubSharp.Models
 		public CommitModel Commit { get; set; }
     }
 
-	[Serializable]
 	public class SlimContentModel
 	{
 		public string Name { get; set; }

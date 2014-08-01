@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace GitHubSharp.Models
 {
-    [Serializable]
     public class AuthorizationModel
     {
         public long Id { get; set; }
@@ -15,7 +14,6 @@ namespace GitHubSharp.Models
 		public DateTimeOffset UpdatedAt { get; set; }
 		public DateTimeOffset CreatedAt { get; set; }
 
-        [Serializable]
         public class AppModel
         {
             public string Url { get; set; }
@@ -24,7 +22,6 @@ namespace GitHubSharp.Models
         }
     }
 
-    [Serializable]
     public class AccessTokenModel
     {
         public string AccessToken { get; set; }

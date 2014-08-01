@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GitHubSharp.Models
 {
-    [Serializable]
+    
     public class GistModel
     {
         public string Url { get; set; }
@@ -23,7 +23,7 @@ namespace GitHubSharp.Models
         public List<HistoryModel> History { get; set; }
     }
 
-    [Serializable]
+    
     public class GistFileModel
     {
         public long Size { get; set; }
@@ -34,7 +34,7 @@ namespace GitHubSharp.Models
         public string Language { get; set; }
     }
 
-    [Serializable]
+    
     public class GistCommentModel
     {
         public long Id { get; set; }
@@ -44,13 +44,13 @@ namespace GitHubSharp.Models
         public DateTimeOffset CreatedAt { get; set; }
     }
 
-    [Serializable]
+    
     public class GistEditModel
     {
         public string Description { get; set; }
         public Dictionary<string, File> Files { get; set; }
     
-        [Serializable]
+        
         public class File
         {
             public string Filename { get; set; }
@@ -58,14 +58,14 @@ namespace GitHubSharp.Models
         }
     }
 
-    [Serializable]
+    
     public class GistCreateModel
     {
         public string Description { get; set; }
 		public bool? Public { get; set; }
         public Dictionary<string, File> Files { get; set; }
 
-        [Serializable]
+        
         public class File
         {
             public string Content { get; set; }

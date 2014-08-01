@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GitHubSharp.Models
 {
-    [Serializable]
+    
     public class EventModel
     {
         private Dictionary<string, object> _payload;
@@ -116,14 +116,14 @@ namespace GitHubSharp.Models
             }
         }
 
-		[Serializable]
+		
 		public class ReleaseEvent
 		{
 			public string Action { get; set; }
 			public ReleaseModel Release { get; set; }
 		}
 
-        [Serializable]
+        
         public class RepoModel
         {
             public long Id { get; set; }
@@ -131,13 +131,13 @@ namespace GitHubSharp.Models
             public string Url { get; set; }
         }
 
-        [Serializable]
+        
         public class CommitCommentEvent
         {
             public CommentModel Comment { get; set; }
         }
 
-        [Serializable]
+        
         public class CreateEvent
         {
             public string RefType { get; set; }
@@ -146,31 +146,31 @@ namespace GitHubSharp.Models
             public string Description { get; set; }
         }
 
-        [Serializable]
+        
         public class DeleteEvent
         {
             public string RefType { get; set; }
             public string Ref { get; set; }
         }
 
-        [Serializable]
+        
         public class DownloadEvent
         {
         }
 
-        [Serializable]
+        
         public class FollowEvent
         {
             public BasicUserModel Target { get; set; }
         }
 
-        [Serializable]
+        
         public class ForkEvent
         {
             public RepositoryModel Forkee { get; set; }
         }
 
-        [Serializable]
+        
         public class ForkApplyEvent
         {
             public string Head { get; set; }
@@ -178,19 +178,19 @@ namespace GitHubSharp.Models
             public string After { get; set; }
         }
 
-        [Serializable]
+        
         public class GistEvent
         {
             public string Action { get; set; }
             public GistModel Gist { get; set; }
         }
 
-        [Serializable]
+        
         public class GollumEvent
         {
             public List<PageModel> Pages { get; set; }
 
-            [Serializable]
+            
             public class PageModel
             {
                 public string PageName { get; set; }
@@ -201,7 +201,7 @@ namespace GitHubSharp.Models
             }
         }
 
-        [Serializable]
+        
         public class IssueCommentEvent
         {
             public string Action { get; set; }
@@ -209,26 +209,26 @@ namespace GitHubSharp.Models
             public CommentModel Comment { get; set; }
         }
 
-        [Serializable]
+        
         public class IssuesEvent
         {
             public string Action { get; set; }
             public IssueModel Issue { get; set; }
         }
 
-        [Serializable]
+        
         public class MemberEvent
         {
             public BasicUserModel Member { get; set; }
             public string Action { get; set; }
         }
 
-        [Serializable]
+        
         public class PublicEvent
         {
         }
 
-        [Serializable]
+        
         public class PullRequestEvent
         {
             public string Action { get; set; }
@@ -236,13 +236,13 @@ namespace GitHubSharp.Models
             public PullRequestModel PullRequest { get; set; }
         }
 
-        [Serializable]
+        
         public class PullRequestReviewCommentEvent
         {
             public CommentModel Comment { get; set; }
         }
 
-        [Serializable]
+        
         public class PushEvent
         {
             public string Before { get; set; }
@@ -250,7 +250,7 @@ namespace GitHubSharp.Models
             public long Size { get; set; }
             public List<CommitModel> Commits { get; set; }
 
-            [Serializable]
+            
             public class CommitModel
             {
                 public CommitAuthorModel Author { get; set; }
@@ -259,7 +259,7 @@ namespace GitHubSharp.Models
                 public string Message { get; set; }
                 public string Sha { get; set; }
 
-                [Serializable]
+                
                 public class CommitAuthorModel
                 {
                     public string Name { get; set; }
@@ -268,7 +268,7 @@ namespace GitHubSharp.Models
             }
         }
 
-        [Serializable]
+        
         public class TeamAddEvent
         {
             public TeamModel Team { get; set; }
@@ -276,7 +276,7 @@ namespace GitHubSharp.Models
             public RepositoryModel Repo { get; set; }
         }
 
-        [Serializable]
+        
         public class WatchEvent
         {
             public string Action { get; set; }

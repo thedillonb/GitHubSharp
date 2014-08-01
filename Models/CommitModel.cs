@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GitHubSharp.Models
 {
-    [Serializable]
+    
     public class CommitModel
     {
         public string Url { get; set; }
@@ -16,14 +16,14 @@ namespace GitHubSharp.Models
         public ChangeStatusModel Stats { get; set; }
         public List<CommitFileModel> Files { get; set; } 
 
-        [Serializable]
+        
         public class CommitParentModel
         {
             public string Sha { get; set; }
             public string Url { get; set; }
         }
 
-        [Serializable]
+        
         public class CommitFileModel
         {
             public string Filename { get; set; }
@@ -37,21 +37,21 @@ namespace GitHubSharp.Models
             public string ContentsUrl { get; set; }
         }
 
-        [Serializable]
+        
         public class SingleFileCommitModel : CommitModel
         {
             public List<SingleFileCommitFileReference> Added { get; set; }
             public List<SingleFileCommitFileReference> Removed { get; set; }
             public List<SingleFileCommitFileReference> Modified { get; set; }
 
-            [Serializable]
+            
             public class SingleFileCommitFileReference
             {
                 public string Filename { get; set; }
             }
         }
 
-        [Serializable]
+        
         public class CommitDetailModel
         {
             public string Url { get; set; }
@@ -61,7 +61,7 @@ namespace GitHubSharp.Models
             public string Message { get; set; }
             public CommitParentModel Tree { get; set; }
 
-            [Serializable]
+            
             public class AuthorModel
             {
                 public string Name { get; set; }

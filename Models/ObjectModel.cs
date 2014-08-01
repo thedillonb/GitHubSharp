@@ -3,7 +3,7 @@ using System;
 
 namespace GitHubSharp.Models
 {
-    [Serializable]
+    
     public class ObjectModel
     {
         public string Name { get; set; }
@@ -16,7 +16,7 @@ namespace GitHubSharp.Models
         }
     }
 
-    [Serializable]
+    
     public class BlobModel
     {
         public string Name { get; set; }
@@ -27,7 +27,7 @@ namespace GitHubSharp.Models
         public string Data { get; set; }
     }
 
-    [Serializable]
+    
     public enum ObjectItemType
     {
         Blob,

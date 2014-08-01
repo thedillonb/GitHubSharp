@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 
 namespace GitHubSharp.Utils
 {
@@ -7,7 +8,7 @@ namespace GitHubSharp.Utils
         public static Dictionary<string, string> Convert(object obj)
         {
             var dictionary = new Dictionary<string, string>();
-            var properties = obj.GetType().GetProperties();
+            var properties = obj.GetType().GetRuntimeProperties();
             foreach (var propertyInfo in properties)
             {
                 var value = propertyInfo.GetValue(obj, null);

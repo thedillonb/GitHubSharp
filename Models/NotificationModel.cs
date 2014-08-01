@@ -2,7 +2,7 @@ using System;
 
 namespace GitHubSharp.Models
 {
-    [Serializable]
+    
     public class NotificationModel
     {
         public string Id { get; set; } // NB: API currently returns this as string which is Weird
@@ -14,7 +14,7 @@ namespace GitHubSharp.Models
 		public DateTimeOffset? LastReadAt { get; set; }
         public string Url { get; set; }
 
-        [Serializable]
+        
         public class SubjectModel
         {
             public string Title { get; set; }

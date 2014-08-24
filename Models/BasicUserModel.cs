@@ -10,6 +10,7 @@ namespace GitHubSharp.Models
         public string AvatarUrl { get; set; }
         public string GravatarId { get; set; }
         public string Url { get; set; }
+        public string Type { get; set; }
 
         protected bool Equals(BasicUserModel other)
         {

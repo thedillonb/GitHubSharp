@@ -7,6 +7,8 @@ namespace GitHubSharp.Models
     public class CommitModel
     {
         public string Url { get; set; }
+        public string HtmlUrl { get; set; }
+        public string CommentsUrl { get; set; }
         public string Sha { get; set; }
         public CommitDetailModel Commit { get; set; }
         public BasicUserModel Author { get; set; }

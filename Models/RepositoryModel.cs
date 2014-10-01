@@ -22,7 +22,7 @@ namespace GitHubSharp.Models
         public int WatchersCount { get; set; }
         public int SubscribersCount { get; set; }
         public long Size { get; set; }
-        public string MasterBranch { get; set; }
+        public string DefaultBranch { get; set; }
         public int OpenIssues { get; set; }
 		public DateTimeOffset? PushedAt { get; set; }
 		public DateTimeOffset CreatedAt { get; set; }

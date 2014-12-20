@@ -6,6 +6,8 @@ namespace GitHubSharp.Controllers
 {
     public class CommitsController : Controller
     {
+        public string FilePath { get; set; }
+
         public RepositoryController RepositoryController { get; private set; }
 
         public CommitController this[string key]
@@ -29,7 +31,7 @@ namespace GitHubSharp.Controllers
 
         public override string Uri
         {
-            get { return RepositoryController.Uri + "/commits"; }
+            get { return RepositoryController.Uri + "/commits" + (string.IsNullOrEmpty(this.FilePath) ? string.Empty : "?path=" + this.FilePath); }
         }
     }
 

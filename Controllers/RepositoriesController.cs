@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace GitHubSharp.Controllers
 {
@@ -200,25 +201,66 @@ namespace GitHubSharp.Controllers
             return GitHubRequest.Get<List<EventModel>>(Uri + "/networks/" + User + "/" + Repo + "/events",  new { page = page, per_page = perPage });
         }
 
-        public GitHubRequest<ContentModel> GetReadme(string branch = "master")
+        public GitHubRequest<ContentModel> GetReadme(string branch = null)
         {
             return GitHubRequest.Get<ContentModel>(Uri + "/readme", new { Ref = branch });
         }
 
-        public GitHubRequest<List<ContentModel>> GetContent(string path = "/", string branch = "master")
+        public async Task<string> GetReadmeRendered(string branch = null)
         {
-            return GitHubRequest.Get<List<ContentModel>>(Uri + "/contents" + path, new { Ref = branch });
+            var r = string.IsNullOrEmpty(branch) ? string.Empty : "?ref=" + branch;
+            using (var request = new HttpRequestMessage(HttpMethod.Get, Uri + "/readme" + r))
+            {
+                request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github.v3.html"));
+                using (var requestResponse = await Client.ExecuteRequest(request).ConfigureAwait(false))
+                {
+                    return await requestResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+            }
         }
 
-		public GitHubRequest<ContentModel> GetContentFile(string path = "/", string branch = "master")
+        public GitHubRequest<List<ContentModel>> GetContent(string path = "", string branch = "master")
+        {
+            return GitHubRequest.Get<List<ContentModel>>(Uri + "/contents/" + path.TrimStart('/'), new { Ref = branch });
+        }
+
+        public GitHubRequest<ContentModel> GetContentFile(string path = "", string branch = "master")
 		{
-			return GitHubRequest.Get<ContentModel>(Uri + "/contents" + path, new { Ref = branch });
+            return GitHubRequest.Get<ContentModel>(Uri + "/contents/" + path.TrimStart('/'), new { Ref = branch });
 		}
+
+        public async Task<string> GetContentFileRendered(string path = "", string branch = "master")
+        {
+            using (var request = new HttpRequestMessage(HttpMethod.Get, Uri + "/contents/" + path.TrimStart('/') + "?ref=" + branch))
+            {
+                request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github.v3.html"));
+                using (var requestResponse = await Client.ExecuteRequest(request).ConfigureAwait(false))
+                {
+                    return await requestResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+            }
+        }
 
         public GitHubRequest<List<ReleaseModel>> GetReleases(int page = 1, int perPage = 100)
         {
             return GitHubRequest.Get<List<ReleaseModel>>(Uri + "/releases", new { page = page, per_page = perPage });
         } 
+
+        public GitHubRequest<ReleaseModel> GetRelease(long id)
+        {
+            return GitHubRequest.Get<ReleaseModel>(Uri + "/releases/" + id);
+        } 
+
+        public GitHubRequest<ContentModel> CreateContentFile(string path, string message, string content, string branch = "master")
+        {
+            if (null == content)
+                throw new Exception("Content cannot be null!");
+            if (string.IsNullOrEmpty(message))
+                throw new Exception("Commit message cannot be empty!");
+
+            content = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(content));
+            return GitHubRequest.Put<ContentModel>(Uri + "/contents" + path, new { message, content });
+        }
 
 		public GitHubRequest<ContentUpdateModel> UpdateContentFile(string path, string message, string content, string sha, string branch = "master")
 		{

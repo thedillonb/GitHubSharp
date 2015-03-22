@@ -18,6 +18,8 @@ namespace GitHubSharp.Models
 
         public string Body { get; set; }
 
+        public string BodyHtml { get; set; }
+
         public BasicUserModel User { get; set; }
 
         public List<LabelModel> Labels { get; set; }
@@ -162,6 +164,8 @@ namespace GitHubSharp.Models
         public string Url { get; set; }
 
         public string Body { get; set; }
+
+        public string BodyHtml { get; set; }
 
         public BasicUserModel User { get; set; }
 

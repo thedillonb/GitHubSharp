@@ -172,9 +172,16 @@ namespace GitHubSharp
             domainUri += "login/oauth/access_token";
 
             var c = new Client();
-            var request = GitHubRequest.Post<AccessTokenModel>(domainUri, new { client_id = clientId, client_secret = clientSecret, code, redirect_uri = redirectUri });
-            var response = await c.ExecuteAsync(request).ConfigureAwait(false);
-            return response.Data;
+
+            using (var r = new HttpRequestMessage(HttpMethod.Post, domainUri))
+            {
+                var args = new { client_id = clientId, client_secret = clientSecret, code, redirect_uri = redirectUri };
+                var serialized = Serializer.Serialize(args);
+                r.Content = new StringContent(serialized, Encoding.UTF8, "application/json");
+                r.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                using (var response = await c.ExecuteRequest(r).ConfigureAwait(false))
+                    return (await ParseResponse<AccessTokenModel>(response).ConfigureAwait(false)).Data;
+            }
         }
 
         private static string ToQueryString(IEnumerable<KeyValuePair<string, string>> nvc)
@@ -441,7 +448,8 @@ namespace GitHubSharp
         {
             try
             {
-                request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                if (request.Headers.Accept.Count == 0)
+                    request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github.v3.full+json"));
                 return await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
             }
             catch (TaskCanceledException e)

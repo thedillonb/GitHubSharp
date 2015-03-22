@@ -10,6 +10,7 @@ namespace GitHubSharp.Models
         public string Url { get; set; }
         public string Id { get; set; }
         public string Body { get; set; }
+        public string BodyHtml { get; set; }
         public string Path { get; set; }
         public int? Position { get; set; }
         public int? Line { get; set; }

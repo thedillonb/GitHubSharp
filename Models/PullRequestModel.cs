@@ -24,6 +24,8 @@ namespace GitHubSharp.Models
 
         public string Body { get; set; }
 
+        public string BodyHtml { get; set; }
+
         public DateTimeOffset CreatedAt { get; set; }
 
         public DateTimeOffset UpdatedAt { get; set; }

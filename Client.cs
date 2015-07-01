@@ -187,7 +187,7 @@ namespace GitHubSharp
         private static string ToQueryString(IEnumerable<KeyValuePair<string, string>> nvc)
         {
             var array = (from key in nvc
-                select string.Format("{0}={1}", Uri.EscapeUriString(key.Key), Uri.EscapeUriString(key.Value)))
+				select string.Format("{0}={1}", Uri.EscapeDataString(key.Key), Uri.EscapeDataString(key.Value)))
                 .ToArray();
             return "?" + string.Join("&", array);
         }

@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{07CD9573-CF93-4CF9-B3D6-501D30B6AD12}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GitHubSharp</RootNamespace>
+    <AssemblyName>GitHubSharp</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="CacheObject.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="Controllers\AuthorizationsController.cs" />
+    <Compile Include="Controllers\CommentsController.cs" />
+    <Compile Include="Controllers\CommitsController.cs" />
+    <Compile Include="Controllers\Controller.cs" />
+    <Compile Include="Controllers\GistsController.cs" />
+    <Compile Include="Controllers\IssuesController.cs" />
+    <Compile Include="Controllers\LabelsController.cs" />
+    <Compile Include="Controllers\MarkdownController.cs" />
+    <Compile Include="Controllers\MilestonesController.cs" />
+    <Compile Include="Controllers\NotificationsController.cs" />
+    <Compile Include="Controllers\OrganizationsController.cs" />
+    <Compile Include="Controllers\PullRequestsController.cs" />
+    <Compile Include="Controllers\RepositoriesController.cs" />
+    <Compile Include="Controllers\TeamsController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="GitHubRequest.cs" />
+    <Compile Include="GitHubResponse.cs" />
+    <Compile Include="ICache.cs" />
+    <Compile Include="IJsonSerializer.cs" />
+    <Compile Include="Models\AuthorizationModel.cs" />
+    <Compile Include="Models\BasicUserModel.cs" />
+    <Compile Include="Models\ChangeStatusModel.cs" />
+    <Compile Include="Models\CommentModel.cs" />
+    <Compile Include="Models\CommitModel.cs" />
+    <Compile Include="Models\ContentModel.cs" />
+    <Compile Include="Models\ErrorModel.cs" />
+    <Compile Include="Models\EventModel.cs" />
+    <Compile Include="Models\ForkModel.cs" />
+    <Compile Include="Models\GistModel.cs" />
+    <Compile Include="Models\HistoryModel.cs" />
+    <Compile Include="Models\IssueModel.cs" />
+    <Compile Include="Models\NotificationModel.cs" />
+    <Compile Include="Models\ObjectModel.cs" />
+    <Compile Include="Models\PullRequestModel.cs" />
+    <Compile Include="Models\ReleaseModel.cs" />
+    <Compile Include="Models\RepositoryModel.cs" />
+    <Compile Include="Models\SubscriptionModel.cs" />
+    <Compile Include="Models\TeamModel.cs" />
+    <Compile Include="Models\TreeModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleJsonSerializer.cs" />
+    <Compile Include="Utils\ObjectToDictionaryConverter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

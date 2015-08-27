@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>GitHubSharp</id>
+    <id>GitHubClient</id>
     <version>$version$</version>
-    <title>GitHubSharp</title>
+    <title>GitHub Client</title>
     <authors>Dillon Buchanan</authors>
     <owners>Dillon Buchanan</owners>
     <projectUrl>https://github.com/thedillonb/GitHubSharp</projectUrl>

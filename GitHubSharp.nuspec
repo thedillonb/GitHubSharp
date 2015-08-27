@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>GitHubSharp</id>
+    <version>$version$</version>
+    <title>GitHubSharp</title>
+    <authors>Dillon Buchanan</authors>
+    <owners>Dillon Buchanan</owners>
+    <projectUrl>https://github.com/thedillonb/GitHubSharp</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A .NET client for GitHub v3 APIs</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <tags>github</tags>
+  </metadata>
+</package>

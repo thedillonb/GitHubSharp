@@ -259,7 +259,7 @@ namespace GitHubSharp.Controllers
                 throw new Exception("Commit message cannot be empty!");
 
             content = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(content));
-            return GitHubRequest.Put<ContentModel>(Uri + "/contents" + path, new { message, content });
+            return GitHubRequest.Put<ContentModel>(Uri + "/contents" + path, new { message, content, branch });
         }
 
 		public GitHubRequest<ContentUpdateModel> UpdateContentFile(string path, string message, string content, string sha, string branch = "master")
@@ -270,7 +270,7 @@ namespace GitHubSharp.Controllers
 				throw new Exception("Commit message cannot be empty!");
 
 			content = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(content));
-			return GitHubRequest.Put<ContentUpdateModel>(Uri + "/contents" + path, new { message, content, sha });
+			return GitHubRequest.Put<ContentUpdateModel>(Uri + "/contents" + path, new { message, content, sha, branch });
 		}
 
         public GitHubRequest<TreeModel> GetTree(string sha)

@@ -1,7 +1,7 @@
 GitHubSharp
 ================
 
-**NOTICE**: Please consider using [https://github.com/octokit/octokit.net](GitHub's official C# library) for all GitHub API calls.
+**OBSOLETE NOTICE**: Please consider using [https://github.com/octokit/octokit.net](GitHub's official C# library) for all GitHub API calls.
 
 Description
 ----------------

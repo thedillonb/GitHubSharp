@@ -39,7 +39,16 @@ namespace GitHubSharp.Models
         public bool HasDownloads { get; set; }
 
         public string HtmlUrl { get; set; }
+
+		public RepositoryPermissions Permissions { get; set; }
     }
+
+	public class RepositoryPermissions
+	{
+		public bool Admin { get; set; }
+		public bool Push { get; set; }
+		public bool Pull { get; set; }
+	}
 
     
     public class RepositorySearchModel

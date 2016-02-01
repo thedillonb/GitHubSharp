@@ -296,6 +296,11 @@ namespace GitHubSharp.Controllers
             return GitHubRequest.Get<bool>(Client.ApiUri + "/user/subscriptions/" + User + "/" + Repo);
         }
 
+		public GitHubRequest<bool> IsCollaborator(string username)
+		{
+			return GitHubRequest.Get<bool>(Client.ApiUri + "/repos/" + User + "/" + Repo + "/collaborators/" + username);
+		}
+
         public GitHubRequest Watch()
         {
             return GitHubRequest.Put(Client.ApiUri + "/user/subscriptions/" + User + "/" + Repo);

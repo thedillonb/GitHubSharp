@@ -88,12 +88,6 @@ namespace GitHubSharp
         }
 
         /// <summary>
-        /// The cache backing
-        /// </summary>
-        /// <value>The cache.</value>
-        public ICache Cache { get; set; }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         private Client()
@@ -205,53 +199,12 @@ namespace GitHubSharp
             var absoluteUrl = url.ToString();
 
             // If there is no cache, just directly execute and parse. Nothing more
-            if (Cache == null)
-            {
-                using (var request = new HttpRequestMessage(HttpMethod.Get, absoluteUrl))
-                {
-                    using (var requestResponse = await ExecuteRequest(request).ConfigureAwait(false))
-                    {
-                        return await ParseResponse<T>(requestResponse).ConfigureAwait(false);
-                    }
-                }
-            }
-
-            // Attempt to get the cached response
-            GitHubResponse<T> cachedResponse = null;
-
-            if (githubRequest.RequestFromCache || githubRequest.CheckIfModified)
-            {
-                try
-                {
-                    cachedResponse = Cache.Get<GitHubResponse<T>>(absoluteUrl);
-                    if (githubRequest.RequestFromCache && cachedResponse != null)
-                    {
-                        cachedResponse.WasCached = true;
-                        return cachedResponse;
-                    }
-                }
-                catch
-                {
-                }
-            }
-
             using (var request = new HttpRequestMessage(HttpMethod.Get, absoluteUrl))
             {
-
-                var etag = (githubRequest.CheckIfModified && cachedResponse != null) ? cachedResponse.ETag : null;
-                if (etag != null)
-                    request.Headers.Add("If-None-Match", string.Format("\"{0}\"", etag));
-
-                using (var response = await ExecuteRequest(request).ConfigureAwait(false))
+                using (var requestResponse = await ExecuteRequest(request).ConfigureAwait(false))
                 {
-                    var parsedResponse = await ParseResponse<T>(response).ConfigureAwait(false);
-
-                    if (githubRequest.CacheResponse)
-                        Cache.Set(absoluteUrl, parsedResponse);
-
-                    return parsedResponse;
+                    return await ParseResponse<T>(requestResponse).ConfigureAwait(false);
                 }
-     
             }
         }
 

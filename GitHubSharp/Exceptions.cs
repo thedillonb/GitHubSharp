@@ -4,36 +4,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Net.Http.Headers;
 
 namespace GitHubSharp
 {
     public class ForbiddenException : StatusCodeException
     {
-        public ForbiddenException(string message, Dictionary<string, string> headers = null)
+		public ForbiddenException(string message, HttpResponseHeaders headers = null)
         : base(HttpStatusCode.Forbidden, message, headers) { }
     }
 
     public class NotFoundException : StatusCodeException
     {
-        public NotFoundException(string message, Dictionary<string, string> headers = null)
+		public NotFoundException(string message, HttpResponseHeaders headers = null)
         : base(HttpStatusCode.NotFound, message, headers) { }
     }
 
     public class NotModifiedException : StatusCodeException
     {
-        public NotModifiedException(string message, Dictionary<string, string> headers = null)
+		public NotModifiedException(string message, HttpResponseHeaders headers = null)
         : base(HttpStatusCode.NotModified, message, headers) { }
     }
 
     public class UnauthorizedException : StatusCodeException
     {
-        public UnauthorizedException(string message, Dictionary<string, string> headers = null)
+		public UnauthorizedException(string message, HttpResponseHeaders headers = null)
         : base(HttpStatusCode.Unauthorized, message, headers) { }
     }
 
     public class InternalServerException : StatusCodeException
     {
-        public InternalServerException(string message, Dictionary<string, string> headers = null)
+		public InternalServerException(string message, HttpResponseHeaders headers = null)
         : base(HttpStatusCode.InternalServerError, message, headers) { }
     }
 
@@ -41,14 +42,14 @@ namespace GitHubSharp
     {
         public HttpStatusCode StatusCode { get; private set; }
 
-        public Dictionary<string, string> Headers { get; private set; }
+		public HttpResponseHeaders Headers { get; private set; }
 
-        public StatusCodeException(HttpStatusCode statusCode, Dictionary<string, string> headers)
+		public StatusCodeException(HttpStatusCode statusCode, HttpResponseHeaders headers)
             : this(statusCode, statusCode.ToString(), headers)
         {
         }
 
-        public StatusCodeException(HttpStatusCode statusCode, string message, Dictionary<string, string> headers)
+		public StatusCodeException(HttpStatusCode statusCode, string message, HttpResponseHeaders headers)
             : base(message)
         {
             StatusCode = statusCode;
@@ -57,9 +58,7 @@ namespace GitHubSharp
 
 		internal static StatusCodeException FactoryCreate(HttpResponseMessage response, string data)
         {
-            var headers = new Dictionary<string, string>();
-            foreach (var h in response.Headers)
-				headers.Add(h.Key, h.Value.ToString());
+			var headers = response.Headers;
 
             string errorStr = null;
             try

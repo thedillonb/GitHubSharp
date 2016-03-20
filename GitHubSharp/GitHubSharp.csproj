@@ -33,7 +33,6 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CacheObject.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Controllers\AuthorizationsController.cs" />
     <Compile Include="Controllers\CommentsController.cs" />
@@ -53,7 +52,6 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="GitHubRequest.cs" />
     <Compile Include="GitHubResponse.cs" />
-    <Compile Include="ICache.cs" />
     <Compile Include="IJsonSerializer.cs" />
     <Compile Include="Models\AuthorizationModel.cs" />
     <Compile Include="Models\BasicUserModel.cs" />

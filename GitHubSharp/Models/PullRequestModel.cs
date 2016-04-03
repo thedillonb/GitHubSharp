@@ -42,7 +42,7 @@ namespace GitHubSharp.Models
 
         public bool? Merged { get; set; }
 
-        public bool? Mergable { get; set; }
+        public bool? Mergeable { get; set; }
 
         public BasicUserModel MergedBy { get; set; }
 

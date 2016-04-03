@@ -20,28 +20,11 @@ namespace GitHubSharp
 
         public object Args { get; private set; }
 
-        public bool RequestFromCache { get; set; }
-
-        public bool CacheResponse { get; set; }
-
-        public bool CheckIfModified { get; set; }
-
-        public bool UseCache
-        {
-            set
-            {
-                RequestFromCache = CacheResponse = CheckIfModified = value;
-            }
-        }
-
         internal GitHubRequest(string url, RequestMethod method, object args = null)
         {
             RequestMethod = method;
             Url = url;
             Args = args;
-            RequestFromCache = true;
-            CacheResponse = true;
-            CheckIfModified = true;
         }
         
         internal static GitHubRequest<T> Get<T>(string url, object args = null) where T : new()

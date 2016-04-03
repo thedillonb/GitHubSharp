@@ -18,6 +18,27 @@ namespace GitHubSharp.Models
         public ChangeStatusModel Stats { get; set; }
         public List<CommitFileModel> Files { get; set; } 
 
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (ReferenceEquals(this, obj))
+                return true;
+            if (obj.GetType() != typeof(CommitModel))
+                return false;
+            CommitModel other = (CommitModel)obj;
+            return Url == other.Url && HtmlUrl == other.HtmlUrl && CommentsUrl == other.CommentsUrl && Sha == other.Sha && Commit == other.Commit && Author == other.Author && Committer == other.Committer && Parents == other.Parents && Stats == other.Stats && Files == other.Files;
+        }
+        
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (Url != null ? Url.GetHashCode() : 0) ^ (HtmlUrl != null ? HtmlUrl.GetHashCode() : 0) ^ (CommentsUrl != null ? CommentsUrl.GetHashCode() : 0) ^ (Sha != null ? Sha.GetHashCode() : 0) ^ (Commit != null ? Commit.GetHashCode() : 0) ^ (Author != null ? Author.GetHashCode() : 0) ^ (Committer != null ? Committer.GetHashCode() : 0) ^ (Parents != null ? Parents.GetHashCode() : 0) ^ (Stats != null ? Stats.GetHashCode() : 0) ^ (Files != null ? Files.GetHashCode() : 0);
+            }
+        }
         
         public class CommitParentModel
         {
@@ -37,6 +58,27 @@ namespace GitHubSharp.Models
             public string BlobUrl { get; set; }
             public string Patch { get; set; }
             public string ContentsUrl { get; set; }
+
+            public override bool Equals(object obj)
+            {
+                if (obj == null)
+                    return false;
+                if (ReferenceEquals(this, obj))
+                    return true;
+                if (obj.GetType() != typeof(CommitFileModel))
+                    return false;
+                CommitFileModel other = (CommitFileModel)obj;
+                return Filename == other.Filename && Additions == other.Additions && Deletions == other.Deletions && Changes == other.Changes && Status == other.Status && RawUrl == other.RawUrl && BlobUrl == other.BlobUrl && Patch == other.Patch && ContentsUrl == other.ContentsUrl;
+            }
+            
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return (Filename != null ? Filename.GetHashCode() : 0) ^ (Additions != null ? Additions.GetHashCode() : 0) ^ (Deletions != null ? Deletions.GetHashCode() : 0) ^ (Changes != null ? Changes.GetHashCode() : 0) ^ (Status != null ? Status.GetHashCode() : 0) ^ (RawUrl != null ? RawUrl.GetHashCode() : 0) ^ (BlobUrl != null ? BlobUrl.GetHashCode() : 0) ^ (Patch != null ? Patch.GetHashCode() : 0) ^ (ContentsUrl != null ? ContentsUrl.GetHashCode() : 0);
+                }
+            }
         }
 
         
@@ -70,6 +112,28 @@ namespace GitHubSharp.Models
 				public DateTimeOffset Date { get; set; }
                 public string Email { get; set; }
             }
+
+            public override bool Equals(object obj)
+            {
+                if (obj == null)
+                    return false;
+                if (ReferenceEquals(this, obj))
+                    return true;
+                if (obj.GetType() != typeof(CommitDetailModel))
+                    return false;
+                CommitDetailModel other = (CommitDetailModel)obj;
+                return Url == other.Url && Sha == other.Sha && Author == other.Author && Committer == other.Committer && Message == other.Message && Tree == other.Tree;
+            }
+            
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return (Url != null ? Url.GetHashCode() : 0) ^ (Sha != null ? Sha.GetHashCode() : 0) ^ (Author != null ? Author.GetHashCode() : 0) ^ (Committer != null ? Committer.GetHashCode() : 0) ^ (Message != null ? Message.GetHashCode() : 0) ^ (Tree != null ? Tree.GetHashCode() : 0);
+                }
+            }
+            
         }
     }
 }

@@ -76,9 +76,13 @@ namespace GitHubSharp.Controllers
         {
         }
 
-        public GitHubRequest<List<RepositoryModel>> GetAll(int page = 1, int perPage = 100)
+        public GitHubRequest<List<RepositoryModel>> GetAll(string affiliation = null, int page = 1, int perPage = 100)
         {
-            return GitHubRequest.Get<List<RepositoryModel>>(Uri + "/repos",  new { page = page, per_page = perPage });
+            return GitHubRequest.Get<List<RepositoryModel>>(Uri + "/repos",  new { 
+                page, 
+                per_page = perPage,
+                affiliation
+            });
         }
 
         public GitHubRequest<List<RepositoryModel>> GetStarred(int page = 1, int perPage = 100)
